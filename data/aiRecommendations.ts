@@ -4,6 +4,7 @@
 // built to feel like an AI analysis, but it's pure data plumbing.
 
 import { hashSeed } from '@/lib/artSeed';
+import { PRODUCTS } from '@/data/mock';
 
 export type ConditionId =
   | 'dark-circles'
@@ -108,7 +109,33 @@ export type AiResult = {
   radar: Record<RadarAxis, number>;
   recommendations: AiRecommendation[];
   generatedAt: string;
+  // A CRM-style callback referencing a past purchase, e.g. "지난번 비타민B
+  // 구매 이력이 있어 피로도 개선을 확인해봤어요." — null when no past
+  // purchase maps cleanly to a radar axis.
+  historyInsight: string | null;
 };
+
+// Loose category -> radar-axis mapping used only to phrase the "we checked
+// back in on X because you bought Y before" CRM callback below — not the
+// same as the condition/goal scoring above.
+const CATEGORY_AXIS: Partial<Record<string, RadarAxis>> = {
+  vitamin: 'fatigue',
+  supplement: 'immunity',
+  skincare: 'elasticity',
+  ampoule: 'hydration',
+};
+
+export function buildHistoryInsight(pastPurchaseTitles: string[]): string | null {
+  for (const title of pastPurchaseTitles) {
+    const product = PRODUCTS.find((p) => title.includes(p.name));
+    if (!product) continue;
+    const axis = CATEGORY_AXIS[product.category];
+    if (!axis) continue;
+    const axisLabel = RADAR_AXES.find((a) => a.id === axis)!.label;
+    return `지난번 ${product.name} 구매 이력이 있어 ${axisLabel} 개선을 확인해봤어요.`;
+  }
+  return null;
+}
 
 function clampScore(n: number): number {
   return Math.max(15, Math.min(95, Math.round(n)));
@@ -117,7 +144,8 @@ function clampScore(n: number): number {
 export function computeAiResult(
   conditions: ConditionId[],
   goals: GoalId[],
-  profile: ProfileAnswers
+  profile: ProfileAnswers,
+  pastPurchaseTitles: string[] = []
 ): AiResult {
   const radar: Record<RadarAxis, number> = {
     fatigue: 78,
@@ -168,7 +196,12 @@ export function computeAiResult(
     .sort((a, b) => b.score - a.score)
     .slice(0, 5);
 
-  return { radar, recommendations, generatedAt: new Date().toISOString() };
+  return {
+    radar,
+    recommendations,
+    generatedAt: new Date().toISOString(),
+    historyInsight: buildHistoryInsight(pastPurchaseTitles),
+  };
 }
 
 export function explainRecommendation(reasons: string[]): string {

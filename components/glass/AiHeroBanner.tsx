@@ -20,13 +20,16 @@ type Props = {
   matchScore?: number;
   isPrecision: boolean;
   onPress: () => void;
+  // A CRM-style callback referencing a past purchase — when present, the
+  // banner leads with this instead of the generic "오늘의 AI 매칭" line.
+  historyInsight?: string | null;
 };
 
 // The home screen's hero — AI Health Intelligence is GLASSY's flagship
 // feature, not a side widget, so this banner outranks every other card in
 // size and visual energy (gradient glow + a continuously scanning light
 // sweep) whether or not the user has diagnosed yet.
-export function AiHeroBanner({ hasCompletedQuiz, topPickLabel, matchScore, isPrecision, onPress }: Props) {
+export function AiHeroBanner({ hasCompletedQuiz, topPickLabel, matchScore, isPrecision, onPress, historyInsight }: Props) {
   const sweep = useSharedValue(-1);
   const glow = useSharedValue(0.6);
 
@@ -84,7 +87,7 @@ export function AiHeroBanner({ hasCompletedQuiz, topPickLabel, matchScore, isPre
           </>
         ) : (
           <>
-            <Text style={styles.summaryTitle}>당신을 위한 오늘의 AI 매칭</Text>
+            <Text style={styles.summaryTitle}>{historyInsight ? '지난 구매 기반 이번엔 이걸 확인해보세요' : '당신을 위한 오늘의 AI 매칭'}</Text>
             {topPickLabel && (
               <Text style={styles.summaryBody} numberOfLines={1}>
                 {topPickLabel} · 매칭 {matchScore}%

@@ -101,6 +101,7 @@ export default function HomeScreen() {
             hasCompletedQuiz={hasCompletedQuiz}
             topPickLabel={topPick ? `${topPick.brand} ${topPick.name}` : undefined}
             matchScore={quizResult?.recommendations[0]?.score}
+            historyInsight={quizResult?.historyInsight}
             isPrecision={isPrecision}
             onPress={() => router.push('/quiz')}
           />

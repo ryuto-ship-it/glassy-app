@@ -131,6 +131,7 @@ export default function QuizScreen() {
           <ResultsStep
             radar={result.radar}
             recommendations={result.recommendations}
+            historyInsight={result.historyInsight}
             isPrecision={isPrecision}
             onFinish={() => router.replace('/')}
             onRetake={() => {
@@ -399,12 +400,14 @@ function PulsingRing() {
 function ResultsStep({
   radar,
   recommendations,
+  historyInsight,
   isPrecision,
   onFinish,
   onRetake,
 }: {
   radar: Record<string, number>;
   recommendations: AiRecommendation[];
+  historyInsight: string | null;
   isPrecision: boolean;
   onFinish: () => void;
   onRetake: () => void;
@@ -431,6 +434,13 @@ function ResultsStep({
           <RadarChart axes={axes} scores={radar} size={220} />
         </RadarGlowCard>
       </View>
+
+      {historyInsight && (
+        <View style={styles.historyInsightCard}>
+          <Ionicons name="time-outline" size={13} color={colors.accentGold} />
+          <Text style={styles.historyInsightText}>{historyInsight}</Text>
+        </View>
+      )}
 
       {!isPrecision && lockedAxes.length > 0 && (
         <View style={styles.lockChipRow}>
@@ -677,6 +687,18 @@ const styles = StyleSheet.create({
     borderRadius: 130,
     backgroundColor: 'rgba(177,140,255,0.16)',
   },
+  historyInsightCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: spacing.lg,
+    backgroundColor: 'rgba(232,196,104,0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(232,196,104,0.25)',
+    borderRadius: radius.md,
+    padding: spacing.md,
+  },
+  historyInsightText: { flex: 1, fontFamily: fonts.bodyMed, fontSize: 11.5, color: colors.text, lineHeight: 16 },
   lockChipRow: { marginTop: spacing.md, gap: 6 },
   lockChip: {
     flexDirection: 'row',

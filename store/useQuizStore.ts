@@ -8,6 +8,7 @@ import {
   GoalId,
   ProfileAnswers,
 } from '@/data/aiRecommendations';
+import { useAppStore } from '@/store/useAppStore';
 
 function seedPastResult(): AiResult {
   const d = new Date();
@@ -16,6 +17,7 @@ function seedPastResult(): AiResult {
     radar: { fatigue: 52, hydration: 58, elasticity: 64, immunity: 60, sleep: 48 },
     recommendations: [],
     generatedAt: d.toISOString(),
+    historyInsight: null,
   };
 }
 
@@ -56,7 +58,11 @@ export const useQuizStore = create<QuizState>((set, get) => ({
 
   runAnalysis: () => {
     const { conditions, goals, profile, result: prevResult, history } = get();
-    const result = computeAiResult(conditions, goals, profile);
+    const pastPurchaseTitles = useAppStore
+      .getState()
+      .transactions.filter((tx) => tx.type === 'purchase')
+      .map((tx) => tx.title);
+    const result = computeAiResult(conditions, goals, profile, pastPurchaseTitles);
     set({
       result,
       hasCompletedQuiz: true,
