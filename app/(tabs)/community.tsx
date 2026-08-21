@@ -19,20 +19,34 @@ import { PlaceholderArt } from '@/components/glass/PlaceholderArt';
 import { SkeletonCard } from '@/components/glass/Skeleton';
 import { TabFade } from '@/components/glass/TabFade';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
-import { CommunityPost, USER } from '@/data/mock';
+import { CommunityPost, INFLUENCER_FOLLOWER_THRESHOLD, POST_CATEGORY_LABEL, PostCategory, USER } from '@/data/mock';
 import { formatRelative } from '@/lib/date';
 import { useAppStore } from '@/store/useAppStore';
 import { useUiStore } from '@/store/useUiStore';
+
+type FilterKey = 'all' | PostCategory;
+
+const FILTERS: { key: FilterKey; label: string }[] = [
+  { key: 'all', label: '전체' },
+  { key: 'review', label: POST_CATEGORY_LABEL.review },
+  { key: 'ingredient', label: POST_CATEGORY_LABEL.ingredient },
+  { key: 'qna', label: POST_CATEGORY_LABEL.qna },
+  { key: 'groupbuy', label: POST_CATEGORY_LABEL.groupbuy },
+];
 
 export default function CommunityScreen() {
   const insets = useSafeAreaInsets();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [filter, setFilter] = useState<FilterKey>('all');
   const openComposer = useUiStore((s) => s.openComposer);
+  const openGroupBuyCreate = useUiStore((s) => s.openGroupBuyCreate);
 
   const posts = useAppStore((s) => s.posts);
   const toggleLike = useAppStore((s) => s.toggleLike);
   const toggleFollow = useAppStore((s) => s.toggleFollow);
+
+  const isCreator = USER.followers >= INFLUENCER_FOLLOWER_THRESHOLD;
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 800);
@@ -44,10 +58,12 @@ export default function CommunityScreen() {
     setTimeout(() => setRefreshing(false), 1000);
   };
 
-  const sorted = [...posts].sort((a, b) => {
-    if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1;
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
+  const sorted = [...posts]
+    .filter((p) => filter === 'all' || (p.category ?? 'review') === filter)
+    .sort((a, b) => {
+      if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1;
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
 
   return (
     <View style={styles.root}>
@@ -59,14 +75,48 @@ export default function CommunityScreen() {
       >
         <View style={styles.section}>
           <View style={styles.headerRow}>
-            <View>
+            <View style={{ flex: 1 }}>
               <Text style={styles.pageTitle}>Glow Feed</Text>
-              <Text style={styles.pageSub}>
+              <Text style={styles.pageSub}>여기저기 검색할 필요 없이, 한국 약국 정보를 이 안에서 다 확인하세요.</Text>
+              <Text style={styles.pageSubMeta}>
                 {USER.followers.toLocaleString()} 팔로워 · {USER.following.toLocaleString()} 팔로잉
               </Text>
             </View>
             <PillButton label="후기 작성" onPress={openComposer} />
           </View>
+        </View>
+
+        {isCreator && (
+          <View style={styles.section}>
+            <Pressable onPress={openGroupBuyCreate}>
+              <GlassSurface radius={radius.lg} padding={spacing.lg} style={styles.creatorCtaCard}>
+                <View style={styles.creatorCtaRow}>
+                  <View style={styles.creatorBadgeSmall}>
+                    <Ionicons name="ribbon" size={11} color="#0B0B0D" />
+                    <Text style={styles.creatorBadgeSmallText}>인증 크리에이터</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={15} color={colors.textFaint} />
+                </View>
+                <Text style={styles.creatorCtaTitle}>인플루언서 공동구매 개설하기</Text>
+                <Text style={styles.creatorCtaSub}>팔로워를 위한 공동구매를 직접 열고 목표 인원·할인율을 정해보세요.</Text>
+              </GlassSurface>
+            </Pressable>
+          </View>
+        )}
+
+        <View style={styles.section}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm }}>
+            {FILTERS.map((f) => {
+              const active = filter === f.key;
+              return (
+                <Pressable key={f.key} onPress={() => setFilter(f.key)}>
+                  <View style={[styles.filterChip, active && styles.filterChipActive]}>
+                    <Text style={[styles.filterChipText, active && styles.filterChipTextActive]}>{f.label}</Text>
+                  </View>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
         </View>
 
         <View style={styles.section}>
@@ -138,14 +188,27 @@ function PostCard({
           <Text style={styles.pinnedChipText}>인기 후기</Text>
         </View>
       )}
-      <View style={styles.earnedChip}>
-        <Ionicons name="add-circle" size={11} color={colors.success} />
-        <Text style={styles.earnedChipText}>+{post.glasEarned} GLAS 획득</Text>
+      {post.glasEarned > 0 && (
+        <View style={styles.earnedChip}>
+          <Ionicons name="add-circle" size={11} color={colors.success} />
+          <Text style={styles.earnedChipText}>+{post.glasEarned} GLAS 획득</Text>
+        </View>
+      )}
+      <View style={styles.categoryChip}>
+        <Text style={styles.categoryChipText}>{POST_CATEGORY_LABEL[post.category ?? 'review']}</Text>
       </View>
       <View style={styles.postHeader}>
         <Image source={{ uri: post.avatar }} style={styles.postAvatar} />
         <View style={{ flex: 1 }}>
-          <Text style={styles.postAuthor}>{post.author}</Text>
+          <View style={styles.postAuthorRow}>
+            <Text style={styles.postAuthor}>{post.author}</Text>
+            {(post.authorFollowers ?? 0) >= INFLUENCER_FOLLOWER_THRESHOLD && (
+              <View style={styles.creatorBadgeTiny}>
+                <Ionicons name="ribbon" size={8} color="#0B0B0D" />
+                <Text style={styles.creatorBadgeTinyText}>인증 크리에이터</Text>
+              </View>
+            )}
+          </View>
           <Text style={styles.postLocation}>
             {post.location} · {formatRelative(post.createdAt)}
           </Text>
@@ -203,9 +266,55 @@ function PostCard({
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
   section: { paddingHorizontal: spacing.xl, marginTop: spacing.xl },
-  headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: spacing.md },
   pageTitle: { fontFamily: fonts.display, fontSize: 24, color: colors.text },
-  pageSub: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted, marginTop: 4 },
+  pageSub: { fontFamily: fonts.bodyMed, fontSize: 12.5, color: colors.text, marginTop: 6, lineHeight: 17 },
+  pageSubMeta: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, marginTop: 6 },
+  creatorCtaCard: { borderColor: 'rgba(232,196,104,0.3)' },
+  creatorCtaRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  creatorBadgeSmall: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: colors.accentGold,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: radius.pill,
+  },
+  creatorBadgeSmallText: { fontFamily: fonts.bodyBold, fontSize: 9.5, color: '#0B0B0D' },
+  creatorCtaTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text, marginTop: spacing.md },
+  creatorCtaSub: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, marginTop: 4, lineHeight: 15 },
+  filterChip: {
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: radius.pill,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  filterChipActive: { backgroundColor: colors.accentViolet, borderColor: colors.accentViolet },
+  filterChipText: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.textMuted },
+  filterChipTextActive: { color: '#FFFFFF' },
+  categoryChip: {
+    alignSelf: 'flex-start',
+    backgroundColor: colors.bgAlt,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: radius.pill,
+    marginBottom: spacing.sm,
+  },
+  categoryChipText: { fontFamily: fonts.bodyBold, fontSize: 9.5, color: colors.accentViolet },
+  postAuthorRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  creatorBadgeTiny: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    backgroundColor: colors.accentGold,
+    paddingHorizontal: 6,
+    paddingVertical: 1.5,
+    borderRadius: radius.pill,
+  },
+  creatorBadgeTinyText: { fontFamily: fonts.bodyBold, fontSize: 8, color: '#0B0B0D' },
   pinnedChip: {
     position: 'absolute',
     top: -8,
