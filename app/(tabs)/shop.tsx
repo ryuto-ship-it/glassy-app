@@ -10,7 +10,7 @@ import { ProductArt } from '@/components/glass/ProductArt';
 import { SkeletonCard } from '@/components/glass/Skeleton';
 import { TabFade } from '@/components/glass/TabFade';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
-import { CATEGORY_LABEL, Product, ProductCategory, PRODUCTS } from '@/data/mock';
+import { CATEGORY_LABEL, Product, ProductCategory, PRODUCTS, REAL_PRODUCT_BADGE } from '@/data/mock';
 import { formatUsd } from '@/lib/format';
 import { useTierStatus } from '@/lib/useTierStatus';
 import { useUiStore } from '@/store/useUiStore';
@@ -131,6 +131,12 @@ export default function ShopScreen() {
                             <Text style={styles.repurchaseBadgeText}>재구매</Text>
                           </View>
                         )}
+                        {p.isRealProduct && (
+                          <View style={styles.realBadge}>
+                            <Ionicons name="ribbon" size={9} color="#0B0B0D" />
+                            <Text style={styles.realBadgeText}>{REAL_PRODUCT_BADGE}</Text>
+                          </View>
+                        )}
                       </View>
                       <Text style={styles.brand}>{p.brand}</Text>
                       <Text style={styles.productName} numberOfLines={2}>
@@ -219,6 +225,20 @@ const styles = StyleSheet.create({
     borderColor: colors.borderStrong,
   },
   repurchaseBadgeText: { fontFamily: fonts.bodyBold, fontSize: 9, color: colors.text },
+  realBadge: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: colors.accentGold,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: radius.pill,
+    maxWidth: '80%',
+  },
+  realBadgeText: { fontFamily: fonts.bodyBold, fontSize: 8, color: '#0B0B0D' },
   brand: { fontFamily: fonts.bodyMed, fontSize: 10, color: colors.textMuted, marginTop: 8 },
   productName: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.text, marginTop: 2, minHeight: 32 },
   ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 3, marginTop: 4 },

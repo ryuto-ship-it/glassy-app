@@ -25,7 +25,7 @@ import { ProductArt } from '@/components/glass/ProductArt';
 import { SkeletonBlock, SkeletonCard } from '@/components/glass/Skeleton';
 import { TabFade } from '@/components/glass/TabFade';
 import { colors, fonts, radius, spacing, TAGLINE } from '@/constants/theme';
-import { FEATURED_GROUP_BUY, PRODUCTS, USER } from '@/data/mock';
+import { FEATURED_GROUP_BUY, PRODUCTS, REAL_PRODUCT_BADGE, USER } from '@/data/mock';
 import { formatDateShort } from '@/lib/date';
 import { formatGlas, formatSigned, formatUsd } from '@/lib/format';
 import { CATEGORY_ICON } from '@/lib/productIcon';
@@ -282,6 +282,12 @@ export default function HomeScreen() {
                             <Text style={styles.repurchaseBadgeText}>재구매</Text>
                           </View>
                         )}
+                        {p.isRealProduct && (
+                          <View style={styles.realBadge}>
+                            <Ionicons name="ribbon" size={9} color="#0B0B0D" />
+                            <Text style={styles.realBadgeText}>{REAL_PRODUCT_BADGE}</Text>
+                          </View>
+                        )}
                       </View>
                       <Text style={styles.brandLabel}>{p.brand}</Text>
                       <Text style={styles.productName} numberOfLines={2}>
@@ -399,6 +405,20 @@ const styles = StyleSheet.create({
     borderColor: colors.borderStrong,
   },
   repurchaseBadgeText: { fontFamily: fonts.bodyBold, fontSize: 10, color: colors.text },
+  realBadge: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: colors.accentGold,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+    borderRadius: radius.pill,
+    maxWidth: '78%',
+  },
+  realBadgeText: { fontFamily: fonts.bodyBold, fontSize: 8.5, color: '#0B0B0D' },
   brandLabel: { fontFamily: fonts.bodyMed, fontSize: 10, color: colors.textMuted, marginTop: 8 },
   productName: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.text, marginTop: 2, minHeight: 32 },
   ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 3, marginTop: 4 },

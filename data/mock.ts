@@ -64,6 +64,12 @@ export type Product = {
   rating: number;
   reviewCount: number;
   isRepurchase?: boolean;
+  // A real, widely-known Korean pharmacy product (as opposed to the
+  // fictional GLASSY-brand catalog) — shown with a "약국 인기 스테디셀러"
+  // trust badge and surfaced first in Home/Shop. Illustrated the same way
+  // as every other product (no real product photography/logos bundled —
+  // see PRODUCTS below), with the real product name kept as-is.
+  isRealProduct?: boolean;
   groupBuy?: {
     participants: number;
     goal: number;
@@ -72,6 +78,8 @@ export type Product = {
   };
 };
 
+export const REAL_PRODUCT_BADGE = '약국 인기 스테디셀러';
+
 export const CATEGORY_LABEL: Record<ProductCategory, string> = {
   skincare: '스킨케어',
   vitamin: '비타민',
@@ -79,7 +87,108 @@ export const CATEGORY_LABEL: Record<ProductCategory, string> = {
   ampoule: '앰플',
 };
 
+// Real, widely-known Korean pharmacy products that foreign tourists
+// actually buy — used as a trust signal ("this app is connected to what's
+// really on the shelf"), not a replacement for the fictional GLASSY catalog
+// below. Illustrated with the same custom silhouette art as every other
+// product (no scraped photography or brand logos), with real product names
+// kept exactly as sold.
+export const REAL_PRODUCTS: Product[] = [
+  {
+    id: 'r1',
+    name: '레모나 비타민C 정제',
+    brand: '경남제약',
+    category: 'vitamin',
+    shape: 'pill-bottle',
+    priceUSD: 8,
+    rating: 4.8,
+    reviewCount: 5230,
+    isRepurchase: true,
+    isRealProduct: true,
+  },
+  {
+    id: 'r2',
+    name: '까스활명수',
+    brand: '동화약품',
+    category: 'vitamin',
+    shape: 'box',
+    priceUSD: 6,
+    rating: 4.7,
+    reviewCount: 3890,
+    isRealProduct: true,
+  },
+  {
+    id: 'r3',
+    name: '정관장 홍삼정 에브리타임',
+    brand: 'KGC인삼공사',
+    category: 'supplement',
+    shape: 'box',
+    priceUSD: 42,
+    rating: 4.9,
+    reviewCount: 2110,
+    isRepurchase: true,
+    isRealProduct: true,
+  },
+  {
+    id: 'r4',
+    name: '락토핏 골드 유산균',
+    brand: '종근당건강',
+    category: 'supplement',
+    shape: 'pouch',
+    priceUSD: 25,
+    rating: 4.8,
+    reviewCount: 4400,
+    isRealProduct: true,
+  },
+  {
+    id: 'r5',
+    name: '굿나이트 스네일 크림',
+    brand: '네이처리퍼블릭',
+    category: 'skincare',
+    shape: 'jar',
+    priceUSD: 17,
+    rating: 4.7,
+    reviewCount: 6789,
+    isRepurchase: true,
+    isRealProduct: true,
+  },
+  {
+    id: 'r6',
+    name: '마데카솔 카밍 크림',
+    brand: '동국제약',
+    category: 'skincare',
+    shape: 'tube',
+    priceUSD: 9,
+    rating: 4.9,
+    reviewCount: 3320,
+    isRealProduct: true,
+  },
+  {
+    id: 'r7',
+    name: '신신파스 아렉스',
+    brand: '신신제약',
+    category: 'supplement',
+    shape: 'box',
+    priceUSD: 5,
+    rating: 4.6,
+    reviewCount: 2900,
+    isRealProduct: true,
+  },
+  {
+    id: 'r8',
+    name: '제로좀 쿨패치',
+    brand: '삼성제약',
+    category: 'supplement',
+    shape: 'box',
+    priceUSD: 4,
+    rating: 4.5,
+    reviewCount: 1750,
+    isRealProduct: true,
+  },
+];
+
 export const PRODUCTS: Product[] = [
+  ...REAL_PRODUCTS,
   {
     id: 'p1',
     name: 'Centella Calming Ampoule',
