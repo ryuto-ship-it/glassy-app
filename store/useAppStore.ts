@@ -45,6 +45,10 @@ type AppState = {
   // country setting but is switchable from Profile for demo purposes.
   language: LanguageCode;
 
+  // Mock wearable connection (no real OAuth) for the Profile "내 컨디션"
+  // screen — Mode A once connected, Mode B (AI survey) until then.
+  wearableProvider: 'whoop' | 'apple-watch' | 'fitbit' | null;
+
   // welcome gateway — only actually credits GLAS the first time; replaying
   // the welcome flow from the Profile tab still shows the full animation
   // but won't re-grant the bonus.
@@ -86,6 +90,7 @@ type AppState = {
   buyTierDirect: (usdCost: number, method: 'stablecoin' | 'card') => void;
   claimWelcomeBonus: () => { credited: boolean; amount: number };
   setLanguage: (lang: LanguageCode) => void;
+  connectWearable: (provider: 'whoop' | 'apple-watch' | 'fitbit') => void;
 };
 
 export const WELCOME_BONUS_GLAS = 500;
@@ -117,6 +122,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   achievedAtPrice: USER.achievedAtPrice,
 
   language: USER.language,
+  wearableProvider: null,
   welcomeBonusClaimed: false,
 
   posts: COMMUNITY_POSTS,
@@ -471,6 +477,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   setLanguage: (lang) => set({ language: lang }),
+  connectWearable: (provider) => set({ wearableProvider: provider }),
 }));
 
 export function getProductById(id: string) {

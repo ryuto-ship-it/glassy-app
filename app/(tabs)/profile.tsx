@@ -82,6 +82,7 @@ export default function ProfileScreen() {
                 onPress={() => router.push('/welcome')}
               />
               <ProfileRow icon="scan-outline" label="제품 스캔" sub="카메라 스캔 데모로 이동" onPress={() => router.push('/scan')} />
+              <ProfileRow icon="pulse-outline" label="내 컨디션" sub="웨어러블 연동 · AI 컨디션 분석" onPress={() => router.push('/wearable')} />
               <ProfileRow icon="notifications-outline" label="알림 설정" sub="곧 제공될 예정" last onPress={() => {}} />
             </GlassSurface>
           </View>

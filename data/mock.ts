@@ -338,6 +338,28 @@ export const PRODUCTS: Product[] = [
     reviewCount: 341,
     groupBuy: { participants: 64, goal: 150, endsInDays: 6, extraDiscountPct: 15 },
   },
+  // Added for the wearable-vitals recommendation mapping (스트레스/수면 저하
+  // -> 마그네슘+테아닌, 산소포화도 저하 -> 철분+비타민B).
+  {
+    id: 'w1',
+    name: '마그네슘 테아닌 슬립 컴플렉스',
+    brand: 'Relaxwell',
+    category: 'supplement',
+    shape: 'pill-bottle',
+    priceUSD: 24,
+    rating: 4.7,
+    reviewCount: 890,
+  },
+  {
+    id: 'w2',
+    name: '철분 + 비타민B 콤플렉스',
+    brand: 'Byul Nutrition',
+    category: 'vitamin',
+    shape: 'pill-bottle',
+    priceUSD: 19,
+    rating: 4.6,
+    reviewCount: 1120,
+  },
 ];
 
 export const FEATURED_GROUP_BUY = PRODUCTS.find((p) => p.id === 'p13')!;
