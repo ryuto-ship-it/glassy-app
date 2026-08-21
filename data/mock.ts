@@ -676,6 +676,44 @@ export const USER = {
   language: 'en' as LanguageCode,
 };
 
+// Mock analytics for the store-owner admin dashboard — entirely
+// illustrative, standing in for real POS/CRM data a pharmacy would only
+// get by adopting GLASSY.
+export const ADMIN_ANALYTICS = {
+  totalUsers: 12480,
+  monthlyVisitors: 3240,
+  avgOrderValueUSD: 38.5,
+  qrRedemptionRatePct: 87,
+  returningCustomerPct: 41,
+  countryShare: [
+    { label: '🇻🇳 베트남', value: 28, color: '#B18CFF' },
+    { label: '🇨🇳 중국', value: 24, color: '#E8C468' },
+    { label: '🇺🇸 미국', value: 18, color: '#6FD7C4' },
+    { label: '🇯🇵 일본', value: 15, color: '#E07A9E' },
+    { label: '기타', value: 15, color: '#5A4A82' },
+  ],
+  ageGenderShare: [
+    { label: '20대', a: 14, b: 18 },
+    { label: '30대', a: 12, b: 22 },
+    { label: '40대', a: 8, b: 15 },
+    { label: '50대+', a: 5, b: 6 },
+  ],
+  paymentMethodShare: [
+    { label: '스테이블코인', value: 33, color: '#B18CFF' },
+    { label: '카드', value: 30, color: '#6FD7C4' },
+    { label: '현금', value: 22, color: '#E07A9E' },
+    { label: '$GLAS', value: 15, color: '#E8C468' },
+  ],
+  stablecoinTrend: [12, 18, 22, 27, 30, 33],
+  topCategories: [
+    { label: '스킨케어', value: 32, color: '#B18CFF' },
+    { label: '비타민', value: 22, color: '#E8C468' },
+    { label: '건기식', value: 20, color: '#6FD7C4' },
+    { label: '앰플', value: 16, color: '#E07A9E' },
+    { label: '기타', value: 10, color: '#5A4A82' },
+  ],
+};
+
 export type CommunityPost = {
   id: string;
   author: string;
