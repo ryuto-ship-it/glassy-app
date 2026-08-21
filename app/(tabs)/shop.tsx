@@ -4,7 +4,6 @@ import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'r
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppBackground } from '@/components/glass/AppBackground';
-import { CheckoutModal } from '@/components/glass/CheckoutModal';
 import { EmptyState } from '@/components/glass/EmptyState';
 import { GlassSurface } from '@/components/glass/GlassSurface';
 import { ProductArt } from '@/components/glass/ProductArt';
@@ -14,6 +13,7 @@ import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { CATEGORY_LABEL, Product, ProductCategory, PRODUCTS } from '@/data/mock';
 import { formatUsd } from '@/lib/format';
 import { useTierStatus } from '@/lib/useTierStatus';
+import { useUiStore } from '@/store/useUiStore';
 
 type FilterKey = 'all' | 'repurchase' | 'groupbuy' | ProductCategory;
 
@@ -32,10 +32,10 @@ export default function ShopScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [filter, setFilter] = useState<FilterKey>('all');
-  const [checkoutProduct, setCheckoutProduct] = useState<{ product: Product; price: number } | null>(null);
   const [justBought, setJustBought] = useState<string | null>(null);
 
   const { tier } = useTierStatus();
+  const openPayment = useUiStore((s) => s.openPayment);
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 800);
@@ -61,7 +61,13 @@ export default function ShopScreen() {
   }, [filter]);
 
   const handleBuy = (p: Product, price: number) => {
-    setCheckoutProduct({ product: p, price });
+    openPayment(
+      { kind: 'product', title: p.name, subtitle: 'GLASSY Myeongdong Pharmacy', priceUSD: price },
+      () => {
+        setJustBought(p.id);
+        setTimeout(() => setJustBought(null), 1600);
+      }
+    );
   };
 
   return (
@@ -177,20 +183,6 @@ export default function ShopScreen() {
         </View>
       </ScrollView>
       </TabFade>
-
-      {checkoutProduct && (
-        <CheckoutModal
-          visible
-          onClose={() => setCheckoutProduct(null)}
-          title={checkoutProduct.product.name}
-          subtitle="GLASSY Myeongdong Pharmacy"
-          priceUSD={checkoutProduct.price}
-          onSuccess={() => {
-            setJustBought(checkoutProduct.product.id);
-            setTimeout(() => setJustBought(null), 1600);
-          }}
-        />
-      )}
     </View>
   );
 }

@@ -2,13 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
-  Modal,
   Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -28,16 +26,15 @@ import { addDays, daysSince, daysUntil, formatDateShort } from '@/lib/date';
 import { formatGlas, formatUsd } from '@/lib/format';
 import { useAppStore } from '@/store/useAppStore';
 import { useQuizStore } from '@/store/useQuizStore';
+import { useUiStore } from '@/store/useUiStore';
 
-type SheetMode = 'buy' | 'stake' | null;
 type Period = '24H' | '7D' | '30D';
 
 export default function WalletScreen() {
   const insets = useSafeAreaInsets();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [sheet, setSheet] = useState<SheetMode>(null);
-  const [amount, setAmount] = useState('');
+  const openWalletAction = useUiStore((s) => s.openWalletAction);
   const [notice, setNotice] = useState<string | null>(null);
   const [period, setPeriod] = useState<Period>('7D');
   const [chartWidth, setChartWidth] = useState(300);
@@ -56,8 +53,6 @@ export default function WalletScreen() {
   const maturedStaked = useAppStore((s) => s.maturedStakedGlas());
   const pendingStaked = useAppStore((s) => s.pendingStakedGlas());
 
-  const buyGlas = useAppStore((s) => s.buyGlas);
-  const stakeGlas = useAppStore((s) => s.stakeGlas);
   const unstakeEntry = useAppStore((s) => s.unstakeEntry);
   const toggleDemoFastForward = useAppStore((s) => s.toggleDemoFastForward);
 
@@ -69,19 +64,6 @@ export default function WalletScreen() {
   const onRefresh = () => {
     setRefreshing(true);
     setTimeout(() => setRefreshing(false), 1000);
-  };
-
-  const closeSheet = () => {
-    setSheet(null);
-    setAmount('');
-  };
-
-  const confirmSheet = () => {
-    const val = Number(amount);
-    if (!val || val <= 0) return;
-    if (sheet === 'buy') buyGlas(val);
-    if (sheet === 'stake') stakeGlas(Math.min(val, liquid));
-    closeSheet();
   };
 
   const handleUnstake = (entryId: string) => {
@@ -209,11 +191,11 @@ export default function WalletScreen() {
         </View>
 
         <View style={[styles.section, styles.actionRow]}>
-          <PillButton label="거래소에서 매수" onPress={() => setSheet('buy')} style={{ flex: 1 }} />
+          <PillButton label="거래소에서 매수" onPress={() => openWalletAction('buy')} style={{ flex: 1 }} />
           <PillButton
             label="스테이킹하기"
             variant="ghost"
-            onPress={() => setSheet('stake')}
+            onPress={() => openWalletAction('stake')}
             disabled={liquid <= 0}
             style={{ flex: 1 }}
           />
@@ -298,36 +280,6 @@ export default function WalletScreen() {
         </View>
       </ScrollView>
       </TabFade>
-
-      <Modal visible={sheet !== null} transparent animationType="fade" onRequestClose={closeSheet}>
-        <Pressable style={styles.modalBackdrop} onPress={closeSheet} />
-        <View style={styles.modalWrap}>
-          <GlassSurface strong radius={radius.xl} padding={spacing.xl}>
-            <Text style={styles.modalTitle}>{sheet === 'buy' ? '$GLAS 거래소 매수' : '$GLAS 스테이킹'}</Text>
-            {sheet === 'stake' && (
-              <View style={styles.lockupNotice}>
-                <Ionicons name="lock-closed-outline" size={14} color={colors.textMuted} />
-                <Text style={styles.lockupNoticeText}>스테이킹은 최소 30일 락업 후 등급에 반영돼요.</Text>
-              </View>
-            )}
-            <Text style={styles.modalHint}>
-              {sheet === 'buy' ? `사용 가능 USDT: ${formatUsd(usdt)}` : `스테이킹 가능 GLAS: ${formatGlas(liquid)}`}
-            </Text>
-            <TextInput
-              value={amount}
-              onChangeText={setAmount}
-              keyboardType="numeric"
-              placeholder={sheet === 'buy' ? 'USDT 금액 입력' : 'GLAS 수량 입력'}
-              placeholderTextColor={colors.textMuted}
-              style={styles.input}
-            />
-            <PillButton label="확인" onPress={confirmSheet} style={{ marginTop: spacing.lg }} />
-            <Pressable onPress={closeSheet} style={{ marginTop: spacing.md, alignItems: 'center' }}>
-              <Text style={styles.cancelText}>취소</Text>
-            </Pressable>
-          </GlassSurface>
-        </View>
-      </Modal>
     </View>
   );
 }
@@ -518,31 +470,4 @@ const styles = StyleSheet.create({
   },
   unstakeBtnDisabled: { backgroundColor: 'rgba(255,255,255,0.08)' },
   unstakeBtnText: { fontFamily: fonts.bodyBold, fontSize: 11, color: '#0B0B0D' },
-  modalBackdrop: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(0,0,0,0.6)' },
-  modalWrap: { flex: 1, justifyContent: 'center', paddingHorizontal: spacing.xl },
-  modalTitle: { fontFamily: fonts.displaySemi, fontSize: 17, color: colors.text },
-  lockupNotice: {
-    flexDirection: 'row',
-    gap: 6,
-    alignItems: 'center',
-    marginTop: spacing.md,
-    padding: spacing.md,
-    borderRadius: radius.md,
-    backgroundColor: 'rgba(177,140,255,0.12)',
-  },
-  lockupNoticeText: { fontFamily: fonts.bodyMed, fontSize: 11, color: colors.text, flex: 1 },
-  modalHint: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, marginTop: spacing.md },
-  input: {
-    marginTop: spacing.sm,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.10)',
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: 12,
-    fontFamily: fonts.bodyMed,
-    fontSize: 15,
-    color: colors.text,
-    backgroundColor: 'rgba(255,255,255,0.05)',
-  },
-  cancelText: { fontFamily: fonts.bodyMed, fontSize: 12, color: colors.textMuted },
 });

@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Modal, Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppBackground } from '@/components/glass/AppBackground';
@@ -16,20 +16,14 @@ import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { formatDateShort } from '@/lib/date';
 import { formatGlas, formatSigned, formatUsd } from '@/lib/format';
 import { useTierStatus } from '@/lib/useTierStatus';
-import { useAppStore } from '@/store/useAppStore';
-
-type PurchaseStep = 'method' | 'swapping' | 'card' | null;
+import { useUiStore } from '@/store/useUiStore';
 
 export default function LevelsScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [purchaseStep, setPurchaseStep] = useState<PurchaseStep>(null);
-
-  const usdt = useAppStore((s) => s.usdtBalance);
-  const usdc = useAppStore((s) => s.usdcBalance);
-  const buyTierDirect = useAppStore((s) => s.buyTierDirect);
+  const openPayment = useUiStore((s) => s.openPayment);
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 800);
@@ -53,21 +47,6 @@ export default function LevelsScreen() {
   } = useTierStatus();
 
   const costUsd = remainingGlas * price;
-  const canPayStable = usdt + usdc >= costUsd;
-  const closePurchase = () => setPurchaseStep(null);
-
-  const confirmStablecoin = () => {
-    setPurchaseStep('swapping');
-    setTimeout(() => {
-      buyTierDirect(costUsd, 'stablecoin');
-      closePurchase();
-    }, 1100);
-  };
-
-  const confirmCard = () => {
-    buyTierDirect(costUsd, 'card');
-    closePurchase();
-  };
 
   return (
     <View style={styles.root}>
@@ -158,7 +137,9 @@ export default function LevelsScreen() {
                   <Text style={styles.currentDelta}>어제보다 {formatSigned(remainingDelta)}개</Text>
                   <PillButton
                     label="지금 바로 구매"
-                    onPress={() => setPurchaseStep('method')}
+                    onPress={() =>
+                      openPayment({ kind: 'tier', tierName: next.name, usdCost: costUsd, glasAmount: remainingGlas })
+                    }
                     colors_={['#E8C468', '#C79A3D']}
                     icon={<Ionicons name="flash" size={14} color="#0B0B0D" />}
                     style={{ marginTop: spacing.lg, alignSelf: 'stretch' }}
@@ -212,83 +193,6 @@ export default function LevelsScreen() {
         </View>
       </ScrollView>
       </TabFade>
-
-      <Modal visible={purchaseStep !== null} transparent animationType="fade" onRequestClose={closePurchase}>
-        <Pressable style={styles.modalBackdrop} onPress={purchaseStep === 'swapping' ? undefined : closePurchase} />
-        <View style={styles.modalWrap}>
-          <GlassSurface strong radius={radius.xl} padding={spacing.xl}>
-            {purchaseStep === 'method' && next && (
-              <>
-                <Text style={styles.modalTitle}>{next.name} 등급 즉시구매</Text>
-                <Text style={styles.modalHint}>
-                  {formatGlas(remainingGlas)} GLAS · {formatUsd(costUsd)} (현재가 {formatUsd(price)} 기준)
-                </Text>
-                <View style={styles.methodCard}>
-                  <View style={styles.methodRow}>
-                    <Ionicons name="swap-horizontal-outline" size={16} color={colors.accentViolet} />
-                    <Text style={styles.methodLabel}>스테이블코인 결제</Text>
-                  </View>
-                  <Text style={styles.methodSub}>
-                    사용 가능 USDT+USDC: {formatUsd(usdt + usdc)}
-                    {!canPayStable && ' · 잔액 부족'}
-                  </Text>
-                  <PillButton
-                    label="스테이블코인으로 결제"
-                    onPress={confirmStablecoin}
-                    disabled={!canPayStable}
-                    style={{ marginTop: spacing.sm }}
-                  />
-                </View>
-                <View style={styles.methodCard}>
-                  <View style={styles.methodRow}>
-                    <Ionicons name="card-outline" size={16} color={colors.accentGold} />
-                    <Text style={styles.methodLabel}>신용카드 결제</Text>
-                  </View>
-                  <Text style={styles.methodSub}>MoonPay 연동으로 카드 결제 후 GLAS로 환산 지급</Text>
-                  <PillButton
-                    label="신용카드로 결제"
-                    onPress={() => setPurchaseStep('card')}
-                    variant="ghost"
-                    style={{ marginTop: spacing.sm }}
-                  />
-                </View>
-                <Pressable onPress={closePurchase} style={{ marginTop: spacing.md, alignItems: 'center' }}>
-                  <Text style={styles.cancelText}>취소</Text>
-                </Pressable>
-              </>
-            )}
-
-            {purchaseStep === 'swapping' && (
-              <View style={{ alignItems: 'center', paddingVertical: spacing.lg }}>
-                <ActivityIndicator color={colors.accentViolet} />
-                <Text style={styles.swappingText}>현재 시세로 GLAS로 스왑 중...</Text>
-              </View>
-            )}
-
-            {purchaseStep === 'card' && next && (
-              <>
-                <Text style={styles.modalTitle}>MoonPay로 결제 확인</Text>
-                <View style={styles.moonpayCard}>
-                  <Text style={styles.moonpaySub}>Powered by MoonPay (데모 연동)</Text>
-                  <Text style={styles.moonpayAmount}>{formatUsd(costUsd)}</Text>
-                  <View style={styles.moonpayRow}>
-                    <Text style={styles.moonpayRowLabel}>지급 예정 GLAS</Text>
-                    <Text style={styles.moonpayRowValue}>{formatGlas(remainingGlas)} GLAS</Text>
-                  </View>
-                  <View style={styles.moonpayRow}>
-                    <Text style={styles.moonpayRowLabel}>목표 등급</Text>
-                    <Text style={styles.moonpayRowValue}>{next.name}</Text>
-                  </View>
-                </View>
-                <PillButton label="결제 확인" onPress={confirmCard} colors_={['#E8C468', '#C79A3D']} style={{ marginTop: spacing.lg }} />
-                <Pressable onPress={() => setPurchaseStep('method')} style={{ marginTop: spacing.md, alignItems: 'center' }}>
-                  <Text style={styles.cancelText}>뒤로</Text>
-                </Pressable>
-              </>
-            )}
-          </GlassSurface>
-        </View>
-      </Modal>
     </View>
   );
 }
@@ -344,42 +248,4 @@ const styles = StyleSheet.create({
   pathTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text, marginBottom: spacing.sm },
   pathRow: { flexDirection: 'row', gap: 8, alignItems: 'flex-start', marginTop: 8 },
   pathText: { fontFamily: fonts.bodyMed, fontSize: 12, color: colors.text, flex: 1 },
-
-  modalBackdrop: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(0,0,0,0.6)' },
-  modalWrap: { flex: 1, justifyContent: 'center', paddingHorizontal: spacing.xl },
-  modalTitle: { fontFamily: fonts.displaySemi, fontSize: 17, color: colors.text },
-  modalHint: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted, marginTop: 6 },
-  methodCard: {
-    marginTop: spacing.lg,
-    padding: spacing.md,
-    borderRadius: radius.md,
-    backgroundColor: 'rgba(255,255,255,0.03)',
-    borderWidth: 1,
-    borderColor: colors.borderDim,
-  },
-  methodRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  methodLabel: { fontFamily: fonts.bodySemi, fontSize: 13, color: colors.text },
-  methodSub: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, marginTop: 4 },
-  cancelText: { fontFamily: fonts.bodyMed, fontSize: 12, color: colors.textMuted },
-  swappingText: { fontFamily: fonts.bodyMed, fontSize: 13, color: colors.textMuted, marginTop: spacing.md },
-  moonpayCard: {
-    marginTop: spacing.lg,
-    padding: spacing.lg,
-    borderRadius: radius.md,
-    backgroundColor: 'rgba(232,196,104,0.08)',
-    borderWidth: 1,
-    borderColor: 'rgba(232,196,104,0.25)',
-  },
-  moonpaySub: { fontFamily: fonts.bodyMed, fontSize: 10, color: colors.textFaint },
-  moonpayAmount: { fontFamily: fonts.display, fontSize: 26, color: colors.text, marginTop: 6 },
-  moonpayRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: spacing.sm,
-    paddingTop: spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: colors.borderDim,
-  },
-  moonpayRowLabel: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted },
-  moonpayRowValue: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.text },
 });

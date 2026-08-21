@@ -13,7 +13,6 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { AppBackground } from '@/components/glass/AppBackground';
-import { CheckoutModal } from '@/components/glass/CheckoutModal';
 import { GlassSurface } from '@/components/glass/GlassSurface';
 import { PillButton } from '@/components/glass/PillButton';
 import { ProductArt } from '@/components/glass/ProductArt';
@@ -35,6 +34,7 @@ import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { formatUsd } from '@/lib/format';
 import { useTierStatus } from '@/lib/useTierStatus';
 import { useQuizStore } from '@/store/useQuizStore';
+import { useUiStore } from '@/store/useUiStore';
 
 const ANALYSIS_STEPS = [
   '컨디션 데이터 분석 중',
@@ -410,7 +410,7 @@ function ResultsStep({
   onRetake: () => void;
 }) {
   const { tier } = useTierStatus();
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const openPayment = useUiStore((s) => s.openPayment);
   const axes = isPrecision ? RADAR_AXES : RADAR_AXES.filter((a) => BASIC_RADAR_AXES.includes(a.id as any));
   const lockedAxes = RADAR_AXES.filter((a) => !BASIC_RADAR_AXES.includes(a.id as any));
   const topScore = recommendations[0]?.score ?? 78;
@@ -481,7 +481,17 @@ function ResultsStep({
 
       <PillButton
         label={`지금 담기 · ${formatUsd(bundlePrice)}`}
-        onPress={() => setCheckoutOpen(true)}
+        onPress={() =>
+          openPayment(
+            {
+              kind: 'product',
+              title: `AI 추천 제품 ${products.length}건`,
+              subtitle: 'AI 헬스 인텔리전스',
+              priceUSD: bundlePrice,
+            },
+            onFinish
+          )
+        }
         colors_={['#B18CFF', '#8C5CE0']}
         style={{ marginTop: spacing.xl }}
       />
@@ -497,15 +507,6 @@ function ResultsStep({
           <Text style={styles.skipText}>홈으로 돌아가기</Text>
         </Pressable>
       </View>
-
-      <CheckoutModal
-        visible={checkoutOpen}
-        onClose={() => setCheckoutOpen(false)}
-        title={`AI 추천 제품 ${products.length}건`}
-        subtitle="AI 헬스 인텔리전스"
-        priceUSD={bundlePrice}
-        onSuccess={onFinish}
-      />
     </ScrollView>
   );
 }

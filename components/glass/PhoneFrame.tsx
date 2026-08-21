@@ -3,10 +3,11 @@ import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 
 import { colors, fonts, TAGLINE } from '@/constants/theme';
 
-const FRAME_WIDTH = 430;
-const FRAME_HEIGHT = 932;
-const BEZEL = 14;
-const MARGIN = 56;
+const FRAME_WIDTH = 412;
+const FRAME_HEIGHT = 896;
+const BEZEL = 7;
+const MARGIN_X = 20;
+const MAX_HEIGHT_RATIO = 0.94;
 
 // On web, the app is shown as a live product-showcase — centered inside a
 // dark phone bezel on a moody radial backdrop — instead of stretching edge
@@ -24,8 +25,10 @@ function WebStage({ children }: { children: React.ReactNode }) {
   const { width: winW, height: winH } = useWindowDimensions();
   const outerW = FRAME_WIDTH + BEZEL * 2;
   const outerH = FRAME_HEIGHT + BEZEL * 2;
-  const scale = Math.min(1, (winW - MARGIN * 2) / outerW, (winH - MARGIN * 2) / outerH);
-  const showWatermarks = winW - outerW * scale > 260;
+  const scaleW = (winW - MARGIN_X * 2) / outerW;
+  const scaleH = (winH * MAX_HEIGHT_RATIO) / outerH;
+  const scale = Math.min(1, scaleW, scaleH);
+  const showWatermarks = winW - outerW * scale > 220;
 
   return (
     <View style={styles.stage}>
@@ -62,11 +65,19 @@ function WebStage({ children }: { children: React.ReactNode }) {
           },
         ]}
       >
-        <View style={styles.notch} />
-        <View style={styles.screen}>{children}</View>
-        <View style={styles.buttonRight} />
-        <View style={styles.buttonLeftUpper} />
-        <View style={styles.buttonLeftLower} />
+        {/* Dynamic Island */}
+        <View style={styles.island} />
+        <View style={styles.screen}>
+          {children}
+          {/* Home indicator — overlays app content, never blocks touches */}
+          <View style={styles.homeIndicator} pointerEvents="none" />
+        </View>
+        {/* right side: power button */}
+        <View style={styles.powerButton} />
+        {/* left side: mute switch + volume up/down */}
+        <View style={styles.muteSwitch} />
+        <View style={styles.volumeUp} />
+        <View style={styles.volumeDown} />
       </View>
     </View>
   );
@@ -84,44 +95,44 @@ const styles = StyleSheet.create({
   watermark: {
     position: 'absolute',
     top: '50%',
-    marginTop: -20,
+    marginTop: -16,
   },
-  watermarkLeft: { left: 48 },
-  watermarkRight: { right: 48, alignItems: 'flex-end' },
+  watermarkLeft: { left: 36 },
+  watermarkRight: { right: 36, alignItems: 'flex-end' },
   watermarkTitle: {
     fontFamily: fonts.display,
-    fontSize: 15,
-    letterSpacing: 3,
-    color: 'rgba(255,255,255,0.16)',
+    fontSize: 11,
+    letterSpacing: 2.5,
+    color: 'rgba(255,255,255,0.14)',
   },
   watermarkTitleRight: { textAlign: 'right' },
   watermarkTagline: {
     fontFamily: fonts.body,
-    fontSize: 11,
-    color: 'rgba(255,255,255,0.1)',
-    marginTop: 4,
+    fontSize: 9,
+    color: 'rgba(255,255,255,0.09)',
+    marginTop: 3,
   },
   watermarkTaglineRight: { textAlign: 'right' },
   bezel: {
-    backgroundColor: '#050506',
-    borderRadius: 54,
+    backgroundColor: '#0C0C0E',
+    borderRadius: 46,
     padding: BEZEL,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.06)',
+    borderColor: 'rgba(255,255,255,0.08)',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 40 },
-    shadowOpacity: 0.6,
+    shadowOpacity: 0.65,
     shadowRadius: 60,
   },
-  notch: {
+  island: {
     position: 'absolute',
-    top: BEZEL + 10,
+    top: BEZEL + 11,
     left: '50%',
-    marginLeft: -60,
-    width: 120,
-    height: 26,
+    marginLeft: -58,
+    width: 116,
+    height: 32,
     borderRadius: 16,
-    backgroundColor: '#050506',
+    backgroundColor: '#000000',
     zIndex: 10,
   },
   screen: {
@@ -133,31 +144,50 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 6,
   },
-  buttonRight: {
+  homeIndicator: {
     position: 'absolute',
-    right: -3,
-    top: 160,
-    width: 3,
-    height: 90,
-    borderRadius: 2,
-    backgroundColor: '#1C1C20',
+    bottom: 7,
+    left: '50%',
+    marginLeft: -60,
+    width: 120,
+    height: 4,
+    borderRadius: 2.5,
+    backgroundColor: 'rgba(255,255,255,0.4)',
   },
-  buttonLeftUpper: {
+  powerButton: {
     position: 'absolute',
-    left: -3,
-    top: 130,
-    width: 3,
+    right: -2,
+    top: 148,
+    width: 2.5,
+    height: 84,
+    borderRadius: 1.5,
+    backgroundColor: '#232327',
+  },
+  muteSwitch: {
+    position: 'absolute',
+    left: -2,
+    top: 108,
+    width: 2.5,
+    height: 22,
+    borderRadius: 1.5,
+    backgroundColor: '#232327',
+  },
+  volumeUp: {
+    position: 'absolute',
+    left: -2,
+    top: 152,
+    width: 2.5,
     height: 50,
-    borderRadius: 2,
-    backgroundColor: '#1C1C20',
+    borderRadius: 1.5,
+    backgroundColor: '#232327',
   },
-  buttonLeftLower: {
+  volumeDown: {
     position: 'absolute',
-    left: -3,
-    top: 200,
-    width: 3,
-    height: 70,
-    borderRadius: 2,
-    backgroundColor: '#1C1C20',
+    left: -2,
+    top: 212,
+    width: 2.5,
+    height: 50,
+    borderRadius: 1.5,
+    backgroundColor: '#232327',
   },
 });

@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-reanimated';
 
+import { GlobalSheets } from '@/components/glass/GlobalSheets';
 import { ToastHost } from '@/components/glass/GlowToast';
 import { LevelUpOverlay } from '@/components/glass/LevelUpOverlay';
 import { PhoneFrame } from '@/components/glass/PhoneFrame';
@@ -55,6 +56,7 @@ export default function RootLayout() {
         </Stack>
         <ToastHost />
         <LevelUpOverlay />
+        <GlobalSheets />
       </PhoneFrame>
     </SafeAreaProvider>
   );

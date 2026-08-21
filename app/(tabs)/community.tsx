@@ -2,13 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useEffect, useState } from 'react';
 import {
-  Modal,
   Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -24,21 +22,17 @@ import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { CommunityPost, USER } from '@/data/mock';
 import { formatRelative } from '@/lib/date';
 import { useAppStore } from '@/store/useAppStore';
-
-const COMPOSER_IMAGES = ['new-1', 'new-2', 'new-3'];
+import { useUiStore } from '@/store/useUiStore';
 
 export default function CommunityScreen() {
   const insets = useSafeAreaInsets();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [composerOpen, setComposerOpen] = useState(false);
-  const [caption, setCaption] = useState('');
-  const [pickedImage, setPickedImage] = useState(COMPOSER_IMAGES[0]);
+  const openComposer = useUiStore((s) => s.openComposer);
 
   const posts = useAppStore((s) => s.posts);
   const toggleLike = useAppStore((s) => s.toggleLike);
   const toggleFollow = useAppStore((s) => s.toggleFollow);
-  const addCommunityPost = useAppStore((s) => s.addCommunityPost);
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 800);
@@ -54,14 +48,6 @@ export default function CommunityScreen() {
     if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1;
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
-
-  const submitPost = () => {
-    if (!caption.trim()) return;
-    addCommunityPost(caption.trim(), [pickedImage]);
-    setCaption('');
-    setPickedImage(COMPOSER_IMAGES[0]);
-    setComposerOpen(false);
-  };
 
   return (
     <View style={styles.root}>
@@ -79,7 +65,7 @@ export default function CommunityScreen() {
                 {USER.followers.toLocaleString()} 팔로워 · {USER.following.toLocaleString()} 팔로잉
               </Text>
             </View>
-            <PillButton label="후기 작성" onPress={() => setComposerOpen(true)} />
+            <PillButton label="후기 작성" onPress={openComposer} />
           </View>
         </View>
 
@@ -114,42 +100,6 @@ export default function CommunityScreen() {
         </View>
       </ScrollView>
       </TabFade>
-
-      <Modal visible={composerOpen} transparent animationType="fade" onRequestClose={() => setComposerOpen(false)}>
-        <Pressable style={styles.modalBackdrop} onPress={() => setComposerOpen(false)} />
-        <View style={styles.modalWrap}>
-          <GlassSurface strong radius={radius.xl} padding={spacing.xl}>
-            <Text style={styles.modalTitle}>새 후기 작성</Text>
-            <Text style={styles.modalHint}>후기를 등록하면 GLAS 리워드를 받아요.</Text>
-
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: spacing.md }}>
-              <View style={{ flexDirection: 'row', gap: spacing.sm }}>
-                {COMPOSER_IMAGES.map((img) => (
-                  <Pressable key={img} onPress={() => setPickedImage(img)}>
-                    <PlaceholderArt
-                      seed={img}
-                      style={[styles.pickThumb, pickedImage === img && styles.pickThumbActive]}
-                    />
-                  </Pressable>
-                ))}
-              </View>
-            </ScrollView>
-
-            <TextInput
-              value={caption}
-              onChangeText={setCaption}
-              placeholder="어떤 제품을 써보셨나요?"
-              placeholderTextColor={colors.textMuted}
-              style={styles.textArea}
-              multiline
-            />
-            <PillButton label="등록하고 GLAS 받기" onPress={submitPost} style={{ marginTop: spacing.lg }} />
-            <Pressable onPress={() => setComposerOpen(false)} style={{ marginTop: spacing.md, alignItems: 'center' }}>
-              <Text style={styles.cancelText}>취소</Text>
-            </Pressable>
-          </GlassSurface>
-        </View>
-      </Modal>
     </View>
   );
 }
@@ -324,25 +274,4 @@ const styles = StyleSheet.create({
   },
   commentAuthor: { fontFamily: fonts.bodyBold, fontSize: 11, color: colors.text },
   commentText: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, flex: 1 },
-  modalBackdrop: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(0,0,0,0.6)' },
-  modalWrap: { flex: 1, justifyContent: 'center', paddingHorizontal: spacing.xl },
-  modalTitle: { fontFamily: fonts.displaySemi, fontSize: 17, color: colors.text },
-  modalHint: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, marginTop: 4 },
-  pickThumb: { width: 64, height: 64, borderRadius: radius.md, marginRight: spacing.sm, opacity: 0.5 },
-  pickThumbActive: { opacity: 1, borderWidth: 2, borderColor: colors.accentViolet },
-  textArea: {
-    marginTop: spacing.md,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.10)',
-    borderRadius: radius.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: 12,
-    fontFamily: fonts.bodyMed,
-    fontSize: 13,
-    color: colors.text,
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    minHeight: 80,
-    textAlignVertical: 'top',
-  },
-  cancelText: { fontFamily: fonts.bodyMed, fontSize: 12, color: colors.textMuted },
 });
