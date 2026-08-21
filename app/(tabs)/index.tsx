@@ -14,6 +14,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AiHeroBanner } from '@/components/glass/AiHeroBanner';
 import { AppBackground } from '@/components/glass/AppBackground';
+import { HomeCarousel } from '@/components/glass/HomeCarousel';
 import { DropletProgress } from '@/components/glass/DropletProgress';
 import { EmptyState } from '@/components/glass/EmptyState';
 import { GlassSurface } from '@/components/glass/GlassSurface';
@@ -77,6 +78,11 @@ export default function HomeScreen() {
             <Text style={styles.valueProp}>여행 중에도 AI가 컨디션을 분석하고, 결제할 때마다 등급이 오르는 K-beauty 멤버십</Text>
           </View>
           <Image source={{ uri: USER.avatar }} style={styles.avatar} />
+        </View>
+
+        {/* rolling promo carousel — the home screen's first banner slot */}
+        <View style={styles.section}>
+          <HomeCarousel />
         </View>
 
         {/* AI hero banner — the app's flagship feature, highest visual priority */}

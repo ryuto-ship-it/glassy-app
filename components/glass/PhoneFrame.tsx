@@ -2,12 +2,17 @@ import { Platform, StyleSheet, Text, View, useWindowDimensions } from 'react-nat
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 
 import { colors, fonts, TAGLINE } from '@/constants/theme';
+import { SidePanel } from './SidePanel';
 
 const FRAME_WIDTH = 412;
 const FRAME_HEIGHT = 896;
 const BEZEL = 7;
 const MARGIN_X = 20;
 const MAX_HEIGHT_RATIO = 0.94;
+// Below this width the plain watermark shows instead (if there's room for
+// it at all) — there simply isn't space for an interactive rail without
+// crowding the phone frame.
+const SIDE_PANEL_MIN_WIDTH = 768;
 
 // On web, the app is shown as a live product-showcase — centered inside a
 // dark phone bezel on a moody radial backdrop — instead of stretching edge
@@ -29,6 +34,7 @@ function WebStage({ children }: { children: React.ReactNode }) {
   const scaleH = (winH * MAX_HEIGHT_RATIO) / outerH;
   const scale = Math.min(1, scaleW, scaleH);
   const showWatermarks = winW - outerW * scale > 220;
+  const showSidePanels = winW >= SIDE_PANEL_MIN_WIDTH;
 
   return (
     <View style={styles.stage}>
@@ -42,17 +48,24 @@ function WebStage({ children }: { children: React.ReactNode }) {
         <Rect width="100%" height="100%" fill="url(#stageGrad)" />
       </Svg>
 
-      {showWatermarks && (
+      {showSidePanels ? (
         <>
-          <View style={[styles.watermark, styles.watermarkLeft]}>
-            <Text style={styles.watermarkTitle}>GLASSY</Text>
-            <Text style={styles.watermarkTagline}>{TAGLINE}</Text>
-          </View>
-          <View style={[styles.watermark, styles.watermarkRight]}>
-            <Text style={[styles.watermarkTitle, styles.watermarkTitleRight]}>GLASSY</Text>
-            <Text style={[styles.watermarkTagline, styles.watermarkTaglineRight]}>{TAGLINE}</Text>
-          </View>
+          <SidePanel side="left" />
+          <SidePanel side="right" />
         </>
+      ) : (
+        showWatermarks && (
+          <>
+            <View style={[styles.watermark, styles.watermarkLeft]}>
+              <Text style={styles.watermarkTitle}>GLASSY</Text>
+              <Text style={styles.watermarkTagline}>{TAGLINE}</Text>
+            </View>
+            <View style={[styles.watermark, styles.watermarkRight]}>
+              <Text style={[styles.watermarkTitle, styles.watermarkTitleRight]}>GLASSY</Text>
+              <Text style={[styles.watermarkTagline, styles.watermarkTaglineRight]}>{TAGLINE}</Text>
+            </View>
+          </>
+        )
       )}
 
       <View

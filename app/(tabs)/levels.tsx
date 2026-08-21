@@ -1,7 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import {
+  FlatList,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppBackground } from '@/components/glass/AppBackground';
@@ -11,12 +21,16 @@ import { GradeBadge } from '@/components/glass/GradeBadge';
 import { PillButton } from '@/components/glass/PillButton';
 import { SkeletonBlock } from '@/components/glass/Skeleton';
 import { TabFade } from '@/components/glass/TabFade';
-import { TIERS } from '@/constants/glow';
+import { Tier, TIERS } from '@/constants/glow';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { formatDateShort } from '@/lib/date';
 import { formatGlas, formatSigned, formatUsd } from '@/lib/format';
 import { useTierStatus } from '@/lib/useTierStatus';
 import { useUiStore } from '@/store/useUiStore';
+
+const CARD_WIDTH = 172;
+const CARD_GAP = spacing.md;
+const SNAP = CARD_WIDTH + CARD_GAP;
 
 export default function LevelsScreen() {
   const insets = useSafeAreaInsets();
@@ -47,6 +61,14 @@ export default function LevelsScreen() {
   } = useTierStatus();
 
   const costUsd = remainingGlas * price;
+  const currentIndex = currentTier.order;
+  const [activeIndex, setActiveIndex] = useState(currentIndex);
+  const progressPct = Math.round(progress * 100);
+
+  const onCarouselMomentumEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const idx = Math.round(e.nativeEvent.contentOffset.x / SNAP);
+    setActiveIndex(Math.max(0, Math.min(TIERS.length - 1, idx)));
+  };
 
   return (
     <View style={styles.root}>
@@ -64,19 +86,26 @@ export default function LevelsScreen() {
           </Text>
         </View>
 
-        {/* SaaS-style tier comparison */}
+        {/* SaaS-style tier comparison — horizontal snap carousel */}
         <View style={{ marginTop: spacing.lg }}>
-          <ScrollView
+          <FlatList
+            data={TIERS}
+            keyExtractor={(tier) => tier.id}
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingHorizontal: spacing.xl, gap: spacing.md }}
-          >
-            {TIERS.map((tier) => {
+            snapToInterval={SNAP}
+            decelerationRate="fast"
+            snapToAlignment="start"
+            contentContainerStyle={{ paddingHorizontal: spacing.xl }}
+            ItemSeparatorComponent={() => <View style={{ width: CARD_GAP }} />}
+            getItemLayout={(_, i) => ({ length: SNAP, offset: i * SNAP, index: i })}
+            initialScrollIndex={currentIndex}
+            onMomentumScrollEnd={onCarouselMomentumEnd}
+            renderItem={({ item: tier }: { item: Tier }) => {
               const achieved = tier.order <= currentTier.order;
               const isCurrent = tier.id === currentTier.id;
               return (
                 <GlassSurface
-                  key={tier.id}
                   radius={radius.lg}
                   padding={spacing.lg}
                   strong={isCurrent}
@@ -112,8 +141,34 @@ export default function LevelsScreen() {
                   </View>
                 </GlassSurface>
               );
-            })}
-          </ScrollView>
+            }}
+          />
+          <View style={styles.dotsRow}>
+            {TIERS.map((tier, i) => (
+              <View key={tier.id} style={[styles.dot, i === activeIndex && styles.dotActive]} />
+            ))}
+          </View>
+        </View>
+
+        {/* progress bar tied to the carousel above — how close to the next tier */}
+        <View style={styles.section}>
+          <GlassSurface radius={radius.lg} padding={spacing.lg}>
+            {next ? (
+              <>
+                <View style={styles.miniProgressHeaderRow}>
+                  <Text style={styles.miniProgressLabel}>
+                    {next.name}까지 {formatGlas(remainingGlas)} GLAS 남음
+                  </Text>
+                  <Text style={[styles.miniProgressPct, { color: next.accent }]}>{progressPct}%</Text>
+                </View>
+                <View style={styles.miniProgressTrack}>
+                  <View style={[styles.miniProgressFill, { width: `${progressPct}%`, backgroundColor: next.accent }]} />
+                </View>
+              </>
+            ) : (
+              <Text style={styles.miniProgressLabel}>🎉 최고 등급 달성 — 더 이상 오를 등급이 없어요</Text>
+            )}
+          </GlassSurface>
         </View>
 
         {loading ? (
@@ -235,6 +290,22 @@ const styles = StyleSheet.create({
   compareBenefits: { marginTop: spacing.md, gap: 6 },
   compareBenefitRow: { flexDirection: 'row', gap: 5, alignItems: 'flex-start' },
   compareBenefitText: { fontFamily: fonts.bodyMed, fontSize: 10.5, color: colors.textMuted, flex: 1, lineHeight: 14 },
+
+  dotsRow: { flexDirection: 'row', justifyContent: 'center', gap: 6, marginTop: spacing.md },
+  dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.borderStrong },
+  dotActive: { width: 16, backgroundColor: colors.accentViolet },
+
+  miniProgressHeaderRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  miniProgressLabel: { fontFamily: fonts.bodySemi, fontSize: 12.5, color: colors.text },
+  miniProgressPct: { fontFamily: fonts.displaySemi, fontSize: 13 },
+  miniProgressTrack: {
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    marginTop: spacing.sm,
+    overflow: 'hidden',
+  },
+  miniProgressFill: { height: '100%', borderRadius: 4 },
 
   currentName: { fontFamily: fonts.display, fontSize: 22, marginTop: spacing.md },
   currentCount: { fontFamily: fonts.bodySemi, fontSize: 13, color: colors.text, marginTop: 4 },
