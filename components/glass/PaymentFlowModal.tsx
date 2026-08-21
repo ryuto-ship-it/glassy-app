@@ -4,11 +4,12 @@ import { ActivityIndicator, Pressable, ScrollView, StyleProp, StyleSheet, Text, 
 import Animated, { FadeIn } from 'react-native-reanimated';
 
 import { colors, fonts, radius, spacing } from '@/constants/theme';
-import { GLAS_PRICE_USD } from '@/data/mock';
+import { GLAS_PRICE_USD, USER } from '@/data/mock';
 import { formatGlas, formatUsd } from '@/lib/format';
 import { PaymentMethod, useAppStore } from '@/store/useAppStore';
 import { AppModal } from './AppModal';
 import { GlassSurface } from './GlassSurface';
+import { MockQRCode } from './MockQRCode';
 import { PillButton } from './PillButton';
 
 export type PaymentVariant =
@@ -34,6 +35,9 @@ type Step =
   | 'card-processing'
   | 'glas-confirm'
   | 'glas-processing'
+  | 'cash-qr'
+  | 'cash-scanning'
+  | 'cash-matched'
   | 'success';
 
 const WALLETS: { id: string; name: string; color: string; icon: keyof typeof Ionicons.glyphMap }[] = [
@@ -86,7 +90,30 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
     setError(null);
     if (method === 'stablecoin') setStep('wallet-select');
     else if (method === 'card') setStep('card-input');
+    else if (method === 'cash') startCashFlow();
     else setStep('glas-confirm');
+  };
+
+  // Cash paid at the register — the point of this flow is that GLASSY
+  // doesn't care how you paid; the QR at checkout is what earns the GLAS,
+  // matched automatically against the profile info collected at signup.
+  const startCashFlow = () => {
+    setStep('cash-qr');
+    after(2200, () => {
+      setStep('cash-scanning');
+      after(1500, () => {
+        setStep('cash-matched');
+        after(1400, () => {
+          let creditGlas = 0;
+          if (variant.kind === 'product') {
+            checkoutPurchase(title, subtitle, priceUSD, 'cash');
+            creditGlas = Math.round(priceUSD * 4);
+          }
+          setResult({ creditGlas, ref: `QR-${mockHex(6).toUpperCase()}` });
+          setStep('success');
+        });
+      });
+    });
   };
 
   const selectWallet = (w: (typeof WALLETS)[number]) => {
@@ -154,7 +181,9 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
     onClose();
   };
 
-  const dismissable = !['stable-processing', 'card-processing', 'glas-processing', 'wallet-connecting'].includes(step);
+  const dismissable = !['stable-processing', 'card-processing', 'glas-processing', 'wallet-connecting', 'cash-scanning'].includes(
+    step
+  );
 
   return (
     <AppModal visible={visible} onClose={onClose} dismissable={dismissable}>
@@ -167,6 +196,9 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
               <MethodRow icon="swap-horizontal-outline" label="스테이블코인" sub="USDT / USDC · 지갑 연결" onPress={() => selectMethod('stablecoin')} />
               <MethodRow icon="card-outline" label="신용카드" sub="MoonPay 연동" onPress={() => selectMethod('card')} />
               {variant.kind === 'product' && (
+                <MethodRow icon="qr-code-outline" label="현금" sub="계산대에서 QR로 적립" onPress={() => selectMethod('cash')} />
+              )}
+              {variant.kind === 'product' && (
                 <MethodRow
                   icon="flash-outline"
                   label="$GLAS"
@@ -175,6 +207,7 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
                 />
               )}
             </View>
+            <Text style={styles.methodFootnote}>결제 수단과 무관하게, 적립은 항상 QR 또는 지갑 서명으로 처리돼요.</Text>
           </StepFade>
         )}
 
@@ -334,6 +367,43 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
           </StepFade>
         )}
 
+        {step === 'cash-qr' && (
+          <StepFade>
+            <Header title="계산대에 QR을 보여주세요" subtitle={title} />
+            <Text style={styles.price}>{formatUsd(priceUSD)}</Text>
+            <View style={styles.qrWrap}>
+              <MockQRCode size={168} seed={7} />
+            </View>
+            <Text style={styles.qrHint}>현금으로 결제하고, 이 QR로 GLAS를 적립받아요.</Text>
+          </StepFade>
+        )}
+
+        {step === 'cash-scanning' && (
+          <StepFade>
+            <View style={styles.centerBlock}>
+              <ActivityIndicator color={colors.accentGold} />
+              <Text style={styles.centerText}>QR 스캔 중...</Text>
+            </View>
+          </StepFade>
+        )}
+
+        {step === 'cash-matched' && (
+          <StepFade>
+            <View style={styles.centerBlock}>
+              <View style={styles.successIcon}>
+                <Ionicons name="checkmark" size={26} color="#0B0B0D" />
+              </View>
+              <Text style={styles.centerTitle}>프로필 매칭 완료</Text>
+              <Text style={styles.centerText}>가입하신 프로필 정보로 자동 매칭돼서 적립돼요.</Text>
+              <View style={styles.profileChipRow}>
+                <ProfileChip label={`${USER.countryFlag} ${USER.country}`} />
+                <ProfileChip label={USER.gender} />
+                <ProfileChip label={USER.ageBand} />
+              </View>
+            </View>
+          </StepFade>
+        )}
+
         {step === 'success' && result && (
           <StepFade>
             <View style={styles.centerBlock}>
@@ -411,6 +481,14 @@ function MethodRow({
         <Ionicons name="chevron-forward" size={16} color={colors.textFaint} />
       </GlassSurface>
     </Pressable>
+  );
+}
+
+function ProfileChip({ label }: { label: string }) {
+  return (
+    <View style={styles.profileChip}>
+      <Text style={styles.profileChipText}>{label}</Text>
+    </View>
   );
 }
 
@@ -535,6 +613,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.04)',
   },
   errorText: { fontFamily: fonts.bodyMed, fontSize: 11, color: colors.danger, marginTop: spacing.sm },
+  methodFootnote: { fontFamily: fonts.body, fontSize: 10.5, color: colors.textFaint, marginTop: spacing.md, textAlign: 'center', lineHeight: 15 },
+  qrWrap: { alignItems: 'center', marginTop: spacing.lg },
+  qrHint: { fontFamily: fonts.bodyMed, fontSize: 11.5, color: colors.textMuted, marginTop: spacing.md, textAlign: 'center' },
+  profileChipRow: { flexDirection: 'row', gap: 6, marginTop: spacing.md, flexWrap: 'wrap', justifyContent: 'center' },
+  profileChip: { backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: radius.pill, paddingHorizontal: 10, paddingVertical: 5, borderWidth: 1, borderColor: colors.borderDim },
+  profileChipText: { fontFamily: fonts.bodySemi, fontSize: 11, color: colors.text },
   detailNote: { fontFamily: fonts.body, fontSize: 10, color: colors.textFaint, marginTop: spacing.sm },
   refBox: { marginTop: spacing.lg, alignItems: 'center' },
   refLabel: { fontFamily: fonts.bodyMed, fontSize: 10, color: colors.textFaint },

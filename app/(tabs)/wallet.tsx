@@ -16,6 +16,7 @@ import { EmptyState } from '@/components/glass/EmptyState';
 import { GlassSurface } from '@/components/glass/GlassSurface';
 import { PillButton } from '@/components/glass/PillButton';
 import { get24hChange, PriceChart, PriceTicker } from '@/components/glass/PriceChart';
+import { QrFlowDiagram } from '@/components/glass/QrFlowDiagram';
 import { SkeletonBlock } from '@/components/glass/Skeleton';
 import { TabFade } from '@/components/glass/TabFade';
 import { RADAR_AXES } from '@/data/aiRecommendations';
@@ -88,6 +89,10 @@ export default function WalletScreen() {
         <View style={styles.section}>
           <Text style={styles.pageTitle}>지갑</Text>
           <Text style={styles.pageSub}>$GLAS는 결제 수단이 아니라 보유 개수로 등급을 결정해요.</Text>
+        </View>
+
+        <View style={styles.section}>
+          <QrFlowDiagram />
         </View>
 
         <View style={styles.section}>

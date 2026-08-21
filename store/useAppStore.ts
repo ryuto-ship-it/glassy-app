@@ -5,6 +5,7 @@ import {
   COMMUNITY_POSTS,
   CommunityPost,
   GLAS_PRICE_USD,
+  LanguageCode,
   PRODUCTS,
   STAKE_ENTRIES,
   StakeEntry,
@@ -20,7 +21,7 @@ export type Toast = {
   glasAmount?: number;
 };
 
-export type PaymentMethod = 'stablecoin' | 'card' | 'glas';
+export type PaymentMethod = 'stablecoin' | 'card' | 'glas' | 'cash';
 
 type AppState = {
   // wallet — GLAS held, split by source
@@ -39,6 +40,15 @@ type AppState = {
   achievedTier: TierId;
   achievedAt: string;
   achievedAtPrice: number;
+
+  // scan/translation display language — defaults from the profile's
+  // country setting but is switchable from Profile for demo purposes.
+  language: LanguageCode;
+
+  // welcome gateway — only actually credits GLAS the first time; replaying
+  // the welcome flow from the Profile tab still shows the full animation
+  // but won't re-grant the bonus.
+  welcomeBonusClaimed: boolean;
 
   // community
   posts: CommunityPost[];
@@ -73,7 +83,11 @@ type AppState = {
     method: PaymentMethod
   ) => { ok: boolean; reason?: string };
   buyTierDirect: (usdCost: number, method: 'stablecoin' | 'card') => void;
+  claimWelcomeBonus: () => { credited: boolean; amount: number };
+  setLanguage: (lang: LanguageCode) => void;
 };
+
+export const WELCOME_BONUS_GLAS = 500;
 
 let idCounter = 1;
 function nextId(prefix: string) {
@@ -100,6 +114,9 @@ export const useAppStore = create<AppState>((set, get) => ({
   achievedTier: USER.achievedTier,
   achievedAt: USER.achievedAt,
   achievedAtPrice: USER.achievedAtPrice,
+
+  language: USER.language,
+  welcomeBonusClaimed: false,
 
   posts: COMMUNITY_POSTS,
 
@@ -313,9 +330,11 @@ export const useAppStore = create<AppState>((set, get) => ({
     get().checkTierPromotion();
   },
 
-  // Checkout with a choice of 3 payment methods. Paying with stablecoin or
-  // card earns the usual purchase-reward GLAS; paying with GLAS itself
-  // spends from the spendable buckets and earns no reward.
+  // Checkout with a choice of payment methods. Stablecoin, card, and cash
+  // (via QR) all earn the usual purchase-reward GLAS — the point is that
+  // payment method is irrelevant to earning; only the QR step differs.
+  // Paying with GLAS itself spends from the spendable buckets and earns no
+  // reward.
   checkoutPurchase: (title, subtitle, priceUSD, method) => {
     if (method === 'glas') {
       const glasCost = Math.ceil(priceUSD / GLAS_PRICE_USD);
@@ -348,7 +367,8 @@ export const useAppStore = create<AppState>((set, get) => ({
           id: nextId('tx'),
           type: 'purchase',
           title,
-          subtitle: method === 'card' ? `${subtitle} · 신용카드` : `${subtitle} · 스테이블코인`,
+          subtitle:
+            method === 'card' ? `${subtitle} · 신용카드` : method === 'cash' ? `${subtitle} · 현금(QR 적립)` : `${subtitle} · 스테이블코인`,
           date: new Date().toISOString(),
           glasDelta: reward,
           usdAmount: priceUSD,
@@ -385,6 +405,29 @@ export const useAppStore = create<AppState>((set, get) => ({
     }));
     get().checkTierPromotion();
   },
+
+  claimWelcomeBonus: () => {
+    if (get().welcomeBonusClaimed) return { credited: false, amount: 0 };
+    set((s) => ({
+      welcomeBonusClaimed: true,
+      purchaseEarnedGlas: s.purchaseEarnedGlas + WELCOME_BONUS_GLAS,
+      transactions: [
+        {
+          id: nextId('tx'),
+          type: 'welcome_bonus',
+          title: '웰컴 리워드',
+          subtitle: '가입 즉시 지급',
+          date: new Date().toISOString(),
+          glasDelta: WELCOME_BONUS_GLAS,
+        },
+        ...s.transactions,
+      ],
+    }));
+    get().checkTierPromotion();
+    return { credited: true, amount: WELCOME_BONUS_GLAS };
+  },
+
+  setLanguage: (lang) => set({ language: lang }),
 }));
 
 export function getProductById(id: string) {

@@ -9,11 +9,15 @@ type UiState = {
   walletActionMode: 'buy' | 'stake';
   paymentVariant: PaymentVariant | null;
   paymentOnSuccess: (() => void) | null;
+  // Shown once per app session on first Home mount, and re-visitable anytime
+  // from the Profile tab ("웰컴 플로우 다시보기") for demo purposes.
+  hasSeenWelcome: boolean;
 
   openWalletAction: (mode: 'buy' | 'stake') => void;
   openComposer: () => void;
   openPayment: (variant: PaymentVariant, onSuccess?: () => void) => void;
   closeSheet: () => void;
+  markWelcomeSeen: () => void;
 };
 
 // All bottom sheets/modals are rendered once at the app root (see
@@ -27,10 +31,12 @@ export const useUiStore = create<UiState>((set) => ({
   walletActionMode: 'buy',
   paymentVariant: null,
   paymentOnSuccess: null,
+  hasSeenWelcome: false,
 
   openWalletAction: (mode) => set({ activeSheet: 'wallet-action', walletActionMode: mode }),
   openComposer: () => set({ activeSheet: 'composer' }),
   openPayment: (variant, onSuccess) =>
     set({ activeSheet: 'payment', paymentVariant: variant, paymentOnSuccess: onSuccess ?? null }),
   closeSheet: () => set({ activeSheet: null }),
+  markWelcomeSeen: () => set({ hasSeenWelcome: true }),
 }));

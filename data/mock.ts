@@ -235,7 +235,7 @@ export const FEATURED_GROUP_BUY = PRODUCTS.find((p) => p.id === 'p13')!;
 
 export type Transaction = {
   id: string;
-  type: 'purchase' | 'stake' | 'unstake' | 'buy' | 'post_reward' | 'tier_purchase' | 'purchase_glas';
+  type: 'purchase' | 'stake' | 'unstake' | 'buy' | 'post_reward' | 'tier_purchase' | 'purchase_glas' | 'welcome_bonus';
   title: string;
   subtitle: string;
   date: string; // ISO
@@ -355,6 +355,15 @@ export const STAKE_ENTRIES: StakeEntry[] = [
   { id: 's1', amount: 650, startDate: '2026-07-05' },
 ];
 
+export type LanguageCode = 'en' | 'zh' | 'vi' | 'ko';
+
+export const LANGUAGE_LABEL: Record<LanguageCode, string> = {
+  en: 'English',
+  zh: '中文',
+  vi: 'Tiếng Việt',
+  ko: '한국어',
+};
+
 export const USER = {
   name: 'Declan Murphy',
   location: 'Dublin, Ireland',
@@ -370,6 +379,14 @@ export const USER = {
   achievedTier: 'radiant-glass' as TierId,
   achievedAt: '2026-06-20T09:00:00.000Z',
   achievedAtPrice: 0.45,
+  // Profile fields used by the QR-based cash-purchase matching mock
+  // (country/gender/age band) and by the product-scan translation demo
+  // (preferred language).
+  country: 'Ireland',
+  countryFlag: '🇮🇪',
+  gender: '남성' as '남성' | '여성',
+  ageBand: '30대' as const,
+  language: 'en' as LanguageCode,
 };
 
 export type CommunityPost = {

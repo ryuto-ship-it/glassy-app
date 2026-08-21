@@ -52,6 +52,9 @@ export default function RootLayout() {
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }}>
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="quiz" options={{ animation: 'slide_from_bottom' }} />
+          <Stack.Screen name="welcome" options={{ animation: 'fade' }} />
+          <Stack.Screen name="scan" options={{ animation: 'fade' }} />
+          <Stack.Screen name="admin" options={{ animation: 'fade' }} />
           <Stack.Screen name="+not-found" options={{ headerShown: true, title: 'Oops!' }} />
         </Stack>
         <ToastHost />

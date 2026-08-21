@@ -32,6 +32,7 @@ import { CATEGORY_ICON } from '@/lib/productIcon';
 import { useTierStatus } from '@/lib/useTierStatus';
 import { useAppStore } from '@/store/useAppStore';
 import { useQuizStore } from '@/store/useQuizStore';
+import { useUiStore } from '@/store/useUiStore';
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
@@ -42,10 +43,19 @@ export default function HomeScreen() {
   const transactions = useAppStore((s) => s.transactions);
   const hasCompletedQuiz = useQuizStore((s) => s.hasCompletedQuiz);
   const quizResult = useQuizStore((s) => s.result);
+  const hasSeenWelcome = useUiStore((s) => s.hasSeenWelcome);
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 800);
     return () => clearTimeout(t);
+  }, []);
+
+  // Shows the store-entry welcome gateway once per session, as if the
+  // customer just walked in and scanned the store QR. Replayable anytime
+  // from Profile for demos.
+  useEffect(() => {
+    if (!hasSeenWelcome) router.push('/welcome');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onRefresh = useCallback(() => {
