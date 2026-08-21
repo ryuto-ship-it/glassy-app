@@ -342,6 +342,184 @@ export const PRODUCTS: Product[] = [
 
 export const FEATURED_GROUP_BUY = PRODUCTS.find((p) => p.id === 'p13')!;
 
+// Multi-language detail data for the camera-scan demo (task 2). Only a
+// handful of real products get the full translated detail sheet — the
+// scan flow is a mock, not a real OCR/vision pipeline, so it only "knows
+// about" these product ids.
+export type ScanDetail = {
+  name: string;
+  manufacturer: string;
+  efficacy: string;
+  dosage: string;
+  precautions: string;
+  sideEffects: string;
+};
+
+export type ScanProduct = {
+  productId: string;
+  sourceBadge: string;
+  // True for the one demo product seeded as already-purchased, so the demo
+  // can show both the "내가 구매한 제품" and "장바구니 담기" states.
+  alreadyPurchased?: boolean;
+  translations: Record<LanguageCode, ScanDetail>;
+};
+
+export const SCAN_PRODUCTS: ScanProduct[] = [
+  {
+    productId: 'r1',
+    sourceBadge: '식약처 공식 데이터 연동',
+    alreadyPurchased: true,
+    translations: {
+      ko: {
+        name: '레모나 비타민C 정제',
+        manufacturer: '경남제약',
+        efficacy: '비타민C 보충, 피로 회복, 면역력 지원',
+        dosage: '1회 1~2정, 1일 3회, 물과 함께 섭취',
+        precautions: '신장 결석 병력이 있는 경우 복용 전 상담 필요',
+        sideEffects: '과다 섭취 시 위장 장애, 설사가 나타날 수 있음',
+      },
+      en: {
+        name: 'Lemona Vitamin C Tablets',
+        manufacturer: 'Kyungnam Pharm',
+        efficacy: 'Vitamin C supplementation, fatigue recovery, immune support',
+        dosage: '1–2 tablets, 3 times daily, taken with water',
+        precautions: 'Consult a doctor first if you have a history of kidney stones',
+        sideEffects: 'Overdose may cause stomach upset or diarrhea',
+      },
+      zh: {
+        name: '레모나 Lemona 维生素C片',
+        manufacturer: '庆南制药',
+        efficacy: '补充维生素C，缓解疲劳，支持免疫力',
+        dosage: '每次1~2片，每日3次，配水服用',
+        precautions: '有肾结石病史者服用前请先咨询医生',
+        sideEffects: '过量服用可能引起肠胃不适或腹泻',
+      },
+      vi: {
+        name: 'Viên Vitamin C Lemona',
+        manufacturer: 'Kyungnam Pharm',
+        efficacy: 'Bổ sung vitamin C, phục hồi mệt mỏi, hỗ trợ miễn dịch',
+        dosage: 'Uống 1–2 viên, 3 lần/ngày cùng với nước',
+        precautions: 'Tham khảo ý kiến bác sĩ trước nếu có tiền sử sỏi thận',
+        sideEffects: 'Dùng quá liều có thể gây khó chịu dạ dày hoặc tiêu chảy',
+      },
+    },
+  },
+  {
+    productId: 'r3',
+    sourceBadge: '식약처 공식 데이터 연동',
+    translations: {
+      ko: {
+        name: '정관장 홍삼정 에브리타임',
+        manufacturer: 'KGC인삼공사',
+        efficacy: '면역력 증진, 피로 개선, 혈액 흐름 개선 도움',
+        dosage: '1회 1포(10ml), 1일 1~2회, 그대로 또는 물에 희석하여 섭취',
+        precautions: '어린이는 보호자와 상담 후 섭취, 특정 약물 복용 중이면 상담 필요',
+        sideEffects: '체질에 따라 소화불량, 두드러기가 나타날 수 있음',
+      },
+      en: {
+        name: 'Cheong Kwan Jang Korean Red Ginseng Everytime',
+        manufacturer: 'KGC Ginseng Corp',
+        efficacy: 'Boosts immunity, reduces fatigue, supports blood circulation',
+        dosage: '1 pouch (10ml), 1–2 times daily, drink directly or diluted with water',
+        precautions: 'Children should consult a guardian first; check with a doctor if on medication',
+        sideEffects: 'May cause indigestion or hives depending on individual sensitivity',
+      },
+      zh: {
+        name: '正官庄 红参精 Everytime',
+        manufacturer: 'KGC人参公社',
+        efficacy: '提升免疫力，缓解疲劳，帮助血液循环',
+        dosage: '每次1袋(10ml)，每日1~2次，可直接饮用或加水稀释',
+        precautions: '儿童需在监护人指导下饮用，服用其他药物者请先咨询',
+        sideEffects: '因体质不同可能出现消化不良或荨麻疹',
+      },
+      vi: {
+        name: 'Hồng Sâm Cheong Kwan Jang Everytime',
+        manufacturer: 'Tập đoàn Sâm KGC',
+        efficacy: 'Tăng cường miễn dịch, giảm mệt mỏi, hỗ trợ tuần hoàn máu',
+        dosage: '1 gói (10ml), 1–2 lần/ngày, uống trực tiếp hoặc pha với nước',
+        precautions: 'Trẻ em cần có người giám hộ tư vấn; hỏi ý kiến bác sĩ nếu đang dùng thuốc khác',
+        sideEffects: 'Có thể gây khó tiêu hoặc mề đay tùy thể trạng',
+      },
+    },
+  },
+  {
+    productId: 'r6',
+    sourceBadge: '식약처 공식 데이터 연동',
+    translations: {
+      ko: {
+        name: '마데카솔 카밍 크림',
+        manufacturer: '동국제약',
+        efficacy: '피부 진정, 상처 및 흉터 케어, 재생 지원',
+        dosage: '환부에 1일 1~3회 적당량 도포',
+        precautions: '눈, 점막 부위 접촉 금지, 상처가 심할 경우 전문의 상담',
+        sideEffects: '드물게 도포 부위 발적, 가려움이 나타날 수 있음',
+      },
+      en: {
+        name: 'Madecassol Calming Cream',
+        manufacturer: 'Dongkook Pharmaceutical',
+        efficacy: 'Skin calming, wound and scar care, supports skin regeneration',
+        dosage: 'Apply an appropriate amount to the affected area 1–3 times daily',
+        precautions: 'Avoid contact with eyes or mucous membranes; see a doctor for severe wounds',
+        sideEffects: 'Redness or itching at the application site may rarely occur',
+      },
+      zh: {
+        name: '마데카솔 舒缓修复霜',
+        manufacturer: '东国制药',
+        efficacy: '镇静肌肤，护理伤口与疤痕，帮助皮肤再生',
+        dosage: '每日1~3次，取适量涂抹于患处',
+        precautions: '避免接触眼睛及黏膜部位，伤口严重请咨询专业医生',
+        sideEffects: '少数情况下涂抹部位可能出现发红或瘙痒',
+      },
+      vi: {
+        name: 'Kem Làm Dịu Madecassol',
+        manufacturer: 'Dongkook Pharmaceutical',
+        efficacy: 'Làm dịu da, chăm sóc vết thương và sẹo, hỗ trợ tái tạo da',
+        dosage: 'Bôi lượng vừa đủ lên vùng da 1–3 lần/ngày',
+        precautions: 'Tránh tiếp xúc với mắt và niêm mạc; tham khảo bác sĩ nếu vết thương nặng',
+        sideEffects: 'Hiếm khi có thể gây đỏ hoặc ngứa tại vùng bôi',
+      },
+    },
+  },
+  {
+    productId: 'r7',
+    sourceBadge: '식약처 공식 데이터 연동',
+    translations: {
+      ko: {
+        name: '신신파스 아렉스',
+        manufacturer: '신신제약',
+        efficacy: '근육통, 관절통, 타박상 완화',
+        dosage: '통증 부위에 1일 1~2회 부착, 같은 부위 연속 사용은 피하기',
+        precautions: '상처나 피부염이 있는 부위에는 사용하지 말 것',
+        sideEffects: '피부 자극감, 발적이 나타날 수 있음',
+      },
+      en: {
+        name: 'Sinsin Pas Arex',
+        manufacturer: 'Sinsin Pharmaceutical',
+        efficacy: 'Relieves muscle pain, joint pain, and bruising',
+        dosage: 'Apply to the painful area 1–2 times daily; avoid continuous use on the same spot',
+        precautions: 'Do not use on wounds or areas with dermatitis',
+        sideEffects: 'Skin irritation or redness may occur',
+      },
+      zh: {
+        name: '신신파스 신신膏 Arex',
+        manufacturer: '新新制药',
+        efficacy: '缓解肌肉痛、关节痛及跌打损伤',
+        dosage: '每日1~2次贴于疼痛部位，避免同一部位连续使用',
+        precautions: '有伤口或皮炎的部位请勿使用',
+        sideEffects: '可能出现皮肤刺激感或发红',
+      },
+      vi: {
+        name: 'Cao Dán Sinsin Pas Arex',
+        manufacturer: 'Sinsin Pharmaceutical',
+        efficacy: 'Giảm đau nhức cơ, đau khớp và bầm tím',
+        dosage: 'Dán lên vùng đau 1–2 lần/ngày, tránh dùng liên tục ở cùng một vị trí',
+        precautions: 'Không sử dụng trên vết thương hoặc vùng da bị viêm',
+        sideEffects: 'Có thể gây kích ứng da hoặc đỏ da',
+      },
+    },
+  },
+];
+
 export type Transaction = {
   id: string;
   type: 'purchase' | 'stake' | 'unstake' | 'buy' | 'post_reward' | 'tier_purchase' | 'purchase_glas' | 'welcome_bonus';

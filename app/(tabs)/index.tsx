@@ -312,6 +312,10 @@ export default function HomeScreen() {
         </View>
       </ScrollView>
       </TabFade>
+
+      <Pressable onPress={() => router.push('/scan')} style={styles.scanFab}>
+        <Ionicons name="scan" size={22} color="#0B0B0D" />
+      </Pressable>
     </View>
   );
 }
@@ -337,6 +341,22 @@ function QuickAction({
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
+  scanFab: {
+    position: 'absolute',
+    right: spacing.xl,
+    bottom: 100,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: colors.accentGold,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: colors.accentGold,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 14,
+    elevation: 8,
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
