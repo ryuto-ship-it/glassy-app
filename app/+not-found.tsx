@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 22,
     borderRadius: radius.pill,
-    backgroundColor: colors.accentLavender,
+    backgroundColor: colors.accentViolet,
   },
-  linkText: { fontFamily: fonts.bodyBold, fontSize: 14, color: '#fff' },
+  linkText: { fontFamily: fonts.bodyBold, fontSize: 14, color: '#0B0B0D' },
 });

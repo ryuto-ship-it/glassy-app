@@ -20,11 +20,15 @@ export type Toast = {
   glasAmount?: number;
 };
 
+export type PaymentMethod = 'stablecoin' | 'card' | 'glas';
+
 type AppState = {
-  // wallet
-  purchaseEarnedGlas: number;
-  liquidBoughtGlas: number;
-  stakeEntries: StakeEntry[];
+  // wallet — GLAS held, split by source
+  purchaseEarnedGlas: number; // 구매 적립분
+  directPurchaseGlas: number; // 등급 즉시구매분
+  communityRewardGlas: number; // 커뮤니티 리워드분
+  liquidBoughtGlas: number; // exchange-bought, not yet staked
+  stakeEntries: StakeEntry[]; // 스테이킹 매수분 (matures after lockup)
   usdtBalance: number;
   usdcBalance: number;
   transactions: Transaction[];
@@ -47,6 +51,7 @@ type AppState = {
   maturedStakedGlas: () => number;
   pendingStakedGlas: () => number;
   totalGlas: () => number;
+  spendableGlas: () => number;
 
   // actions
   buyGlas: (usdtAmount: number) => void;
@@ -60,6 +65,14 @@ type AppState = {
   clearLevelUp: () => void;
   simulatePharmacyPurchase: (title: string, subtitle: string, usdAmount: number) => void;
   checkTierPromotion: () => void;
+  spendGlas: (amount: number) => boolean;
+  checkoutPurchase: (
+    title: string,
+    subtitle: string,
+    priceUSD: number,
+    method: PaymentMethod
+  ) => { ok: boolean; reason?: string };
+  buyTierDirect: (usdCost: number, method: 'stablecoin' | 'card') => void;
 };
 
 let idCounter = 1;
@@ -75,6 +88,8 @@ function isEntryMatured(entry: StakeEntry, fastForward: boolean): boolean {
 
 export const useAppStore = create<AppState>((set, get) => ({
   purchaseEarnedGlas: USER.purchaseEarnedGlas,
+  directPurchaseGlas: 0,
+  communityRewardGlas: 0,
   liquidBoughtGlas: 0,
   stakeEntries: STAKE_ENTRIES,
   usdtBalance: USER.usdtBalance,
@@ -104,8 +119,13 @@ export const useAppStore = create<AppState>((set, get) => ({
       .reduce((sum, e) => sum + e.amount, 0);
   },
   totalGlas: () => {
-    const { purchaseEarnedGlas } = get();
-    return purchaseEarnedGlas + get().maturedStakedGlas();
+    const { purchaseEarnedGlas, directPurchaseGlas, communityRewardGlas } = get();
+    return purchaseEarnedGlas + directPurchaseGlas + communityRewardGlas + get().maturedStakedGlas();
+  },
+  // GLAS that can actually be spent at checkout (excludes locked stake entries).
+  spendableGlas: () => {
+    const { liquidBoughtGlas, purchaseEarnedGlas, directPurchaseGlas, communityRewardGlas } = get();
+    return liquidBoughtGlas + purchaseEarnedGlas + directPurchaseGlas + communityRewardGlas;
   },
 
   // Promote (never demote) based on current USD value of held GLAS. Called
@@ -123,6 +143,25 @@ export const useAppStore = create<AppState>((set, get) => ({
         levelUpTier: evaluated.id,
       });
     }
+  },
+
+  // Deduct GLAS spent at checkout from the liquid, spendable buckets only
+  // (never from locked stake entries). Returns false if insufficient.
+  spendGlas: (amount) => {
+    const s = get();
+    if (s.spendableGlas() < amount) return false;
+    let remaining = amount;
+    const takeFrom = (bucket: number) => {
+      const take = Math.min(bucket, remaining);
+      remaining -= take;
+      return bucket - take;
+    };
+    const liquidBoughtGlas = takeFrom(s.liquidBoughtGlas);
+    const purchaseEarnedGlas = takeFrom(s.purchaseEarnedGlas);
+    const directPurchaseGlas = takeFrom(s.directPurchaseGlas);
+    const communityRewardGlas = takeFrom(s.communityRewardGlas);
+    set({ liquidBoughtGlas, purchaseEarnedGlas, directPurchaseGlas, communityRewardGlas });
+    return true;
   },
 
   buyGlas: (usdtAmount) => {
@@ -217,10 +256,11 @@ export const useAppStore = create<AppState>((set, get) => ({
           isFollowing: true,
           createdAt: new Date().toISOString(),
           tags: [],
+          glasEarned: reward,
         },
         ...s.posts,
       ],
-      purchaseEarnedGlas: s.purchaseEarnedGlas + reward,
+      communityRewardGlas: s.communityRewardGlas + reward,
       transactions: [
         {
           id: nextId('tx'),
@@ -269,6 +309,79 @@ export const useAppStore = create<AppState>((set, get) => ({
         ...s.transactions,
       ],
       toasts: [...s.toasts, { id: nextId('toast'), message: `구매 적립 +${reward} GLAS`, glasAmount: reward }],
+    }));
+    get().checkTierPromotion();
+  },
+
+  // Checkout with a choice of 3 payment methods. Paying with stablecoin or
+  // card earns the usual purchase-reward GLAS; paying with GLAS itself
+  // spends from the spendable buckets and earns no reward.
+  checkoutPurchase: (title, subtitle, priceUSD, method) => {
+    if (method === 'glas') {
+      const glasCost = Math.ceil(priceUSD / GLAS_PRICE_USD);
+      const ok = get().spendGlas(glasCost);
+      if (!ok) return { ok: false, reason: '보유 GLAS가 부족해요.' };
+      set((s) => ({
+        transactions: [
+          {
+            id: nextId('tx'),
+            type: 'purchase_glas',
+            title,
+            subtitle,
+            date: new Date().toISOString(),
+            glasDelta: glasCost,
+            direction: 'out',
+            usdAmount: priceUSD,
+          },
+          ...s.transactions,
+        ],
+        toasts: [...s.toasts, { id: nextId('toast'), message: `${glasCost.toLocaleString()} GLAS로 결제 완료` }],
+      }));
+      return { ok: true };
+    }
+
+    const reward = Math.round(priceUSD * 4);
+    set((s) => ({
+      purchaseEarnedGlas: s.purchaseEarnedGlas + reward,
+      transactions: [
+        {
+          id: nextId('tx'),
+          type: 'purchase',
+          title,
+          subtitle: method === 'card' ? `${subtitle} · 신용카드` : `${subtitle} · 스테이블코인`,
+          date: new Date().toISOString(),
+          glasDelta: reward,
+          usdAmount: priceUSD,
+        },
+        ...s.transactions,
+      ],
+      toasts: [...s.toasts, { id: nextId('toast'), message: `구매 적립 +${reward} GLAS`, glasAmount: reward }],
+    }));
+    get().checkTierPromotion();
+    return { ok: true };
+  },
+
+  // "지금 바로 구매" — instantly buy enough GLAS to cross into a tier. This
+  // bucket counts toward the tier immediately (no 30-day lockup), and the
+  // resulting tier is permanent per checkTierPromotion's usual rule.
+  buyTierDirect: (usdCost, method) => {
+    const glas = Math.round(usdCost / GLAS_PRICE_USD);
+    set((s) => ({
+      usdtBalance: method === 'stablecoin' ? s.usdtBalance - usdCost : s.usdtBalance,
+      directPurchaseGlas: s.directPurchaseGlas + glas,
+      transactions: [
+        {
+          id: nextId('tx'),
+          type: 'tier_purchase',
+          title: '등급 즉시구매',
+          subtitle: method === 'stablecoin' ? '스테이블코인 결제' : '신용카드 결제 (MoonPay)',
+          date: new Date().toISOString(),
+          glasDelta: glas,
+          usdAmount: usdCost,
+        },
+        ...s.transactions,
+      ],
+      toasts: [...s.toasts, { id: nextId('toast'), message: `${glas.toLocaleString()} GLAS 즉시구매 완료`, glasAmount: glas }],
     }));
     get().checkTierPromotion();
   },

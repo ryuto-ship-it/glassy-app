@@ -9,6 +9,7 @@ import 'react-native-reanimated';
 
 import { ToastHost } from '@/components/glass/GlowToast';
 import { LevelUpOverlay } from '@/components/glass/LevelUpOverlay';
+import { PhoneFrame } from '@/components/glass/PhoneFrame';
 import { colors } from '@/constants/theme';
 
 export { ErrorBoundary } from 'expo-router';
@@ -46,12 +47,15 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }}>
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="+not-found" options={{ headerShown: true, title: 'Oops!' }} />
-      </Stack>
-      <ToastHost />
-      <LevelUpOverlay />
+      <PhoneFrame>
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="quiz" options={{ animation: 'slide_from_bottom' }} />
+          <Stack.Screen name="+not-found" options={{ headerShown: true, title: 'Oops!' }} />
+        </Stack>
+        <ToastHost />
+        <LevelUpOverlay />
+      </PhoneFrame>
     </SafeAreaProvider>
   );
 }

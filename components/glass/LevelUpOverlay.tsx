@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   benefitDot: {
-    color: colors.accentLavender,
+    color: colors.accentViolet,
     fontSize: 12,
     marginTop: 1,
   },

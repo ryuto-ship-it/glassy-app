@@ -1,53 +1,64 @@
-// GLASSY design system — glassmorphism tokens for a K-beauty membership dApp demo.
+// GLASSY design system — premium dark fintech/commerce tokens.
+// Pastel glassmorphism has been fully retired in favor of a dark, high-
+// contrast "premium dark glass" surface treatment.
 
 export const palette = {
-  pink: '#FFD1DC',
-  pinkSoft: '#FFE3EA',
-  lavender: '#D8C7F5',
-  lavenderSoft: '#E9E0FB',
-  mint: '#C6F2E4',
-  pearl: '#FAF7FB',
-  pearlDim: '#F1EAF4',
-  plum: '#4A2E4E',
-  plumSoft: '#7A5C7E',
+  black: '#0B0B0D',
+  panel: '#16161A',
+  panelRaised: '#1D1D22',
+  ink: '#050506',
   white: '#FFFFFF',
-  black: '#1B1120',
+  fog: '#C7C7CE',
+  fogDim: '#8A8A93',
+  violet: '#B18CFF',
+  violetDeep: '#8C5CE0',
+  violetDim: '#5A4A82',
+  gold: '#E8C468',
+  goldDeep: '#C79A3D',
+  rose: '#E07A9E',
+  teal: '#6FD7C4',
 };
 
-// Holographic multi-gradient reserved for the top Glass Skin tier.
-export const holoGradient = ['#FFD1DC', '#E4C9F2', '#C6F2E4', '#D8C7F5'] as const;
+// Holographic multi-gradient reserved for the top Glass Skin tier —
+// violet fusing into gold with a near-white specular sheen.
+export const holoGradient = ['#B18CFF', '#8C5CE0', '#E8C468', '#F5F0FF'] as const;
 
 export const gradients = {
-  background: ['#FBF6FB', '#F3E9F7', '#EFE6FB'] as const,
-  card: ['rgba(255,255,255,0.55)', 'rgba(255,255,255,0.25)'] as const,
-  pinkLavender: ['#FFD1DC', '#D8C7F5'] as const,
+  background: ['#0A0A0C', '#14111C', '#0B0B0D'] as const,
+  card: ['rgba(255,255,255,0.06)', 'rgba(255,255,255,0.02)'] as const,
+  violetGold: ['#B18CFF', '#E8C468'] as const,
+  violet: ['#8C5CE0', '#B18CFF'] as const,
   holo: holoGradient,
-  plumHeader: ['#4A2E4E', '#6B4670'] as const,
+  panelHeader: ['#1D1D22', '#16161A'] as const,
 };
 
 export const colors = {
-  bg: palette.pearl,
-  bgAlt: palette.pearlDim,
-  text: palette.plum,
-  textMuted: palette.plumSoft,
-  textOnDark: palette.pearl,
-  accentPink: palette.pink,
-  accentLavender: palette.lavender,
-  accentMint: palette.mint,
-  border: 'rgba(255,255,255,0.6)',
-  borderDim: 'rgba(74,46,78,0.08)',
-  glassFill: 'rgba(255,255,255,0.38)',
-  glassFillStrong: 'rgba(255,255,255,0.55)',
-  shadow: 'rgba(122,92,126,0.25)',
-  danger: '#E0637C',
-  success: '#5FAE8E',
+  bg: palette.black,
+  bgAlt: palette.panel,
+  surface: palette.panel,
+  surfaceRaised: palette.panelRaised,
+  text: '#F5F5F7',
+  textMuted: palette.fog,
+  textFaint: palette.fogDim,
+  textOnDark: '#F5F5F7',
+  accentViolet: palette.violet,
+  accentGold: palette.gold,
+  accentTeal: palette.teal,
+  border: 'rgba(255,255,255,0.08)',
+  borderDim: 'rgba(255,255,255,0.06)',
+  borderStrong: 'rgba(255,255,255,0.14)',
+  glassFill: 'rgba(255,255,255,0.045)',
+  glassFillStrong: 'rgba(255,255,255,0.075)',
+  shadow: 'rgba(0,0,0,0.55)',
+  danger: '#F0637E',
+  success: '#4ADE9A',
 };
 
 export const radius = {
-  sm: 12,
-  md: 18,
-  lg: 24,
-  xl: 32,
+  sm: 10,
+  md: 16,
+  lg: 20,
+  xl: 28,
   pill: 999,
 };
 
@@ -75,16 +86,16 @@ export const shadow = {
   soft: {
     shadowColor: colors.shadow,
     shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.18,
+    shadowOpacity: 0.45,
     shadowRadius: 20,
     elevation: 6,
   },
   lift: {
     shadowColor: colors.shadow,
-    shadowOffset: { width: 0, height: 14 },
-    shadowOpacity: 0.22,
-    shadowRadius: 28,
-    elevation: 10,
+    shadowOffset: { width: 0, height: 16 },
+    shadowOpacity: 0.55,
+    shadowRadius: 32,
+    elevation: 12,
   },
 };
 

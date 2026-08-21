@@ -10,13 +10,56 @@ export const GLAS_PRICE_USD = 0.42;
 // need today" has moved since yesterday's price.
 export const GLAS_PRICE_USD_YESTERDAY = 0.44;
 
+function daysAgoIso(daysAgo: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() - daysAgo);
+  return d.toISOString().slice(0, 10);
+}
+
+// 30 trading days of mock $GLAS price action. The last two points are
+// anchored to GLAS_PRICE_USD / GLAS_PRICE_USD_YESTERDAY so every screen
+// agrees on "today" and "24h ago".
+const PRICE_SEQUENCE = [
+  0.38, 0.385, 0.39, 0.4, 0.395, 0.405, 0.415, 0.41, 0.42, 0.435, 0.445, 0.455,
+  0.465, 0.47, 0.462, 0.45, 0.44, 0.43, 0.42, 0.41, 0.405, 0.4, 0.395, 0.405,
+  0.415, 0.425, 0.435, 0.445, 0.44, 0.42,
+];
+
+export type PricePoint = { date: string; price: number };
+
+export const GLAS_PRICE_HISTORY: PricePoint[] = PRICE_SEQUENCE.map((price, i) => ({
+  date: daysAgoIso(PRICE_SEQUENCE.length - 1 - i),
+  price,
+}));
+
+function hoursAgoIso(hoursAgo: number): string {
+  const d = new Date();
+  d.setHours(d.getHours() - hoursAgo);
+  return d.toISOString();
+}
+
+// A finer-grained 24h series purely for the "24H" chart filter — daily
+// closes alone would render as a flat two-point line.
+const PRICE_SEQUENCE_24H = [
+  0.441, 0.443, 0.44, 0.438, 0.436, 0.439, 0.437, 0.434, 0.432, 0.435, 0.433,
+  0.43, 0.428, 0.431, 0.429, 0.427, 0.425, 0.428, 0.426, 0.424, 0.422, 0.423,
+  0.421, 0.42,
+];
+
+export const GLAS_PRICE_HISTORY_24H: PricePoint[] = PRICE_SEQUENCE_24H.map((price, i) => ({
+  date: hoursAgoIso(PRICE_SEQUENCE_24H.length - 1 - i),
+  price,
+}));
+
 export type ProductCategory = 'skincare' | 'vitamin' | 'supplement' | 'ampoule';
+export type ProductShape = 'dropper-bottle' | 'pill-bottle' | 'tube' | 'pouch' | 'jar' | 'box';
 
 export type Product = {
   id: string;
   name: string;
   brand: string;
   category: ProductCategory;
+  shape: ProductShape;
   priceUSD: number;
   rating: number;
   reviewCount: number;
@@ -42,6 +85,7 @@ export const PRODUCTS: Product[] = [
     name: 'Centella Calming Ampoule',
     brand: 'Jeju Botanica',
     category: 'ampoule',
+    shape: 'dropper-bottle',
     priceUSD: 28,
     rating: 4.8,
     reviewCount: 2140,
@@ -52,6 +96,7 @@ export const PRODUCTS: Product[] = [
     name: 'Vitamin C 22% Brightening Serum',
     brand: 'Haneul Lab',
     category: 'ampoule',
+    shape: 'dropper-bottle',
     priceUSD: 24,
     rating: 4.7,
     reviewCount: 1802,
@@ -62,6 +107,7 @@ export const PRODUCTS: Product[] = [
     name: 'Marine Collagen Jelly Ampoule',
     brand: 'Soonsoo',
     category: 'ampoule',
+    shape: 'dropper-bottle',
     priceUSD: 32,
     rating: 4.9,
     reviewCount: 987,
@@ -72,6 +118,7 @@ export const PRODUCTS: Product[] = [
     name: 'Niacinamide 10% Pore Ampoule',
     brand: 'Cheongdam Derm',
     category: 'ampoule',
+    shape: 'dropper-bottle',
     priceUSD: 19,
     rating: 4.6,
     reviewCount: 3021,
@@ -81,6 +128,7 @@ export const PRODUCTS: Product[] = [
     name: 'Vitamin C 1000 Effervescent',
     brand: 'Byul Nutrition',
     category: 'vitamin',
+    shape: 'pill-bottle',
     priceUSD: 15,
     rating: 4.5,
     reviewCount: 1290,
@@ -91,6 +139,7 @@ export const PRODUCTS: Product[] = [
     name: 'Marine Collagen Peptide Powder',
     brand: 'Mureung',
     category: 'supplement',
+    shape: 'pouch',
     priceUSD: 26,
     rating: 4.7,
     reviewCount: 764,
@@ -101,6 +150,7 @@ export const PRODUCTS: Product[] = [
     name: 'Probiotic Skin-Gut Capsules',
     brand: 'Danpoong',
     category: 'supplement',
+    shape: 'pill-bottle',
     priceUSD: 22,
     rating: 4.4,
     reviewCount: 512,
@@ -110,6 +160,7 @@ export const PRODUCTS: Product[] = [
     name: 'Biotin & Glow Multivitamin',
     brand: 'Byul Nutrition',
     category: 'vitamin',
+    shape: 'pill-bottle',
     priceUSD: 18,
     rating: 4.6,
     reviewCount: 1108,
@@ -119,6 +170,7 @@ export const PRODUCTS: Product[] = [
     name: 'Rice Bran Brightening Mask (5ea)',
     brand: 'Rice & Rain',
     category: 'skincare',
+    shape: 'pouch',
     priceUSD: 14,
     rating: 4.8,
     reviewCount: 2455,
@@ -129,6 +181,7 @@ export const PRODUCTS: Product[] = [
     name: 'Snail Mucin 96% Essence Mask',
     brand: 'Soonsoo',
     category: 'skincare',
+    shape: 'pouch',
     priceUSD: 16,
     rating: 4.7,
     reviewCount: 1876,
@@ -138,6 +191,7 @@ export const PRODUCTS: Product[] = [
     name: 'Mineral Sunscreen SPF50+ PA++++',
     brand: 'Jeju Botanica',
     category: 'skincare',
+    shape: 'tube',
     priceUSD: 21,
     rating: 4.9,
     reviewCount: 4032,
@@ -148,6 +202,7 @@ export const PRODUCTS: Product[] = [
     name: 'Ceramide Barrier Cream',
     brand: 'Haneul Lab',
     category: 'skincare',
+    shape: 'jar',
     priceUSD: 27,
     rating: 4.6,
     reviewCount: 998,
@@ -157,6 +212,7 @@ export const PRODUCTS: Product[] = [
     name: 'Honey Propolis Sleeping Mask',
     brand: 'Cheongdam Derm',
     category: 'skincare',
+    shape: 'jar',
     priceUSD: 23,
     rating: 4.8,
     reviewCount: 655,
@@ -167,6 +223,7 @@ export const PRODUCTS: Product[] = [
     name: 'Red Ginseng Ampoule Duo Set',
     brand: 'Mureung',
     category: 'ampoule',
+    shape: 'box',
     priceUSD: 45,
     rating: 4.9,
     reviewCount: 341,
@@ -178,11 +235,12 @@ export const FEATURED_GROUP_BUY = PRODUCTS.find((p) => p.id === 'p13')!;
 
 export type Transaction = {
   id: string;
-  type: 'purchase' | 'stake' | 'unstake' | 'buy' | 'post_reward';
+  type: 'purchase' | 'stake' | 'unstake' | 'buy' | 'post_reward' | 'tier_purchase' | 'purchase_glas';
   title: string;
   subtitle: string;
   date: string; // ISO
-  glasDelta: number;
+  glasDelta: number; // always a positive magnitude — see `direction`
+  direction?: 'in' | 'out'; // defaults to 'in' when omitted
   usdAmount?: number;
 };
 
@@ -328,6 +386,8 @@ export type CommunityPost = {
   isFollowing: boolean;
   createdAt: string;
   tags: string[];
+  glasEarned: number;
+  showEarnedCaption?: boolean;
 };
 
 export const COMMUNITY_POSTS: CommunityPost[] = [
@@ -337,7 +397,8 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     avatar: 'https://i.pravatar.cc/300?img=47',
     location: 'Lisbon, Portugal',
     images: ['feed1'],
-    caption: '3주째 Centella Calming Ampoule 쓰는 중인데 진짜 붉음증이 가라앉았어요. Radiant Glass 등급 찍고 할인까지 받아서 계속 재구매 중 ✨',
+    caption:
+      '3주째 Centella Calming Ampoule 쓰는 중인데 진짜 붉음증이 가라앉았어요. Radiant Glass 등급 찍고 할인까지 받아서 계속 재구매 중입니다. 이 후기로 18 GLAS 받았어요.',
     likes: 342,
     comments: [
       { id: 'c1-1', author: 'minji_seoul', text: '저도 이거 쓰는데 완전 공감이요!' },
@@ -347,6 +408,8 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     isFollowing: true,
     createdAt: '2026-08-18',
     tags: ['앰플', '진정케어'],
+    glasEarned: 18,
+    showEarnedCaption: true,
   },
   {
     id: 'c2',
@@ -354,13 +417,16 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     avatar: 'https://i.pravatar.cc/300?img=32',
     location: 'Osaka, Japan',
     images: ['feed2', 'feed2b'],
-    caption: 'Glass Skin 등급 드디어 달성! 홀로그램 이펙트 실제로 보니까 감동... 스테이킹 30일 기다린 보람 있네요 🥹',
+    caption:
+      'Glass Skin 등급 드디어 달성했어요. 홀로그램 이펙트 실제로 보니 스테이킹 30일 기다린 보람이 있네요. 이 후기로 25 GLAS 받았어요.',
     likes: 891,
     comments: [{ id: 'c2-1', author: 'k.beauty.fan', text: '축하합니다!! 저도 목표예요' }],
     pinned: true,
     isFollowing: false,
     createdAt: '2026-08-16',
     tags: ['등급업', 'GlassSkin'],
+    glasEarned: 25,
+    showEarnedCaption: true,
   },
   {
     id: 'c3',
@@ -374,6 +440,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     isFollowing: true,
     createdAt: '2026-08-14',
     tags: ['마스크', '민감케어'],
+    glasEarned: 12,
   },
   {
     id: 'c4',
@@ -381,12 +448,15 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     avatar: 'https://i.pravatar.cc/300?img=15',
     location: 'Dublin, Ireland',
     images: ['feed4'],
-    caption: 'Vitamin C 세럼 한 병 다 쓰고 재구매! 톤이 진짜 밝아진 게 느껴짐. GLAS 적립도 쌓이는 중 💧',
+    caption:
+      'Vitamin C 세럼 한 병 다 쓰고 재구매했어요. 톤이 밝아진 게 느껴지고 GLAS 적립도 꾸준히 쌓이는 중입니다. 이 후기로 15 GLAS 받았어요.',
     likes: 98,
     comments: [{ id: 'c4-1', author: 'Sofia Almeida', text: '피부 진짜 좋아지신 듯!' }],
     isFollowing: true,
     createdAt: '2026-08-11',
     tags: ['비타민C', '재구매'],
+    glasEarned: 15,
+    showEarnedCaption: true,
   },
   {
     id: 'c5',
@@ -400,6 +470,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     isFollowing: false,
     createdAt: '2026-08-09',
     tags: ['공동구매', '앰플'],
+    glasEarned: 20,
   },
   {
     id: 'c6',
@@ -413,6 +484,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     isFollowing: true,
     createdAt: '2026-08-06',
     tags: ['선크림', '재구매'],
+    glasEarned: 14,
   },
   {
     id: 'c7',
@@ -422,9 +494,54 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     images: ['feed7'],
     caption: '콜라겐 파우더 한달 후기 — 손톱이랑 피부 결이 확실히 달라짐. Dewy Glow 등급도 코앞!',
     likes: 132,
-    comments: [{ id: 'c7-1', author: 'Declan Murphy', text: '오 같은 아일랜드! 응원해요 ☘️' }],
+    comments: [{ id: 'c7-1', author: 'Declan Murphy', text: '같은 아일랜드시네요, 응원할게요.' }],
     isFollowing: false,
     createdAt: '2026-08-02',
     tags: ['콜라겐', '건기식'],
+    glasEarned: 16,
+  },
+  {
+    id: 'c8',
+    author: 'Yuna Park',
+    avatar: 'https://i.pravatar.cc/300?img=23',
+    location: 'Busan, South Korea',
+    images: ['feed8'],
+    caption: 'Red Ginseng Ampoule Duo Set 선물용으로 구매했는데 포장이 고급스러워서 만족스러워요.',
+    likes: 189,
+    comments: [{ id: 'c8-1', author: 'Declan Murphy', text: '선물용으로 좋아 보이네요.' }],
+    isFollowing: false,
+    createdAt: '2026-07-30',
+    tags: ['홍삼', '선물세트'],
+    glasEarned: 13,
+  },
+  {
+    id: 'c9',
+    author: 'Chloe Martin',
+    avatar: 'https://i.pravatar.cc/300?img=9',
+    location: 'Lyon, France',
+    images: ['feed9'],
+    caption:
+      'Probiotic Skin-Gut Capsules 2주째 먹는 중인데 속이 편해졌어요. 팔로워가 늘어서 리워드도 같이 받았습니다. 이 후기로 22 GLAS 받았어요.',
+    likes: 145,
+    comments: [],
+    isFollowing: true,
+    createdAt: '2026-07-27',
+    tags: ['프로바이오틱', '건기식'],
+    glasEarned: 22,
+    showEarnedCaption: true,
+  },
+  {
+    id: 'c10',
+    author: 'Ben Walsh',
+    avatar: 'https://i.pravatar.cc/300?img=14',
+    location: 'Galway, Ireland',
+    images: ['feed10'],
+    caption: 'Ceramide Barrier Cream으로 바꾸고 건조함이 확실히 줄었어요. 겨울에도 계속 쓸 것 같습니다.',
+    likes: 176,
+    comments: [{ id: 'c10-1', author: 'Liam O’Connor', text: '저도 다음에 써볼게요.' }],
+    isFollowing: false,
+    createdAt: '2026-07-24',
+    tags: ['크림', '보습'],
+    glasEarned: 17,
   },
 ];

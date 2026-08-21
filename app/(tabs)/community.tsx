@@ -84,6 +84,21 @@ export default function CommunityScreen() {
         </View>
 
         <View style={styles.section}>
+          <GlassSurface radius={radius.lg} padding={spacing.lg}>
+            <View style={styles.activityHeaderRow}>
+              <Ionicons name="flash" size={14} color={colors.accentGold} />
+              <Text style={styles.activityTitle}>활동하고 GLAS 받기</Text>
+            </View>
+            <View style={styles.activityGrid}>
+              <ActivityRule label="후기 작성" amount="+15" />
+              <ActivityRule label="좋아요 받기" amount="+1" />
+              <ActivityRule label="댓글 받기" amount="+2" />
+              <ActivityRule label="팔로워 10명" amount="+20" />
+            </View>
+          </GlassSurface>
+        </View>
+
+        <View style={styles.section}>
           {loading ? (
             <View style={{ gap: spacing.md }}>
               <SkeletonCard />
@@ -139,6 +154,15 @@ export default function CommunityScreen() {
   );
 }
 
+function ActivityRule({ label, amount }: { label: string; amount: string }) {
+  return (
+    <View style={styles.activityItem}>
+      <Text style={styles.activityAmount}>{amount} GLAS</Text>
+      <Text style={styles.activityLabel}>{label}</Text>
+    </View>
+  );
+}
+
 function PostCard({
   post,
   onLike,
@@ -164,6 +188,10 @@ function PostCard({
           <Text style={styles.pinnedChipText}>인기 후기</Text>
         </View>
       )}
+      <View style={styles.earnedChip}>
+        <Ionicons name="add-circle" size={11} color={colors.success} />
+        <Text style={styles.earnedChipText}>+{post.glasEarned} GLAS 획득</Text>
+      </View>
       <View style={styles.postHeader}>
         <Image source={{ uri: post.avatar }} style={styles.postAvatar} />
         <View style={{ flex: 1 }}>
@@ -242,6 +270,28 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   pinnedChipText: { fontFamily: fonts.bodyBold, fontSize: 9, color: '#fff' },
+  earnedChip: {
+    position: 'absolute',
+    top: -8,
+    right: spacing.lg,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: 'rgba(74,222,154,0.16)',
+    borderWidth: 1,
+    borderColor: 'rgba(74,222,154,0.4)',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: radius.pill,
+    zIndex: 2,
+  },
+  earnedChipText: { fontFamily: fonts.bodyBold, fontSize: 9, color: colors.success },
+  activityHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  activityTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text },
+  activityGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md, marginTop: spacing.md },
+  activityItem: { width: '47%' },
+  activityAmount: { fontFamily: fonts.bodyBold, fontSize: 14, color: colors.accentGold },
+  activityLabel: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, marginTop: 2 },
   postHeader: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   postAvatar: { width: 38, height: 38, borderRadius: 19 },
   postAuthor: { fontFamily: fonts.bodySemi, fontSize: 13, color: colors.text },
@@ -251,15 +301,15 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: radius.pill,
     borderWidth: 1,
-    borderColor: colors.accentLavender,
+    borderColor: colors.accentViolet,
   },
-  followBtnActive: { backgroundColor: colors.accentLavender, borderColor: colors.accentLavender },
+  followBtnActive: { backgroundColor: colors.accentViolet, borderColor: colors.accentViolet },
   followBtnText: { fontFamily: fonts.bodyBold, fontSize: 11, color: colors.text },
-  followBtnTextActive: { color: '#3D2640' },
+  followBtnTextActive: { color: '#0B0B0D' },
   postImage: { width: 300, height: 220, borderRadius: radius.md, marginRight: spacing.sm },
   caption: { fontFamily: fonts.body, fontSize: 13, color: colors.text, marginTop: spacing.md, lineHeight: 19 },
   tagRow: { flexDirection: 'row', gap: 6, marginTop: spacing.sm, flexWrap: 'wrap' },
-  tag: { backgroundColor: 'rgba(74,46,78,0.06)', paddingHorizontal: 8, paddingVertical: 3, borderRadius: radius.pill },
+  tag: { backgroundColor: 'rgba(255,255,255,0.05)', paddingHorizontal: 8, paddingVertical: 3, borderRadius: radius.pill },
   tagText: { fontFamily: fonts.bodyMed, fontSize: 10, color: colors.textMuted },
   footerRow: { flexDirection: 'row', gap: spacing.lg, marginTop: spacing.md },
   footerAction: { flexDirection: 'row', alignItems: 'center', gap: 5 },
@@ -268,29 +318,29 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
     flexDirection: 'row',
     gap: 6,
-    backgroundColor: 'rgba(74,46,78,0.04)',
+    backgroundColor: 'rgba(255,255,255,0.04)',
     padding: spacing.sm,
     borderRadius: radius.sm,
   },
   commentAuthor: { fontFamily: fonts.bodyBold, fontSize: 11, color: colors.text },
   commentText: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, flex: 1 },
-  modalBackdrop: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(74,46,78,0.35)' },
+  modalBackdrop: { ...StyleSheet.absoluteFill, backgroundColor: 'rgba(0,0,0,0.6)' },
   modalWrap: { flex: 1, justifyContent: 'center', paddingHorizontal: spacing.xl },
   modalTitle: { fontFamily: fonts.displaySemi, fontSize: 17, color: colors.text },
   modalHint: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, marginTop: 4 },
   pickThumb: { width: 64, height: 64, borderRadius: radius.md, marginRight: spacing.sm, opacity: 0.5 },
-  pickThumbActive: { opacity: 1, borderWidth: 2, borderColor: colors.accentLavender },
+  pickThumbActive: { opacity: 1, borderWidth: 2, borderColor: colors.accentViolet },
   textArea: {
     marginTop: spacing.md,
     borderWidth: 1,
-    borderColor: 'rgba(74,46,78,0.15)',
+    borderColor: 'rgba(255,255,255,0.10)',
     borderRadius: radius.md,
     paddingHorizontal: spacing.md,
     paddingVertical: 12,
     fontFamily: fonts.bodyMed,
     fontSize: 13,
     color: colors.text,
-    backgroundColor: 'rgba(255,255,255,0.6)',
+    backgroundColor: 'rgba(255,255,255,0.05)',
     minHeight: 80,
     textAlignVertical: 'top',
   },

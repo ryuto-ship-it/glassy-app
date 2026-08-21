@@ -3,8 +3,8 @@ import { StyleSheet, View, ViewProps } from 'react-native';
 
 import { gradients } from '@/constants/theme';
 
-// Full-bleed soft gradient wash that sits behind every screen so the
-// glassmorphism cards have something colorful to blur against.
+// Full-bleed dark gradient wash that sits behind every screen so the
+// dark-glass cards have a subtle, premium backdrop to blur against.
 export function AppBackground({ style, children, ...rest }: ViewProps) {
   return (
     <View style={[StyleSheet.absoluteFill, style]} {...rest}>
@@ -14,30 +14,30 @@ export function AppBackground({ style, children, ...rest }: ViewProps) {
         end={{ x: 0.9, y: 1 }}
         style={StyleSheet.absoluteFill}
       />
-      <View style={[styles.blobPink]} />
-      <View style={[styles.blobLavender]} />
+      <View style={[styles.blobViolet]} />
+      <View style={[styles.blobGold]} />
       {children}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  blobPink: {
+  blobViolet: {
     position: 'absolute',
     top: -60,
-    right: -70,
-    width: 260,
-    height: 260,
-    borderRadius: 200,
-    backgroundColor: 'rgba(255,209,220,0.45)',
-  },
-  blobLavender: {
-    position: 'absolute',
-    bottom: 40,
-    left: -90,
+    right: -90,
     width: 280,
     height: 280,
     borderRadius: 200,
-    backgroundColor: 'rgba(216,199,245,0.4)',
+    backgroundColor: 'rgba(177,140,255,0.10)',
+  },
+  blobGold: {
+    position: 'absolute',
+    bottom: 60,
+    left: -100,
+    width: 260,
+    height: 260,
+    borderRadius: 200,
+    backgroundColor: 'rgba(232,196,104,0.06)',
   },
 });

@@ -6,14 +6,15 @@ export function hashSeed(seed: string): number {
   return Math.abs(h);
 }
 
-// Curated on-brand gradient pairs, so decorative art never clashes with the palette.
+// Curated dark, premium gradient pairs — used for decorative art (e.g.
+// community feed photo placeholders) so it never clashes with the palette.
 export const ART_GRADIENTS: readonly [string, string][] = [
-  ['#FFD1DC', '#D8C7F5'],
-  ['#D8C7F5', '#C6F2E4'],
-  ['#FFD1DC', '#C6F2E4'],
-  ['#F1EAF4', '#D8C7F5'],
-  ['#C6F2E4', '#FFB9C9'],
-  ['#E9E0FB', '#FFE3EA'],
+  ['#2A2038', '#8C5CE0'],
+  ['#241B2E', '#B18CFF'],
+  ['#2B2418', '#E8C468'],
+  ['#1B2A28', '#6FD7C4'],
+  ['#2B1B24', '#E07A9E'],
+  ['#1A2032', '#7FA6FF'],
 ];
 
 export function gradientForSeed(seed: string): readonly [string, string] {

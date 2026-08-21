@@ -29,7 +29,7 @@ export function PillButton({ label, onPress, variant = 'solid', colors_, disable
   return (
     <Pressable onPress={onPress} disabled={disabled} style={[styles.solidWrap, disabled && styles.disabled, style]}>
       <LinearGradient
-        colors={(colors_ ?? ['#D8C7F5', '#C6AFF0']) as any}
+        colors={(colors_ ?? [colors.accentViolet, '#8C5CE0']) as any}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={StyleSheet.absoluteFill}
@@ -57,20 +57,20 @@ const styles = StyleSheet.create({
   },
   solidText: {
     fontFamily: fonts.bodyBold,
-    color: '#3D2640',
+    color: '#0B0B0D',
     fontSize: 14,
   },
   ghost: {
     borderRadius: radius.pill,
     borderWidth: 1.5,
-    borderColor: colors.borderDim,
+    borderColor: colors.borderStrong,
     paddingVertical: 12,
     paddingHorizontal: spacing.lg,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: 'rgba(255,255,255,0.4)',
+    backgroundColor: 'rgba(255,255,255,0.05)',
   },
   ghostText: {
     fontFamily: fonts.bodySemi,

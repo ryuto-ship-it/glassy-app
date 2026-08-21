@@ -4,17 +4,16 @@ import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'r
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppBackground } from '@/components/glass/AppBackground';
+import { CheckoutModal } from '@/components/glass/CheckoutModal';
 import { EmptyState } from '@/components/glass/EmptyState';
 import { GlassSurface } from '@/components/glass/GlassSurface';
-import { PlaceholderArt } from '@/components/glass/PlaceholderArt';
+import { ProductArt } from '@/components/glass/ProductArt';
 import { SkeletonCard } from '@/components/glass/Skeleton';
 import { TabFade } from '@/components/glass/TabFade';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { CATEGORY_LABEL, Product, ProductCategory, PRODUCTS } from '@/data/mock';
 import { formatUsd } from '@/lib/format';
-import { CATEGORY_ICON } from '@/lib/productIcon';
 import { useTierStatus } from '@/lib/useTierStatus';
-import { useAppStore } from '@/store/useAppStore';
 
 type FilterKey = 'all' | 'repurchase' | 'groupbuy' | ProductCategory;
 
@@ -33,9 +32,9 @@ export default function ShopScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [filter, setFilter] = useState<FilterKey>('all');
+  const [checkoutProduct, setCheckoutProduct] = useState<{ product: Product; price: number } | null>(null);
   const [justBought, setJustBought] = useState<string | null>(null);
 
-  const simulatePharmacyPurchase = useAppStore((s) => s.simulatePharmacyPurchase);
   const { tier } = useTierStatus();
 
   useEffect(() => {
@@ -62,9 +61,7 @@ export default function ShopScreen() {
   }, [filter]);
 
   const handleBuy = (p: Product, price: number) => {
-    simulatePharmacyPurchase(p.name, 'GLASSY Myeongdong Pharmacy', price);
-    setJustBought(p.id);
-    setTimeout(() => setJustBought(null), 1600);
+    setCheckoutProduct({ product: p, price });
   };
 
   return (
@@ -122,7 +119,7 @@ export default function ShopScreen() {
                   <View key={p.id} style={styles.gridItem}>
                     <GlassSurface radius={radius.lg} padding={spacing.sm}>
                       <View style={styles.imgWrap}>
-                        <PlaceholderArt seed={p.id} icon={CATEGORY_ICON[p.category]} style={styles.productImg} />
+                        <ProductArt seed={p.id} shape={p.shape} style={styles.productImg} />
                         {p.isRepurchase && (
                           <View style={styles.repurchaseBadge}>
                             <Text style={styles.repurchaseBadgeText}>재구매</Text>
@@ -134,7 +131,7 @@ export default function ShopScreen() {
                         {p.name}
                       </Text>
                       <View style={styles.ratingRow}>
-                        <Ionicons name="star" size={11} color="#F1B44C" />
+                        <Ionicons name="star" size={11} color="#E8C468" />
                         <Text style={styles.ratingText}>
                           {p.rating} ({p.reviewCount.toLocaleString()})
                         </Text>
@@ -180,6 +177,20 @@ export default function ShopScreen() {
         </View>
       </ScrollView>
       </TabFade>
+
+      {checkoutProduct && (
+        <CheckoutModal
+          visible
+          onClose={() => setCheckoutProduct(null)}
+          title={checkoutProduct.product.name}
+          subtitle="GLASSY Myeongdong Pharmacy"
+          priceUSD={checkoutProduct.price}
+          onSuccess={() => {
+            setJustBought(checkoutProduct.product.id);
+            setTimeout(() => setJustBought(null), 1600);
+          }}
+        />
+      )}
     </View>
   );
 }
@@ -193,13 +204,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: radius.pill,
-    backgroundColor: 'rgba(255,255,255,0.5)',
+    backgroundColor: 'rgba(255,255,255,0.04)',
     borderWidth: 1,
-    borderColor: 'rgba(74,46,78,0.08)',
+    borderColor: colors.borderDim,
   },
-  chipActive: { backgroundColor: colors.text, borderColor: colors.text },
-  chipText: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.text },
-  chipTextActive: { color: '#fff' },
+  chipActive: { backgroundColor: colors.accentViolet, borderColor: colors.accentViolet },
+  chipText: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.textMuted },
+  chipTextActive: { color: '#0B0B0D' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md },
   gridItem: { width: '47%' },
   imgWrap: { position: 'relative' },
@@ -208,19 +219,21 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 6,
     left: 6,
-    backgroundColor: colors.text,
+    backgroundColor: colors.surfaceRaised,
     paddingHorizontal: 7,
     paddingVertical: 2,
     borderRadius: radius.pill,
+    borderWidth: 1,
+    borderColor: colors.borderStrong,
   },
-  repurchaseBadgeText: { fontFamily: fonts.bodyBold, fontSize: 9, color: '#fff' },
+  repurchaseBadgeText: { fontFamily: fonts.bodyBold, fontSize: 9, color: colors.text },
   brand: { fontFamily: fonts.bodyMed, fontSize: 10, color: colors.textMuted, marginTop: 8 },
   productName: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.text, marginTop: 2, minHeight: 32 },
   ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 3, marginTop: 4 },
   ratingText: { fontFamily: fonts.body, fontSize: 10, color: colors.textMuted },
   groupBuyBox: { marginTop: spacing.sm },
   groupBuyText: { fontFamily: fonts.bodyMed, fontSize: 9, color: colors.danger },
-  progressTrack: { height: 4, borderRadius: 2, backgroundColor: 'rgba(74,46,78,0.1)', marginTop: 3, overflow: 'hidden' },
+  progressTrack: { height: 4, borderRadius: 2, backgroundColor: 'rgba(255,255,255,0.08)', marginTop: 3, overflow: 'hidden' },
   progressFill: { height: '100%', backgroundColor: colors.danger, borderRadius: 2 },
   priceRow: { flexDirection: 'row', alignItems: 'baseline', gap: 6, marginTop: spacing.sm },
   priceOriginal: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, textDecorationLine: 'line-through' },
@@ -229,9 +242,9 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
     paddingVertical: 9,
     borderRadius: radius.pill,
-    backgroundColor: colors.accentLavender,
+    backgroundColor: colors.accentViolet,
     alignItems: 'center',
   },
   buyBtnDone: { backgroundColor: colors.success },
-  buyBtnText: { fontFamily: fonts.bodyBold, fontSize: 12, color: '#3D2640' },
+  buyBtnText: { fontFamily: fonts.bodyBold, fontSize: 12, color: '#0B0B0D' },
 });

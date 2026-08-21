@@ -63,7 +63,7 @@ export function DropletProgress({ size = 120, percent, colors, children }: Props
           </ClipPath>
         </Defs>
         {/* droplet outline / empty state */}
-        <Path d={DROPLET_PATH} fill="rgba(255,255,255,0.35)" stroke="rgba(255,255,255,0.75)" strokeWidth={2} />
+        <Path d={DROPLET_PATH} fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.28)" strokeWidth={2} />
         {/* animated fill, clipped to droplet silhouette */}
         <AnimatedRect
           x={0}
