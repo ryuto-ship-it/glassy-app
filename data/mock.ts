@@ -714,6 +714,20 @@ export const ADMIN_ANALYTICS = {
   ],
 };
 
+export type PostCategory = 'review' | 'ingredient' | 'qna' | 'groupbuy';
+
+export const POST_CATEGORY_LABEL: Record<PostCategory, string> = {
+  review: '후기',
+  ingredient: '성분 정보',
+  qna: 'Q&A',
+  groupbuy: '공동구매',
+};
+
+// Followers needed to unlock "인플루언서 공동구매 개설" — GLASSY's seed user
+// (120 followers) is intentionally just above this so the feature is
+// demoable without switching accounts.
+export const INFLUENCER_FOLLOWER_THRESHOLD = 100;
+
 export type CommunityPost = {
   id: string;
   author: string;
@@ -730,6 +744,11 @@ export type CommunityPost = {
   tags: string[];
   glasEarned: number;
   showEarnedCaption?: boolean;
+  // Defaults to 'review' when omitted (all the original seed posts).
+  category?: PostCategory;
+  // Shown with a "인증 크리에이터" badge — a follower count high enough to
+  // open influencer group-buys.
+  authorFollowers?: number;
 };
 
 export const COMMUNITY_POSTS: CommunityPost[] = [
@@ -885,5 +904,71 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     createdAt: '2026-07-24',
     tags: ['크림', '보습'],
     glasEarned: 17,
+  },
+  {
+    id: 'c11',
+    author: 'Dr. Hana Seo',
+    avatar: 'https://i.pravatar.cc/300?img=48',
+    location: 'Seoul, South Korea',
+    images: ['feed11'],
+    caption:
+      '[성분 정보] 나이아신아마이드는 피지 조절과 모공 케어에 도움을 주지만, 고농도 비타민C(L-아스코르빈산)와 같은 시간에 바르면 효과가 떨어질 수 있어요. 아침/저녁으로 나눠 사용하는 걸 추천해요.',
+    likes: 512,
+    comments: [{ id: 'c11-1', author: 'Declan Murphy', text: '몰랐던 정보네요, 감사합니다!' }],
+    isFollowing: false,
+    createdAt: '2026-08-17',
+    tags: ['나이아신아마이드', '성분정보'],
+    glasEarned: 0,
+    category: 'ingredient',
+    authorFollowers: 8400,
+  },
+  {
+    id: 'c12',
+    author: 'Priya Nair',
+    avatar: 'https://i.pravatar.cc/300?img=25',
+    location: 'Mumbai, India',
+    images: [],
+    caption: '[Q&A] 홍삼정 처음 먹어보는데, 카페인이랑 같이 먹어도 괜찮을까요? 아침에 커피 마시는 습관이 있어서요.',
+    likes: 34,
+    comments: [
+      { id: 'c12-1', author: 'Dr. Hana Seo', text: '홍삼 자체엔 카페인이 없어서 괜찮지만, 공복에 함께 드시면 위에 부담될 수 있어요. 식후 섭취를 추천해요.' },
+    ],
+    isFollowing: false,
+    createdAt: '2026-08-13',
+    tags: ['홍삼', 'QnA'],
+    glasEarned: 0,
+    category: 'qna',
+  },
+  {
+    id: 'c13',
+    author: 'Dr. Hana Seo',
+    avatar: 'https://i.pravatar.cc/300?img=48',
+    location: 'Seoul, South Korea',
+    images: [],
+    caption:
+      '[성분 정보] 센텔라 아시아티카(병풀) 추출물은 진정·재생 효과가 입증된 성분이에요. 트러블이나 시술 후 예민해진 피부에 특히 좋아요.',
+    likes: 388,
+    comments: [],
+    isFollowing: true,
+    createdAt: '2026-08-08',
+    tags: ['센텔라', '성분정보'],
+    glasEarned: 0,
+    category: 'ingredient',
+    authorFollowers: 8400,
+  },
+  {
+    id: 'c14',
+    author: 'Marco Rossi',
+    avatar: 'https://i.pravatar.cc/300?img=33',
+    location: 'Milan, Italy',
+    images: [],
+    caption: '[Q&A] 여드름 자국(홍조)에 진정 앰플이랑 시카크림 중 어떤 걸 먼저 발라야 하나요?',
+    likes: 21,
+    comments: [{ id: 'c14-1', author: 'Sofia Almeida', text: '저는 앰플 먼저 바르고 크림으로 마무리해요!' }],
+    isFollowing: false,
+    createdAt: '2026-08-03',
+    tags: ['트러블케어', 'QnA'],
+    glasEarned: 0,
+    category: 'qna',
   },
 ];

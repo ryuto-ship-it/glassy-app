@@ -69,6 +69,7 @@ type AppState = {
   unstakeEntry: (entryId: string) => { ok: boolean; reason?: string };
   toggleDemoFastForward: () => void;
   addCommunityPost: (caption: string, images: string[]) => void;
+  createGroupBuyPost: (title: string, goalParticipants: number, discountPct: number) => void;
   toggleLike: (postId: string) => void;
   toggleFollow: (postId: string) => void;
   dismissToast: (id: string) => void;
@@ -290,6 +291,48 @@ export const useAppStore = create<AppState>((set, get) => ({
         ...s.transactions,
       ],
       toasts: [...s.toasts, { id: nextId('toast'), message: '후기 작성 완료!', glasAmount: reward }],
+    }));
+    get().checkTierPromotion();
+  },
+
+  // Influencer-only (see INFLUENCER_FOLLOWER_THRESHOLD) — opens a new
+  // community group-buy post announcing the deal, same reward pattern as
+  // a regular post.
+  createGroupBuyPost: (title, goalParticipants, discountPct) => {
+    const reward = 30;
+    set((s) => ({
+      posts: [
+        {
+          id: nextId('post'),
+          author: USER.name,
+          avatar: USER.avatar,
+          location: USER.location,
+          images: [],
+          caption: `[공동구매 개설] ${title} — 목표 ${goalParticipants}명 달성 시 추가 ${discountPct}% 할인! 지금 참여해보세요.`,
+          likes: 0,
+          comments: [],
+          isFollowing: true,
+          createdAt: new Date().toISOString(),
+          tags: ['공동구매', '인증크리에이터'],
+          glasEarned: reward,
+          category: 'groupbuy' as const,
+          authorFollowers: USER.followers,
+        },
+        ...s.posts,
+      ],
+      communityRewardGlas: s.communityRewardGlas + reward,
+      transactions: [
+        {
+          id: nextId('tx'),
+          type: 'post_reward',
+          title: '인플루언서 공동구매 개설 리워드',
+          subtitle: 'Glow Feed',
+          date: new Date().toISOString(),
+          glasDelta: reward,
+        },
+        ...s.transactions,
+      ],
+      toasts: [...s.toasts, { id: nextId('toast'), message: '공동구매가 개설됐어요!', glasAmount: reward }],
     }));
     get().checkTierPromotion();
   },

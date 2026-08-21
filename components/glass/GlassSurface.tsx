@@ -2,7 +2,8 @@ import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleProp, StyleSheet, View, ViewProps, ViewStyle } from 'react-native';
 
-import { colors, radius as radiusTokens, shadow } from '@/constants/theme';
+import { colors, darkColors, radius as radiusTokens, shadow, darkShadow } from '@/constants/theme';
+import { useIsDarkScope } from '@/constants/themeScope';
 
 type Props = ViewProps & {
   intensity?: number;
@@ -14,10 +15,10 @@ type Props = ViewProps & {
   style?: StyleProp<ViewStyle>;
 };
 
-// The core "premium dark glass" primitive used across GLASSY: a blurred,
-// near-black translucent surface with a hairline highlight border and a
-// faint top specular edge, evoking a dark fintech/commerce panel rather
-// than pastel glassmorphism.
+// The core card primitive used across GLASSY. Light by default — a clean
+// white "premium beauty commerce" card with a soft shadow — except inside
+// <DarkScope> (Wallet, payment modals, admin, etc), where it renders the
+// original blurred, near-black translucent "premium dark glass" treatment.
 export function GlassSurface({
   children,
   style,
@@ -29,11 +30,33 @@ export function GlassSurface({
   elevated = false,
   ...rest
 }: Props) {
+  const dark = useIsDarkScope();
+
+  if (!dark) {
+    return (
+      <View
+        style={[
+          {
+            borderRadius: radius,
+            backgroundColor: colors.surface,
+            borderWidth: noBorder ? 0 : 1,
+            borderColor: colors.border,
+          },
+          elevated ? shadow.soft : undefined,
+          style,
+        ]}
+        {...rest}
+      >
+        <View style={{ padding }}>{children}</View>
+      </View>
+    );
+  }
+
   return (
     <View
       style={[
-        { borderRadius: radius, overflow: 'hidden', backgroundColor: colors.surface },
-        elevated ? shadow.soft : undefined,
+        { borderRadius: radius, overflow: 'hidden', backgroundColor: darkColors.surface },
+        elevated ? darkShadow.soft : undefined,
         style,
       ]}
       {...rest}
@@ -42,7 +65,7 @@ export function GlassSurface({
       <View
         style={[
           StyleSheet.absoluteFill,
-          { backgroundColor: strong ? colors.glassFillStrong : colors.glassFill },
+          { backgroundColor: strong ? darkColors.glassFillStrong : darkColors.glassFill },
         ]}
       />
       <LinearGradient
@@ -57,7 +80,7 @@ export function GlassSurface({
           {
             padding,
             borderRadius: radius,
-            borderColor: noBorder ? 'transparent' : colors.border,
+            borderColor: noBorder ? 'transparent' : darkColors.border,
           },
         ]}
       >

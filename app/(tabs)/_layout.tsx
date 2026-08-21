@@ -3,8 +3,13 @@ import { BlurView } from 'expo-blur';
 import { Tabs } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
-import { colors } from '@/constants/theme';
+import { colors, darkColors } from '@/constants/theme';
 
+// The tab bar is light everywhere except the Wallet tab: a light frosted
+// blur sitting on top of Wallet's fully-dark screen reads as a muddy grey
+// smear rather than clean glass, so Wallet gets its own dark tab bar to
+// match — the one explicitly-sanctioned exception to "tab bar is always
+// light" (see the light/dark hybrid theme in constants/theme.ts).
 export default function TabLayout() {
   return (
     <Tabs
@@ -25,8 +30,8 @@ export default function TabLayout() {
         },
         tabBarBackground: () => (
           <View style={StyleSheet.absoluteFill}>
-            <BlurView intensity={40} tint="dark" style={StyleSheet.absoluteFill} />
-            <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(11,11,13,0.55)' }]} />
+            <BlurView intensity={40} tint="light" style={StyleSheet.absoluteFill} />
+            <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(255,255,255,0.82)' }]} />
           </View>
         ),
       }}
@@ -46,6 +51,22 @@ export default function TabLayout() {
           title: '지갑',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'wallet' : 'wallet-outline'} size={22} color={color} />
+          ),
+          tabBarActiveTintColor: darkColors.accentViolet,
+          tabBarInactiveTintColor: darkColors.textFaint,
+          tabBarStyle: {
+            position: 'absolute',
+            borderTopWidth: 1,
+            borderTopColor: darkColors.borderDim,
+            backgroundColor: 'transparent',
+            height: 78,
+            elevation: 0,
+          },
+          tabBarBackground: () => (
+            <View style={StyleSheet.absoluteFill}>
+              <BlurView intensity={40} tint="dark" style={StyleSheet.absoluteFill} />
+              <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(11,11,13,0.55)' }]} />
+            </View>
           ),
         }}
       />

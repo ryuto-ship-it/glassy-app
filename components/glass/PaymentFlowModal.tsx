@@ -3,7 +3,10 @@ import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleProp, StyleSheet, Text, TextInput, View, ViewStyle } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 
-import { colors, fonts, radius, spacing } from '@/constants/theme';
+// Payment/checkout modals stay on the dark "premium glass" theme regardless
+// of which screen opened them — see constants/theme.ts / themeScope.tsx.
+import { darkColors as colors, fonts, radius, spacing } from '@/constants/theme';
+import { DarkScope } from '@/constants/themeScope';
 import { GLAS_PRICE_USD, USER } from '@/data/mock';
 import { formatGlas, formatUsd } from '@/lib/format';
 import { PaymentMethod, useAppStore } from '@/store/useAppStore';
@@ -186,6 +189,7 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
   );
 
   return (
+    <DarkScope>
     <AppModal visible={visible} onClose={onClose} dismissable={dismissable}>
       <ScrollView style={styles.scroll} contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
         {step === 'method' && (
@@ -428,6 +432,7 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
         )}
       </ScrollView>
     </AppModal>
+    </DarkScope>
   );
 }
 

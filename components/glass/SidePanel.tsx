@@ -4,7 +4,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import Svg, { Path, Circle } from 'react-native-svg';
 
-import { colors, fonts, radius, shadow, palette, APP_NAME } from '@/constants/theme';
+// The side link-tree panel sits in the dark browser showcase backdrop
+// (see PhoneFrame.tsx), so it stays dark regardless of the app's light
+// default — see constants/theme.ts / themeScope.tsx.
+import { darkColors as colors, darkShadow as shadow, fonts, radius, palette, APP_NAME } from '@/constants/theme';
 import { TOKENOMICS_ALLOCATION } from '@/constants/tokenomics';
 import TokenomicsChart from './TokenomicsChart';
 

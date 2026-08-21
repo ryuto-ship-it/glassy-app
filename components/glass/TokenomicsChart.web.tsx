@@ -1,6 +1,8 @@
 import { View, Text, StyleSheet } from 'react-native';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
-import { colors, fonts } from '@/constants/theme';
+// Only ever rendered from the always-dark SidePanel — see
+// constants/theme.ts / themeScope.tsx.
+import { darkColors as colors, fonts } from '@/constants/theme';
 import { TokenomicsSlice } from '@/constants/tokenomics';
 
 // Web-only: recharts renders to the DOM and has no native equivalent, so this

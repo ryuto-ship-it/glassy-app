@@ -1,7 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { colors, fonts, radius, spacing } from '@/constants/theme';
+// Only ever rendered on the Wallet tab, which stays dark — see
+// constants/theme.ts / themeScope.tsx.
+import { darkColors as colors, fonts, radius, spacing } from '@/constants/theme';
 import { GlassSurface } from './GlassSurface';
 
 function FlowIcon({ icon, label, tint }: { icon: keyof typeof Ionicons.glyphMap; label: string; tint: string }) {

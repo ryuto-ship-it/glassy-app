@@ -1,7 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Circle, Polyline } from 'react-native-svg';
 
-import { colors, fonts, radius, spacing } from '@/constants/theme';
+// Only ever rendered inside the always-dark admin dashboard — see
+// constants/theme.ts / themeScope.tsx.
+import { darkColors as colors, fonts, radius, spacing } from '@/constants/theme';
 
 export type ChartSlice = { label: string; value: number; color: string };
 

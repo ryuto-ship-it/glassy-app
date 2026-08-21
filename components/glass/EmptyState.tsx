@@ -1,7 +1,8 @@
 import { Text, View } from 'react-native';
 import { StyleSheet } from 'react-native';
 
-import { colors, fonts, spacing } from '@/constants/theme';
+import { colors, darkColors, fonts, spacing } from '@/constants/theme';
+import { useIsDarkScope } from '@/constants/themeScope';
 
 type Props = {
   emoji?: string;
@@ -10,11 +11,13 @@ type Props = {
 };
 
 export function EmptyState({ emoji = '💧', title, subtitle }: Props) {
+  const dark = useIsDarkScope();
+  const c = dark ? darkColors : colors;
   return (
     <View style={styles.wrap}>
       <Text style={styles.emoji}>{emoji}</Text>
-      <Text style={styles.title}>{title}</Text>
-      {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+      <Text style={[styles.title, { color: c.text }]}>{title}</Text>
+      {subtitle ? <Text style={[styles.subtitle, { color: c.textMuted }]}>{subtitle}</Text> : null}
     </View>
   );
 }
@@ -27,6 +30,6 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   emoji: { fontSize: 34, marginBottom: 4 },
-  title: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 15, textAlign: 'center' },
-  subtitle: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13, textAlign: 'center' },
+  title: { fontFamily: fonts.bodySemi, fontSize: 15, textAlign: 'center' },
+  subtitle: { fontFamily: fonts.body, fontSize: 13, textAlign: 'center' },
 });

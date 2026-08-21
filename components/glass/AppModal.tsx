@@ -3,7 +3,8 @@ import { Modal as RNModal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeIn, FadeOut, SlideInDown, SlideOutDown } from 'react-native-reanimated';
 
-import { colors, radius } from '@/constants/theme';
+import { colors, darkColors, radius } from '@/constants/theme';
+import { useIsDarkScope } from '@/constants/themeScope';
 
 type Props = {
   visible: boolean;
@@ -19,15 +20,23 @@ type Props = {
 // native it falls back to the real Modal — full-screen there is correct
 // since there's no frame to escape.
 export function AppModal({ visible, onClose, children, dismissable = true }: Props) {
+  const dark = useIsDarkScope();
+  const c = dark ? darkColors : colors;
+  const sheetStyle = [styles.sheet, { backgroundColor: c.surface, borderColor: c.border }];
+  const grabberStyle = [styles.grabber, { backgroundColor: dark ? 'rgba(255,255,255,0.16)' : 'rgba(0,0,0,0.12)' }];
+  const topEdgeColors = dark
+    ? (['rgba(255,255,255,0.14)', 'rgba(255,255,255,0)'] as const)
+    : (['rgba(0,0,0,0.06)', 'rgba(0,0,0,0)'] as const);
+
   if (Platform.OS !== 'web') {
     return (
       <RNModal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
         <Pressable style={styles.backdrop} onPress={dismissable ? onClose : undefined} />
         <View style={styles.sheetWrap} pointerEvents="box-none">
-          <View style={styles.sheet}>
-          <View style={styles.grabber} />
+          <View style={sheetStyle}>
+          <View style={grabberStyle} />
           <LinearGradient
-            colors={['rgba(255,255,255,0.14)', 'rgba(255,255,255,0)']}
+            colors={topEdgeColors}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.topEdge}
@@ -56,10 +65,10 @@ export function AppModal({ visible, onClose, children, dismissable = true }: Pro
         style={styles.sheetWrap}
         pointerEvents="box-none"
       >
-        <View style={styles.sheet}>
-          <View style={styles.grabber} />
+        <View style={sheetStyle}>
+          <View style={grabberStyle} />
           <LinearGradient
-            colors={['rgba(255,255,255,0.14)', 'rgba(255,255,255,0)']}
+            colors={topEdgeColors}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.topEdge}

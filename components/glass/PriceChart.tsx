@@ -2,7 +2,8 @@ import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Svg, { Defs, LinearGradient, Path, Stop } from 'react-native-svg';
 
-import { colors, fonts, spacing } from '@/constants/theme';
+import { colors, darkColors, fonts, spacing } from '@/constants/theme';
+import { useIsDarkScope } from '@/constants/themeScope';
 import { GLAS_PRICE_HISTORY, PricePoint } from '@/data/mock';
 import { formatUsd } from '@/lib/format';
 
@@ -85,18 +86,20 @@ type TickerProps = {
 };
 
 export function PriceTicker({ showSparkline = true }: TickerProps) {
+  const dark = useIsDarkScope();
+  const c = dark ? darkColors : colors;
   const { price, changePct, up } = get24hChange();
-  const trendColor = up ? colors.success : colors.danger;
+  const trendColor = up ? c.success : c.danger;
 
   return (
     <View style={styles.row}>
       <View style={{ flex: 1 }}>
-        <Text style={styles.label}>$GLAS</Text>
-        <Text style={styles.price}>{formatUsd(price)}</Text>
+        <Text style={[styles.label, { color: c.textMuted }]}>$GLAS</Text>
+        <Text style={[styles.price, { color: c.text }]}>{formatUsd(price)}</Text>
         <View style={styles.changeRow}>
           <Text style={[styles.changeArrow, { color: trendColor }]}>{up ? '▲' : '▼'}</Text>
           <Text style={[styles.change, { color: trendColor }]}>{Math.abs(changePct).toFixed(2)}%</Text>
-          <Text style={styles.changeSub}>24H</Text>
+          <Text style={[styles.changeSub, { color: c.textFaint }]}>24H</Text>
         </View>
       </View>
       {showSparkline && <Sparkline data={GLAS_PRICE_HISTORY.slice(-14)} color={trendColor} />}
@@ -106,10 +109,10 @@ export function PriceTicker({ showSparkline = true }: TickerProps) {
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  label: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.textMuted, letterSpacing: 0.5 },
-  price: { fontFamily: fonts.display, fontSize: 24, color: colors.text, marginTop: 4 },
+  label: { fontFamily: fonts.bodySemi, fontSize: 12, letterSpacing: 0.5 },
+  price: { fontFamily: fonts.display, fontSize: 24, marginTop: 4 },
   changeRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 4 },
   changeArrow: { fontSize: 10 },
   change: { fontFamily: fonts.bodyBold, fontSize: 12 },
-  changeSub: { fontFamily: fonts.bodyMed, fontSize: 11, color: colors.textFaint },
+  changeSub: { fontFamily: fonts.bodyMed, fontSize: 11 },
 });

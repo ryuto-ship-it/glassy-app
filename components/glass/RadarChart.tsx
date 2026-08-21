@@ -59,14 +59,14 @@ export function RadarChart({ axes, scores, size = 220, color = colors.accentViol
             key={f}
             points={ringPoints(cx, cy, maxR * f, n)}
             fill="none"
-            stroke="rgba(255,255,255,0.1)"
+            stroke="rgba(0,0,0,0.1)"
             strokeWidth={1}
           />
         ))}
         {axes.map((axis, i) => {
           const angle = -Math.PI / 2 + (2 * Math.PI * i) / n;
           const [x, y] = pointOn(cx, cy, maxR, angle);
-          return <Line key={axis.id} x1={cx} y1={cy} x2={x} y2={y} stroke="rgba(255,255,255,0.1)" strokeWidth={1} />;
+          return <Line key={axis.id} x1={cx} y1={cy} x2={x} y2={y} stroke="rgba(0,0,0,0.1)" strokeWidth={1} />;
         })}
         <Polygon points={dataPoints} fill={`url(#${gradId})`} stroke={color} strokeWidth={2} />
         {axes.map((axis, i) => {

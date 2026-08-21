@@ -2,7 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { colors, fonts, radius, spacing } from '@/constants/theme';
+import { colors, darkColors, fonts, radius, spacing } from '@/constants/theme';
+import { DarkScope } from '@/constants/themeScope';
 import { formatGlas, formatUsd } from '@/lib/format';
 import { useAppStore } from '@/store/useAppStore';
 import { useUiStore } from '@/store/useUiStore';
@@ -37,6 +38,10 @@ export function GlobalSheets() {
         {activeSheet === 'composer' && <ComposerSheetContent onClose={closeSheet} />}
       </AppModal>
 
+      <AppModal visible={activeSheet === 'groupbuy-create'} onClose={closeSheet}>
+        {activeSheet === 'groupbuy-create' && <GroupBuyCreateSheetContent onClose={closeSheet} />}
+      </AppModal>
+
       {paymentVariant && (
         <PaymentFlowModal
           visible={activeSheet === 'payment'}
@@ -65,30 +70,32 @@ function WalletActionSheetContent({ mode, onClose }: { mode: 'buy' | 'stake'; on
   };
 
   return (
-    <View style={styles.sheetContent}>
-      <Text style={styles.title}>{mode === 'buy' ? '$GLAS 거래소 매수' : '$GLAS 스테이킹'}</Text>
-      {mode === 'stake' && (
-        <View style={styles.lockupNotice}>
-          <Ionicons name="lock-closed-outline" size={14} color={colors.textMuted} />
-          <Text style={styles.lockupNoticeText}>스테이킹은 최소 30일 락업 후 등급에 반영돼요.</Text>
-        </View>
-      )}
-      <Text style={styles.hint}>
-        {mode === 'buy' ? `사용 가능 USDT: ${formatUsd(usdt)}` : `스테이킹 가능 GLAS: ${formatGlas(liquid)}`}
-      </Text>
-      <TextInput
-        value={amount}
-        onChangeText={setAmount}
-        keyboardType="numeric"
-        placeholder={mode === 'buy' ? 'USDT 금액 입력' : 'GLAS 수량 입력'}
-        placeholderTextColor={colors.textMuted}
-        style={styles.input}
-      />
-      <PillButton label="확인" onPress={confirm} style={{ marginTop: spacing.lg }} />
-      <Pressable onPress={onClose} style={{ marginTop: spacing.md, alignItems: 'center' }}>
-        <Text style={styles.cancelText}>취소</Text>
-      </Pressable>
-    </View>
+    <DarkScope>
+      <View style={styles.sheetContent}>
+        <Text style={[styles.title, { color: darkColors.text }]}>{mode === 'buy' ? '$GLAS 거래소 매수' : '$GLAS 스테이킹'}</Text>
+        {mode === 'stake' && (
+          <View style={styles.lockupNotice}>
+            <Ionicons name="lock-closed-outline" size={14} color={darkColors.textMuted} />
+            <Text style={[styles.lockupNoticeText, { color: darkColors.text }]}>스테이킹은 최소 30일 락업 후 등급에 반영돼요.</Text>
+          </View>
+        )}
+        <Text style={[styles.hint, { color: darkColors.textMuted }]}>
+          {mode === 'buy' ? `사용 가능 USDT: ${formatUsd(usdt)}` : `스테이킹 가능 GLAS: ${formatGlas(liquid)}`}
+        </Text>
+        <TextInput
+          value={amount}
+          onChangeText={setAmount}
+          keyboardType="numeric"
+          placeholder={mode === 'buy' ? 'USDT 금액 입력' : 'GLAS 수량 입력'}
+          placeholderTextColor={darkColors.textMuted}
+          style={[styles.input, { borderColor: darkColors.borderStrong, backgroundColor: darkColors.glassFill, color: darkColors.text }]}
+        />
+        <PillButton label="확인" onPress={confirm} style={{ marginTop: spacing.lg }} />
+        <Pressable onPress={onClose} style={{ marginTop: spacing.md, alignItems: 'center' }}>
+          <Text style={[styles.cancelText, { color: darkColors.textMuted }]}>취소</Text>
+        </Pressable>
+      </View>
+    </DarkScope>
   );
 }
 
@@ -132,6 +139,86 @@ function ComposerSheetContent({ onClose }: { onClose: () => void }) {
   );
 }
 
+function GroupBuyCreateSheetContent({ onClose }: { onClose: () => void }) {
+  const [title, setTitle] = useState('');
+  const [goal, setGoal] = useState(50);
+  const [discountPct, setDiscountPct] = useState(10);
+  const createGroupBuyPost = useAppStore((s) => s.createGroupBuyPost);
+
+  const submit = () => {
+    if (!title.trim()) return;
+    createGroupBuyPost(title.trim(), goal, discountPct);
+    onClose();
+  };
+
+  return (
+    <View style={styles.sheetContent}>
+      <View style={styles.creatorBadge}>
+        <Ionicons name="ribbon" size={11} color="#0B0B0D" />
+        <Text style={styles.creatorBadgeText}>인증 크리에이터 전용</Text>
+      </View>
+      <Text style={styles.title}>인플루언서 공동구매 개설</Text>
+      <Text style={styles.hint}>팔로워를 대상으로 직접 공동구매를 열어보세요.</Text>
+
+      <Text style={styles.fieldLabel}>공동구매 상품/제목</Text>
+      <TextInput
+        value={title}
+        onChangeText={setTitle}
+        placeholder="예: 센텔라 앰플 3+1 특가"
+        placeholderTextColor={colors.textMuted}
+        style={styles.input}
+      />
+
+      <View style={styles.stepperRow}>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.fieldLabel}>목표 인원</Text>
+          <Stepper value={goal} onChange={setGoal} step={10} min={10} suffix="명" />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.fieldLabel}>추가 할인율</Text>
+          <Stepper value={discountPct} onChange={setDiscountPct} step={5} min={5} max={40} suffix="%" />
+        </View>
+      </View>
+
+      <PillButton label="공동구매 개설하기" onPress={submit} style={{ marginTop: spacing.lg }} />
+      <Pressable onPress={onClose} style={{ marginTop: spacing.md, alignItems: 'center' }}>
+        <Text style={styles.cancelText}>취소</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+function Stepper({
+  value,
+  onChange,
+  step,
+  min,
+  max,
+  suffix,
+}: {
+  value: number;
+  onChange: (v: number) => void;
+  step: number;
+  min: number;
+  max?: number;
+  suffix: string;
+}) {
+  return (
+    <View style={styles.stepper}>
+      <Pressable onPress={() => onChange(Math.max(min, value - step))} style={styles.stepperBtn}>
+        <Ionicons name="remove" size={14} color={colors.text} />
+      </Pressable>
+      <Text style={styles.stepperValue}>
+        {value}
+        {suffix}
+      </Text>
+      <Pressable onPress={() => onChange(max ? Math.min(max, value + step) : value + step)} style={styles.stepperBtn}>
+        <Ionicons name="add" size={14} color={colors.text} />
+      </Pressable>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   sheetContent: { paddingHorizontal: spacing.xl, paddingTop: spacing.sm },
   title: { fontFamily: fonts.displaySemi, fontSize: 17, color: colors.text },
@@ -149,14 +236,14 @@ const styles = StyleSheet.create({
   input: {
     marginTop: spacing.sm,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.10)',
+    borderColor: colors.border,
     borderRadius: radius.md,
     paddingHorizontal: spacing.md,
     paddingVertical: 12,
     fontFamily: fonts.bodyMed,
     fontSize: 15,
     color: colors.text,
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    backgroundColor: colors.bgAlt,
   },
   cancelText: { fontFamily: fonts.bodyMed, fontSize: 12, color: colors.textMuted },
   pickThumb: { width: 64, height: 64, borderRadius: radius.md, opacity: 0.5 },
@@ -164,15 +251,51 @@ const styles = StyleSheet.create({
   textArea: {
     marginTop: spacing.md,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.10)',
+    borderColor: colors.border,
     borderRadius: radius.md,
     paddingHorizontal: spacing.md,
     paddingVertical: 12,
     fontFamily: fonts.bodyMed,
     fontSize: 13,
     color: colors.text,
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    backgroundColor: colors.bgAlt,
     minHeight: 80,
     textAlignVertical: 'top',
   },
+  creatorBadge: {
+    flexDirection: 'row',
+    alignSelf: 'flex-start',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: colors.accentGold,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: radius.pill,
+    marginBottom: spacing.sm,
+  },
+  creatorBadgeText: { fontFamily: fonts.bodyBold, fontSize: 9.5, color: '#0B0B0D' },
+  fieldLabel: { fontFamily: fonts.bodyMed, fontSize: 11, color: colors.textMuted, marginTop: spacing.md, marginBottom: 6 },
+  stepperRow: { flexDirection: 'row', gap: spacing.md, marginTop: spacing.xs },
+  stepper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    backgroundColor: colors.bgAlt,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 6,
+  },
+  stepperBtn: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepperValue: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.text },
 });

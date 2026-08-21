@@ -7,7 +7,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeIn, FadeInDown, ZoomIn } from 'react-native-reanimated';
 
 import { PillButton } from '@/components/glass/PillButton';
-import { colors, fonts, gradients, radius, spacing, TAGLINE } from '@/constants/theme';
+// Kept on the dark theme deliberately — a dramatic, distinct "store entry"
+// moment regardless of the app's light default elsewhere.
+import { darkBackgroundGradient, darkColors as colors, fonts, radius, spacing, TAGLINE } from '@/constants/theme';
+import { DarkScope } from '@/constants/themeScope';
 import { WELCOME_BONUS_GLAS, useAppStore } from '@/store/useAppStore';
 import { useUiStore } from '@/store/useUiStore';
 
@@ -39,7 +42,8 @@ export default function WelcomeScreen() {
   const goHome = () => router.back();
 
   return (
-    <LinearGradient colors={gradients.background} style={[styles.root, { paddingTop: insets.top + spacing.lg }]}>
+    <DarkScope>
+    <LinearGradient colors={darkBackgroundGradient} style={[styles.root, { paddingTop: insets.top + spacing.lg }]}>
       {step === 'intro' && (
         <Pressable onPress={goHome} style={styles.closeBtn} hitSlop={10}>
           <Ionicons name="close" size={18} color={colors.textMuted} />
@@ -102,6 +106,7 @@ export default function WelcomeScreen() {
         </View>
       )}
     </LinearGradient>
+    </DarkScope>
   );
 }
 

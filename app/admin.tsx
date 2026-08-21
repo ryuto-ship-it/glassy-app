@@ -12,7 +12,10 @@ import {
   SimpleBarChart,
 } from '@/components/glass/AdminCharts';
 import { GlassSurface } from '@/components/glass/GlassSurface';
-import { colors, fonts, radius, spacing } from '@/constants/theme';
+// The admin dashboard is always dark — a deliberate contrast with the
+// light consumer app. See constants/theme.ts / themeScope.tsx.
+import { darkColors as colors, fonts, radius, spacing } from '@/constants/theme';
+import { DarkScope } from '@/constants/themeScope';
 import { ADMIN_ANALYTICS } from '@/data/mock';
 
 const a = ADMIN_ANALYTICS;
@@ -26,6 +29,7 @@ export default function AdminScreen() {
   const insets = useSafeAreaInsets();
 
   return (
+    <DarkScope>
     <View style={styles.root}>
       <ScrollView contentContainerStyle={{ paddingTop: insets.top + spacing.lg, paddingBottom: 100 }}>
         <View style={styles.section}>
@@ -112,6 +116,7 @@ export default function AdminScreen() {
         </View>
       </ScrollView>
     </View>
+    </DarkScope>
   );
 }
 

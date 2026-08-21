@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, Text, View, ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { colors, fonts, radius, spacing } from '@/constants/theme';
+import { colors, darkColors, fonts, radius, spacing } from '@/constants/theme';
+import { useIsDarkScope } from '@/constants/themeScope';
 
 type Props = {
   label: string;
@@ -14,22 +15,25 @@ type Props = {
 };
 
 export function PillButton({ label, onPress, variant = 'solid', colors_, disabled, icon, style }: Props) {
+  const dark = useIsDarkScope();
+  const c = dark ? darkColors : colors;
+
   if (variant === 'ghost') {
     return (
       <Pressable
         onPress={onPress}
         disabled={disabled}
-        style={[styles.ghost, disabled && styles.disabled, style]}
+        style={[styles.ghost, { borderColor: c.borderStrong, backgroundColor: c.glassFill }, disabled && styles.disabled, style]}
       >
         {icon}
-        <Text style={styles.ghostText}>{label}</Text>
+        <Text style={[styles.ghostText, { color: c.text }]}>{label}</Text>
       </Pressable>
     );
   }
   return (
     <Pressable onPress={onPress} disabled={disabled} style={[styles.solidWrap, disabled && styles.disabled, style]}>
       <LinearGradient
-        colors={(colors_ ?? [colors.accentViolet, '#8C5CE0']) as any}
+        colors={(colors_ ?? [darkColors.accentViolet, '#8C5CE0']) as any}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={StyleSheet.absoluteFill}
@@ -63,18 +67,15 @@ const styles = StyleSheet.create({
   ghost: {
     borderRadius: radius.pill,
     borderWidth: 1.5,
-    borderColor: colors.borderStrong,
     paddingVertical: 12,
     paddingHorizontal: spacing.lg,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: 'rgba(255,255,255,0.05)',
   },
   ghostText: {
     fontFamily: fonts.bodySemi,
-    color: colors.text,
     fontSize: 14,
   },
   disabled: {

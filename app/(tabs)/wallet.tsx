@@ -21,7 +21,12 @@ import { SkeletonBlock } from '@/components/glass/Skeleton';
 import { TabFade } from '@/components/glass/TabFade';
 import { RADAR_AXES } from '@/data/aiRecommendations';
 import { STAKE_LOCKUP_DAYS } from '@/constants/glow';
-import { colors, fonts, radius, spacing } from '@/constants/theme';
+// Wallet stays on the original dark "premium glass" theme regardless of the
+// app's light default — see constants/theme.ts / themeScope.tsx. Aliasing
+// the import means every existing `colors.*` reference in this file's
+// styles keeps resolving to the dark palette with no further changes.
+import { darkColors as colors, fonts, radius, spacing } from '@/constants/theme';
+import { DarkScope } from '@/constants/themeScope';
 import { GLAS_PRICE_HISTORY, GLAS_PRICE_HISTORY_24H } from '@/data/mock';
 import { addDays, daysSince, daysUntil, formatDateShort } from '@/lib/date';
 import { formatGlas, formatUsd } from '@/lib/format';
@@ -79,6 +84,7 @@ export default function WalletScreen() {
     period === '24H' ? GLAS_PRICE_HISTORY_24H : period === '7D' ? GLAS_PRICE_HISTORY.slice(-7) : GLAS_PRICE_HISTORY;
 
   return (
+    <DarkScope>
     <View style={styles.root}>
       <AppBackground />
       <TabFade>
@@ -286,6 +292,7 @@ export default function WalletScreen() {
       </ScrollView>
       </TabFade>
     </View>
+    </DarkScope>
   );
 }
 

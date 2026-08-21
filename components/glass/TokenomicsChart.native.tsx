@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { colors, fonts } from '@/constants/theme';
+import { darkColors as colors, fonts } from '@/constants/theme';
 import { TokenomicsSlice } from '@/constants/tokenomics';
 
 // Never actually reached today (the side link-tree panel that renders this

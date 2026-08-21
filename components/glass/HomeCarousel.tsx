@@ -3,7 +3,7 @@ import { View, Text, Animated, Easing, PanResponder, LayoutChangeEvent, StyleShe
 import { LinearGradient } from 'expo-linear-gradient';
 import { useVideoPlayer, VideoView } from 'expo-video';
 
-import { colors, fonts, radius, shadow, palette } from '@/constants/theme';
+import { fonts, radius, shadow, palette } from '@/constants/theme';
 
 export type HomeSlide = {
   key: string;
@@ -294,11 +294,11 @@ const styles = StyleSheet.create({
   blobSmall: { width: 110, height: 110, top: 30, right: 40 },
   floatingIcon: { position: 'absolute', bottom: 16, right: 20, fontSize: 34, opacity: 0.55 },
   eyebrow: { fontFamily: fonts.bodyBold, fontSize: 10.5, letterSpacing: 1.4, color: 'rgba(255,255,255,0.85)' },
-  title: { fontFamily: fonts.display, fontSize: 21, lineHeight: 26, color: colors.text, marginTop: 9, marginBottom: 10, maxWidth: '78%' },
+  title: { fontFamily: fonts.display, fontSize: 21, lineHeight: 26, color: '#FFFFFF', marginTop: 9, marginBottom: 10, maxWidth: '78%' },
   caption: { fontSize: 10.5, lineHeight: 14.5, color: 'rgba(255,255,255,0.85)', marginTop: 2, fontFamily: fonts.body, maxWidth: '80%' },
   dotsRow: {
     position: 'absolute', bottom: 12, left: 20, flexDirection: 'row', gap: 6,
   },
   dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: 'rgba(255,255,255,0.4)' },
-  dotActive: { width: 16, backgroundColor: colors.text },
+  dotActive: { width: 16, backgroundColor: '#FFFFFF' },
 });
