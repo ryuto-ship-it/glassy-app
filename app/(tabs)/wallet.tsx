@@ -41,6 +41,7 @@ export default function WalletScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const openWalletAction = useUiStore((s) => s.openWalletAction);
+  const openReceipt = useUiStore((s) => s.openReceipt);
   const [notice, setNotice] = useState<string | null>(null);
   const [period, setPeriod] = useState<Period>('7D');
   const [chartWidth, setChartWidth] = useState(300);
@@ -275,9 +276,17 @@ export default function WalletScreen() {
                     <Ionicons name={txIcon(tx.type)} size={16} color={colors.textMuted} />
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={styles.txTitle} numberOfLines={1}>
-                      {tx.title}
-                    </Text>
+                    <View style={styles.txTitleRow}>
+                      <Text style={styles.txTitle} numberOfLines={1}>
+                        {tx.title}
+                      </Text>
+                      {(tx.type === 'purchase' || tx.type === 'purchase_glas') && (
+                        <Pressable onPress={() => openReceipt(tx)} style={styles.chainBadge} hitSlop={6}>
+                          <Ionicons name="shield-checkmark" size={11} color={colors.success} />
+                          <Text style={styles.chainBadgeText}>체인 인증됨</Text>
+                        </Pressable>
+                      )}
+                    </View>
                     <Text style={styles.txSub}>{formatDateShort(tx.date)}</Text>
                   </View>
                   <Text style={[styles.txAmount, tx.direction === 'out' && styles.txAmountOut]}>
@@ -470,7 +479,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  txTitle: { fontFamily: fonts.bodySemi, fontSize: 13, color: colors.text },
+  txTitleRow: { flexDirection: 'row', alignItems: 'center', gap: 6, flexWrap: 'wrap' },
+  txTitle: { fontFamily: fonts.bodySemi, fontSize: 13, color: colors.text, flexShrink: 1 },
+  chainBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 2,
+    backgroundColor: 'rgba(74,222,154,0.12)',
+    paddingHorizontal: 6,
+    paddingVertical: 1.5,
+    borderRadius: radius.pill,
+  },
+  chainBadgeText: { fontFamily: fonts.bodyBold, fontSize: 8.5, color: colors.success },
   txSub: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, marginTop: 2 },
   txAmount: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.success },
   txAmountOut: { color: colors.danger },

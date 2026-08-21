@@ -4,7 +4,8 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { colors, darkColors, fonts, radius, spacing } from '@/constants/theme';
 import { DarkScope } from '@/constants/themeScope';
-import { formatGlas, formatUsd } from '@/lib/format';
+import { Transaction } from '@/data/mock';
+import { formatGlas, formatUsd, mockTxHash } from '@/lib/format';
 import { useAppStore } from '@/store/useAppStore';
 import { useUiStore } from '@/store/useUiStore';
 import { AppModal } from './AppModal';
@@ -27,12 +28,19 @@ export function GlobalSheets() {
   const walletActionMode = useUiStore((s) => s.walletActionMode);
   const paymentVariant = useUiStore((s) => s.paymentVariant);
   const paymentOnSuccess = useUiStore((s) => s.paymentOnSuccess);
+  const receiptTx = useUiStore((s) => s.receiptTx);
 
   return (
     <>
-      <AppModal visible={activeSheet === 'wallet-action'} onClose={closeSheet}>
-        {activeSheet === 'wallet-action' && <WalletActionSheetContent mode={walletActionMode} onClose={closeSheet} />}
-      </AppModal>
+      {/* AppModal itself must be inside <DarkScope>, not just its children —
+          the sheet background/border is drawn by AppModal, which is a
+          sibling of (not a descendant of) a DarkScope wrapped only around
+          its children. */}
+      <DarkScope>
+        <AppModal visible={activeSheet === 'wallet-action'} onClose={closeSheet}>
+          {activeSheet === 'wallet-action' && <WalletActionSheetContent mode={walletActionMode} onClose={closeSheet} />}
+        </AppModal>
+      </DarkScope>
 
       <AppModal visible={activeSheet === 'composer'} onClose={closeSheet}>
         {activeSheet === 'composer' && <ComposerSheetContent onClose={closeSheet} />}
@@ -41,6 +49,12 @@ export function GlobalSheets() {
       <AppModal visible={activeSheet === 'groupbuy-create'} onClose={closeSheet}>
         {activeSheet === 'groupbuy-create' && <GroupBuyCreateSheetContent onClose={closeSheet} />}
       </AppModal>
+
+      <DarkScope>
+        <AppModal visible={activeSheet === 'receipt'} onClose={closeSheet}>
+          {activeSheet === 'receipt' && receiptTx && <ReceiptSheetContent tx={receiptTx} />}
+        </AppModal>
+      </DarkScope>
 
       {paymentVariant && (
         <PaymentFlowModal
@@ -188,6 +202,42 @@ function GroupBuyCreateSheetContent({ onClose }: { onClose: () => void }) {
   );
 }
 
+// Only ever opened from the Wallet tab's transaction list, so this stays
+// on the dark theme like the rest of Wallet.
+function ReceiptSheetContent({ tx }: { tx: Transaction }) {
+  const hash = mockTxHash(tx.id);
+  return (
+    <DarkScope>
+      <View style={styles.sheetContent}>
+        <View style={styles.receiptIconWrap}>
+          <Ionicons name="shield-checkmark" size={26} color={darkColors.success} />
+        </View>
+        <Text style={[styles.receiptTitle, { color: darkColors.text }]}>체인 인증 영수증</Text>
+        <Text style={[styles.receiptBody, { color: darkColors.textMuted }]}>
+          이 거래는 코넷 블록체인에 안전하게 기록되었습니다.
+        </Text>
+
+        <View style={styles.receiptDivider} />
+
+        <ReceiptRow label="거래 내역" value={tx.title} />
+        <ReceiptRow label="트랜잭션 해시" value={`${hash.slice(0, 10)}...${hash.slice(-6)}`} />
+        <ReceiptRow label="타임스탬프" value={new Date(tx.date).toLocaleString('ko-KR')} />
+      </View>
+    </DarkScope>
+  );
+}
+
+function ReceiptRow({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={styles.receiptRow}>
+      <Text style={[styles.receiptLabel, { color: darkColors.textMuted }]}>{label}</Text>
+      <Text style={[styles.receiptValue, { color: darkColors.text }]} numberOfLines={1}>
+        {value}
+      </Text>
+    </View>
+  );
+}
+
 function Stepper({
   value,
   onChange,
@@ -298,4 +348,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   stepperValue: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.text },
+  receiptIconWrap: { alignSelf: 'center', marginBottom: spacing.sm },
+  receiptTitle: { fontFamily: fonts.displaySemi, fontSize: 17, textAlign: 'center' },
+  receiptBody: { fontFamily: fonts.body, fontSize: 12, textAlign: 'center', marginTop: 6, lineHeight: 17 },
+  receiptDivider: { height: 1, backgroundColor: 'rgba(255,255,255,0.1)', marginTop: spacing.lg, marginBottom: spacing.md },
+  receiptRow: { marginBottom: spacing.md },
+  receiptLabel: { fontFamily: fonts.bodyMed, fontSize: 10.5, marginBottom: 3 },
+  receiptValue: { fontFamily: fonts.bodySemi, fontSize: 13 },
 });

@@ -1,14 +1,16 @@
 import { create } from 'zustand';
 
 import { PaymentVariant } from '@/components/glass/PaymentFlowModal';
+import { Transaction } from '@/data/mock';
 
-type SheetKind = 'wallet-action' | 'composer' | 'payment' | 'groupbuy-create' | null;
+type SheetKind = 'wallet-action' | 'composer' | 'payment' | 'groupbuy-create' | 'receipt' | null;
 
 type UiState = {
   activeSheet: SheetKind;
   walletActionMode: 'buy' | 'stake';
   paymentVariant: PaymentVariant | null;
   paymentOnSuccess: (() => void) | null;
+  receiptTx: Transaction | null;
   // Shown once per app session on first Home mount, and re-visitable anytime
   // from the Profile tab ("웰컴 플로우 다시보기") for demo purposes.
   hasSeenWelcome: boolean;
@@ -17,6 +19,7 @@ type UiState = {
   openComposer: () => void;
   openPayment: (variant: PaymentVariant, onSuccess?: () => void) => void;
   openGroupBuyCreate: () => void;
+  openReceipt: (tx: Transaction) => void;
   closeSheet: () => void;
   markWelcomeSeen: () => void;
 };
@@ -32,6 +35,7 @@ export const useUiStore = create<UiState>((set) => ({
   walletActionMode: 'buy',
   paymentVariant: null,
   paymentOnSuccess: null,
+  receiptTx: null,
   hasSeenWelcome: false,
 
   openWalletAction: (mode) => set({ activeSheet: 'wallet-action', walletActionMode: mode }),
@@ -39,6 +43,7 @@ export const useUiStore = create<UiState>((set) => ({
   openPayment: (variant, onSuccess) =>
     set({ activeSheet: 'payment', paymentVariant: variant, paymentOnSuccess: onSuccess ?? null }),
   openGroupBuyCreate: () => set({ activeSheet: 'groupbuy-create' }),
+  openReceipt: (tx) => set({ activeSheet: 'receipt', receiptTx: tx }),
   closeSheet: () => set({ activeSheet: null }),
   markWelcomeSeen: () => set({ hasSeenWelcome: true }),
 }));
