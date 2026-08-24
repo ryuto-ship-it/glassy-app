@@ -13,6 +13,8 @@ import TokenomicsChart from './TokenomicsChart';
 
 const FLYOUT_WIDTH = 250;
 const RAIL_GRADIENT = [colors.accentViolet, palette.rose] as const;
+const WHITEPAPER_GRADIENT = [palette.gold, palette.goldDeep] as const;
+const WHITEPAPER_URL = '/glassy-app/whitepaper.html';
 
 function XIcon({ size = 14, color = '#fff' }: { size?: number; color?: string }) {
   return (
@@ -37,7 +39,19 @@ function TelegramIcon({ size = 16, color = '#fff' }: { size?: number; color?: st
   );
 }
 
-function RailButton({ onPress, label, children }: { onPress: () => void; label: string; children: React.ReactNode }) {
+function RailButton({
+  onPress,
+  label,
+  children,
+  gradient = RAIL_GRADIENT,
+  emphasize = false,
+}: {
+  onPress: () => void;
+  label: string;
+  children: React.ReactNode;
+  gradient?: readonly [string, string];
+  emphasize?: boolean;
+}) {
   const scale = useRef(new Animated.Value(1)).current;
   const animateTo = (v: number) =>
     Animated.spring(scale, { toValue: v, useNativeDriver: true, speed: 30, bounciness: 6 }).start();
@@ -45,10 +59,15 @@ function RailButton({ onPress, label, children }: { onPress: () => void; label: 
   return (
     <Pressable onPress={onPress} onPressIn={() => animateTo(0.92)} onPressOut={() => animateTo(1)} style={styles.railBtnHit}>
       <Animated.View style={{ transform: [{ scale }], alignItems: 'center' }}>
-        <LinearGradient colors={RAIL_GRADIENT} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.railBtn}>
+        <LinearGradient
+          colors={gradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={[styles.railBtn, emphasize && styles.railBtnEmphasis]}
+        >
           {children}
         </LinearGradient>
-        <Text style={styles.railLabel}>{label}</Text>
+        <Text style={[styles.railLabel, emphasize && styles.railLabelEmphasis]}>{label}</Text>
       </Animated.View>
     </Pressable>
   );
@@ -84,6 +103,14 @@ export function SidePanel({ side }: { side: 'left' | 'right' }) {
     <View style={[styles.wrap, side === 'left' ? styles.wrapLeft : styles.wrapRight]}>
       <View style={styles.rail}>
         <Text style={styles.railWordmark}>{APP_NAME}</Text>
+        <RailButton
+          onPress={() => window.open(WHITEPAPER_URL, '_blank')}
+          label="Whitepaper"
+          gradient={WHITEPAPER_GRADIENT}
+          emphasize
+        >
+          <Ionicons name="document-text-outline" size={17} color="#0B0B0D" />
+        </RailButton>
         <RailButton onPress={() => showComingSoon('홈페이지 — 오픈 예정')} label="홈페이지">
           <Ionicons name="home-outline" size={17} color="#0B0B0D" />
         </RailButton>
@@ -158,12 +185,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...shadow.soft,
   },
+  railBtnEmphasis: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    shadowOpacity: 0.7,
+  },
   railLabel: {
     fontSize: 9,
     color: colors.textMuted,
     fontFamily: fonts.bodyMed,
     marginTop: 5,
     letterSpacing: 0.2,
+  },
+  railLabelEmphasis: {
+    color: palette.gold,
+    fontFamily: fonts.bodyBold,
   },
   flyout: {
     position: 'absolute',
