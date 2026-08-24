@@ -12,7 +12,10 @@
 <style>
   :root {
     --violet: #7C57C7;
+    --violet-vivid: #B18CFF;
     --violet-deep: #8C5CE0;
+    --teal: #6FD7C4;
+    --rose: #E07A9E;
     --gold: #C79A3D;
     --gold-bright: #E8C468;
     --ink: #1A1A1A;
@@ -20,8 +23,10 @@
     --faint: #8A8A93;
     --rule: rgba(124,87,199,0.16);
     --bg: #FFFFFF;
+    --nav-h: 60px;
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   html, body { margin: 0; padding: 0; }
   body {
     background: var(--bg);
@@ -31,67 +36,103 @@
     line-height: 1.75;
     -webkit-font-smoothing: antialiased;
   }
-
   a { color: var(--violet); text-decoration: none; }
   a:hover { text-decoration: underline; }
+  button { font-family: inherit; }
 
-  .topbar {
+  /* ---------- Top nav (matches the app-side showcase TopNav) ---------- */
+  .topnav {
     position: sticky;
     top: 0;
-    z-index: 20;
+    z-index: 30;
+    height: var(--nav-h);
     display: flex;
     align-items: center;
-    padding: 16px 24px;
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--rule);
+    background: rgba(10,10,12,0.82);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35);
   }
-  .topbar-inner {
+  .topnav-inner {
     max-width: 1180px;
     margin: 0 auto;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 24px;
   }
-  .brand {
+  .topnav-brand {
     display: flex;
-    align-items: baseline;
-    gap: 8px;
+    align-items: center;
+    gap: 7px;
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
     font-size: 15px;
-    letter-spacing: 0.5px;
-    color: var(--ink);
+    letter-spacing: 1.2px;
+    color: #F5F5F7;
   }
-  .brand-mark {
-    background: linear-gradient(90deg, var(--violet-deep), var(--gold));
+  .topnav-brand svg { flex-shrink: 0; }
+  .topnav-links { display: flex; align-items: center; gap: 28px; }
+  .topnav-links a {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.2px;
+    color: rgba(255,255,255,0.62);
+    padding: 4px 0;
+    position: relative;
+  }
+  .topnav-links a:hover { color: #fff; text-decoration: none; }
+  .topnav-links a.active { color: #fff; font-weight: 600; }
+  .topnav-links a.active::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -14px;
+    height: 2px;
+    background: var(--gold-bright);
+    border-radius: 1px;
+  }
+
+  /* ---------- Mega hero ---------- */
+  .mega-hero {
+    background: linear-gradient(135deg, #100D18 0%, #1C1528 45%, #2B2038 100%);
+    padding: 64px 24px 56px;
+    text-align: center;
+  }
+  .mega-hero-inner { max-width: 760px; margin: 0 auto; }
+  .mega-kicker {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    margin: 0 0 16px;
+  }
+  h2.mega-line {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: clamp(26px, 4.6vw, 42px);
+    line-height: 1.32;
+    margin: 0 0 20px;
+    background: linear-gradient(100deg, #F5F0FF 10%, var(--violet-vivid) 45%, var(--gold-bright) 85%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
-  .version-pill {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 11px;
-    letter-spacing: 0.3px;
-    color: var(--gold);
-    border: 1px solid rgba(199,154,61,0.35);
-    background: rgba(232,196,104,0.08);
-    border-radius: 999px;
-    padding: 2px 9px;
+  .mega-sub {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.68);
+    max-width: 600px;
+    margin: 0 auto 4px;
   }
-  .back-link {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--muted);
-  }
-  .back-link:hover { color: var(--violet); }
 
+  /* ---------- Document hero ---------- */
   header.hero {
     max-width: 1180px;
     margin: 0 auto;
-    padding: 56px 24px 40px;
+    padding: 44px 24px 36px;
   }
   .eyebrow {
     font-size: 12.5px;
@@ -105,44 +146,44 @@
     flex-wrap: wrap;
   }
   .eyebrow .dot { color: var(--faint); font-weight: 400; }
+  .version-pill {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    color: var(--gold);
+    border: 1px solid rgba(199,154,61,0.35);
+    background: rgba(232,196,104,0.08);
+    border-radius: 999px;
+    padding: 2px 9px;
+  }
   h1.title {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
-    font-size: 34px;
+    font-size: 32px;
     line-height: 1.25;
     margin: 0 0 10px;
     color: var(--ink);
     max-width: 780px;
   }
-  .tagline {
-    font-size: 17px;
-    color: var(--muted);
-    margin: 0 0 22px;
-    max-width: 780px;
-  }
+  .tagline { font-size: 16.5px; color: var(--muted); margin: 0 0 20px; max-width: 780px; }
   .hero-rule {
     height: 3px;
     width: 64px;
     border-radius: 2px;
     background: linear-gradient(90deg, var(--violet-deep), var(--gold-bright));
-    margin: 0;
   }
 
+  /* ---------- Layout ---------- */
   .layout {
     max-width: 1180px;
     margin: 0 auto;
-    padding: 0 24px 96px;
+    padding: 0 24px 100px;
     display: flex;
     gap: 56px;
     align-items: flex-start;
   }
-
-  nav.toc {
-    width: 216px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 76px;
-  }
+  nav.toc { width: 216px; flex-shrink: 0; position: sticky; top: calc(var(--nav-h) + 16px); }
   nav.toc .toc-label {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -153,12 +194,7 @@
     margin: 0 0 12px;
     padding-left: 12px;
   }
-  nav.toc ol {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border-left: 2px solid var(--rule);
-  }
+  nav.toc ol { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--rule); }
   nav.toc li { margin: 0; }
   nav.toc a {
     display: block;
@@ -169,34 +205,26 @@
     font-weight: 500;
     color: var(--muted);
     line-height: 1.4;
+    transition: color .15s ease, border-color .15s ease;
   }
-  nav.toc a:hover {
-    color: var(--violet);
-    text-decoration: none;
-    border-left-color: var(--violet-deep);
-  }
-  nav.toc a .toc-num {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    color: var(--gold);
-    margin-right: 7px;
-  }
+  nav.toc a:hover { color: var(--violet); text-decoration: none; border-left-color: var(--violet-deep); }
+  nav.toc a.active { color: var(--violet); border-left-color: var(--gold-bright); font-weight: 600; }
+  nav.toc a .toc-num { font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--gold); margin-right: 7px; }
 
   main { flex: 1; min-width: 0; max-width: 780px; }
 
   section.doc-section {
-    padding: 44px 0;
+    padding: 48px 0;
     border-top: 1px solid var(--rule);
-    scroll-margin-top: 76px;
+    scroll-margin-top: calc(var(--nav-h) + 16px);
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity .7s ease, transform .7s ease;
   }
+  section.doc-section.is-visible { opacity: 1; transform: none; }
   section.doc-section:first-child { border-top: none; padding-top: 8px; }
 
-  .section-head {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    margin: 0 0 20px;
-  }
+  .section-head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 20px; }
   .section-num {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
@@ -207,60 +235,23 @@
     padding: 3px 11px;
     flex-shrink: 0;
   }
-  h2.section-title {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 23px;
-    margin: 0;
-    color: var(--ink);
-  }
-  h3.sub-title {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 16px;
-    margin: 28px 0 12px;
-    color: var(--ink);
-  }
+  h2.section-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 23px; margin: 0; color: var(--ink); }
+  h3.sub-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 16px; margin: 28px 0 12px; color: var(--ink); }
   h3.sub-title:first-of-type { margin-top: 4px; }
 
   p { margin: 0 0 16px; color: var(--ink); }
-  p.lead { font-size: 16.5px; color: var(--ink); }
+  p.lead { font-size: 16.5px; }
 
-  ul.doc-list {
-    margin: 0 0 16px;
-    padding: 0;
-    list-style: none;
-  }
-  ul.doc-list > li {
-    position: relative;
-    padding-left: 20px;
-    margin-bottom: 12px;
-    color: var(--ink);
-  }
+  ul.doc-list { margin: 0 0 16px; padding: 0; list-style: none; }
+  ul.doc-list > li { position: relative; padding-left: 20px; margin-bottom: 12px; }
   ul.doc-list > li::before {
-    content: '';
-    position: absolute;
-    left: 2px;
-    top: 9px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
+    content: ''; position: absolute; left: 2px; top: 9px; width: 6px; height: 6px; border-radius: 50%;
     background: linear-gradient(135deg, var(--violet-deep), var(--gold));
   }
-  ul.doc-list > li strong {
-    font-weight: 600;
-    color: var(--ink);
-  }
-  ol.doc-list-num {
-    margin: 0 0 16px;
-    padding: 0 0 0 22px;
-  }
-  ol.doc-list-num > li {
-    margin-bottom: 14px;
-    padding-left: 4px;
-    color: var(--ink);
-  }
-  ol.doc-list-num > li strong { font-weight: 600; color: var(--ink); }
+  ul.doc-list > li strong { font-weight: 600; }
+  ol.doc-list-num { margin: 0 0 16px; padding: 0 0 0 22px; }
+  ol.doc-list-num > li { margin-bottom: 14px; padding-left: 4px; }
+  ol.doc-list-num > li strong { font-weight: 600; }
 
   blockquote.callout {
     margin: 4px 0 22px;
@@ -269,90 +260,9 @@
     background: linear-gradient(135deg, rgba(232,196,104,0.08), rgba(124,87,199,0.04));
     border-radius: 0 12px 12px 0;
     font-size: 15px;
-    color: var(--ink);
     font-weight: 500;
   }
   blockquote.callout p { margin: 0; }
-
-  table.doc-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 4px 0 20px;
-    font-size: 14.5px;
-  }
-  table.doc-table th, table.doc-table td {
-    text-align: left;
-    padding: 10px 8px;
-    border-bottom: 1px solid var(--rule);
-  }
-  table.doc-table th {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 12px;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-    color: var(--faint);
-  }
-  table.doc-table td.tier-name-cell {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    color: var(--violet);
-    white-space: nowrap;
-  }
-  table.doc-table td.pct {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    color: var(--violet);
-    white-space: nowrap;
-  }
-  table.doc-table td.desc { color: var(--muted); }
-
-  .supply-callout {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    border: 1px solid var(--rule);
-    border-radius: 14px;
-    padding: 18px 20px;
-    margin: 0 0 22px;
-    background: linear-gradient(135deg, rgba(124,87,199,0.05), rgba(232,196,104,0.06));
-  }
-  .supply-figure {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-size: 22px;
-    color: var(--ink);
-  }
-  .supply-label { font-size: 13px; color: var(--muted); }
-
-  .roadmap {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    border-left: 2px solid var(--rule);
-    padding-left: 20px;
-  }
-  .roadmap li { position: relative; margin-bottom: 20px; padding-bottom: 2px; }
-  .roadmap li::before {
-    content: '';
-    position: absolute;
-    left: -25px;
-    top: 5px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--violet-deep), var(--gold));
-  }
-  .roadmap .phase-label {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 14.5px;
-    color: var(--ink);
-    display: block;
-    margin-bottom: 3px;
-  }
-  .roadmap .phase-window { color: var(--gold); font-weight: 500; }
-  .roadmap .phase-desc { color: var(--muted); font-size: 15px; }
 
   .disclaimer {
     margin-top: 8px;
@@ -364,67 +274,289 @@
     color: var(--muted);
   }
 
+  /* ---------- Before / after comparison (section 2) ---------- */
+  .compare-grid { display: flex; flex-direction: column; gap: 10px; margin: 4px 0 8px; }
+  .compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .compare-card {
+    border-radius: 14px;
+    padding: 15px 17px;
+    font-size: 14.5px;
+    line-height: 1.6;
+    border: 1px solid var(--rule);
+  }
+  .compare-old { background: #F7F6F5; color: var(--muted); }
+  .compare-new { background: linear-gradient(135deg, rgba(124,87,199,0.07), rgba(232,196,104,0.08)); color: var(--ink); }
+  .compare-flag { display: flex; align-items: center; gap: 6px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 11.5px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .compare-old .compare-flag { color: #A6A6A6; }
+  .compare-new .compare-flag { color: var(--violet); }
+  @media (max-width: 620px) { .compare-row { grid-template-columns: 1fr; } }
+
+  /* ---------- Architecture diagram (section 3) ---------- */
+  .layer-stack { display: flex; flex-direction: column; margin: 4px 0 8px; }
+  .layer-box {
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    background: #fff;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .layer-connector { display: flex; justify-content: center; margin: -6px 0; }
+  .layer-connector svg { display: block; }
+  .layer-head {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+  .layer-icon {
+    width: 38px; height: 38px; flex-shrink: 0; border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+  }
+  .layer-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 15px; color: var(--ink); margin: 0 0 2px; }
+  .layer-summary { font-size: 13px; color: var(--muted); margin: 0; }
+  .layer-chevron { margin-left: auto; flex-shrink: 0; color: var(--faint); transition: transform .25s ease; }
+  .layer-box.open .layer-chevron { transform: rotate(180deg); }
+  .layer-detail { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+  .layer-box.open .layer-detail { max-height: 200px; }
+  .layer-detail-inner { padding: 0 18px 18px 70px; font-size: 14.5px; color: var(--muted); }
+
+  /* ---------- Tier cards (section 4-3) ---------- */
+  .tier-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 4px 0 20px; }
+  .tier-card {
+    border-radius: 16px;
+    padding: 18px 16px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    min-height: 168px;
+    display: flex;
+    flex-direction: column;
+  }
+  .tier-badge {
+    width: 30px; height: 30px; border-radius: 9px;
+    background: rgba(255,255,255,0.22);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 10px;
+  }
+  .tier-name { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14.5px; margin: 0 0 4px; }
+  .tier-range { font-size: 12.5px; opacity: 0.88; margin: 0 0 10px; }
+  .tier-benefit { font-size: 12px; opacity: 0.92; line-height: 1.5; margin-top: auto; }
+  @media (max-width: 720px) { .tier-cards { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 420px) { .tier-cards { grid-template-columns: 1fr; } }
+
+  /* ---------- AI interactive cards (section 5) ---------- */
+  .ai-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 4px 0 20px; }
+  .ai-card {
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    padding: 18px;
+    cursor: pointer;
+    background: #fff;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+  .ai-card:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(124,87,199,0.14); border-color: rgba(124,87,199,0.3); }
+  .ai-card-icon {
+    width: 48px; height: 48px; border-radius: 13px; margin-bottom: 12px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, rgba(124,87,199,0.1), rgba(232,196,104,0.12));
+    color: var(--violet);
+  }
+  .ai-card-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14.5px; margin: 0 0 6px; color: var(--ink); }
+  .ai-card-desc { font-size: 13px; color: var(--muted); margin: 0 0 10px; line-height: 1.55; }
+  .ai-card-cta { font-size: 12px; font-weight: 600; color: var(--violet); }
+  @media (max-width: 560px) { .ai-grid { grid-template-columns: 1fr; } }
+
+  .ai-modal-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(10,8,14,0.62);
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .ai-modal-overlay.open { display: flex; }
+  .ai-modal {
+    background: #fff; border-radius: 20px; max-width: 420px; width: 100%;
+    padding: 28px 26px 26px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+    position: relative;
+  }
+  .ai-modal-close {
+    position: absolute; top: 14px; right: 14px;
+    width: 30px; height: 30px; border-radius: 50%;
+    border: none; background: rgba(0,0,0,0.05);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--muted);
+  }
+  .ai-modal-icon {
+    width: 84px; height: 84px; border-radius: 20px; margin: 0 auto 18px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, rgba(124,87,199,0.12), rgba(232,196,104,0.14));
+    color: var(--violet);
+  }
+  .ai-modal-icon svg { width: 44px; height: 44px; }
+  .ai-modal h3 { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 18px; text-align: center; margin: 0 0 10px; color: var(--ink); }
+  .ai-modal p { font-size: 14.5px; color: var(--muted); text-align: center; margin: 0; line-height: 1.65; }
+
+  /* ---------- Tokenomics donut (section 8) ---------- */
+  .supply-callout {
+    display: flex; align-items: center; gap: 16px;
+    border: 1px solid var(--rule); border-radius: 14px;
+    padding: 18px 20px; margin: 0 0 22px;
+    background: linear-gradient(135deg, rgba(124,87,199,0.05), rgba(232,196,104,0.06));
+    flex-wrap: wrap;
+  }
+  .supply-figure { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 22px; color: var(--ink); }
+  .supply-label { font-size: 13px; color: var(--muted); }
+  .supply-badge {
+    margin-left: auto;
+    font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 11.5px;
+    color: #fff; background: linear-gradient(135deg, var(--violet-deep), var(--gold));
+    padding: 5px 12px; border-radius: 999px;
+  }
+
+  .donut-section { display: flex; gap: 32px; align-items: center; margin: 8px 0 28px; flex-wrap: wrap; }
+  .donut-wrap { position: relative; width: 220px; height: 220px; flex-shrink: 0; margin: 0 auto; }
+  .donut-svg { width: 100%; height: 100%; display: block; }
+  .donut-slice { cursor: pointer; transition: transform .18s ease, opacity .18s ease; transform-origin: 100px 100px; stroke: #fff; stroke-width: 1.5; }
+  .donut-slice:hover, .donut-slice.active { transform: scale(1.045); }
+  .donut-slice.dim { opacity: 0.35; }
+  .donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; text-align: center; }
+  .donut-center-figure { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 20px; color: var(--ink); }
+  .donut-center-label { font-size: 10.5px; color: var(--faint); margin-top: 2px; max-width: 90px; line-height: 1.3; }
+  .donut-tooltip {
+    position: absolute; z-index: 5; pointer-events: none;
+    background: #201A2B; color: #fff; padding: 9px 12px; border-radius: 10px;
+    font-size: 12px; line-height: 1.5; max-width: 190px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+    opacity: 0; transition: opacity .12s ease;
+    transform: translate(-50%, -100%);
+  }
+  .donut-tooltip.visible { opacity: 1; }
+  .donut-tooltip strong { display: block; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 12.5px; margin-bottom: 2px; }
+
+  .donut-legend { flex: 1; min-width: 240px; display: flex; flex-direction: column; gap: 8px; }
+  .legend-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: 10px;
+    cursor: pointer; transition: background .15s ease;
+    border: 1px solid transparent;
+  }
+  .legend-row:hover, .legend-row.active { background: rgba(124,87,199,0.06); border-color: var(--rule); }
+  .legend-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+  .legend-label { font-size: 13.5px; color: var(--ink); flex: 1; }
+  .legend-pct { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13.5px; color: var(--violet); }
+
+  .burn-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 4px 0 8px; }
+  .burn-card { border: 1px solid var(--rule); border-radius: 14px; padding: 16px; }
+  .burn-icon {
+    width: 34px; height: 34px; border-radius: 10px; margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, rgba(124,87,199,0.12), rgba(232,196,104,0.14));
+    color: var(--violet);
+  }
+  .burn-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13.5px; margin: 0 0 5px; color: var(--ink); }
+  .burn-desc { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin: 0; }
+  @media (max-width: 640px) { .burn-cards { grid-template-columns: 1fr; } }
+
+  /* ---------- Roadmap timeline (section 9) ---------- */
+  .timeline { display: flex; gap: 6px; margin: 8px 0 8px; }
+  .timeline-node { flex: 1; position: relative; padding-top: 30px; cursor: pointer; }
+  .timeline-track { position: absolute; top: 9px; left: 0; right: 0; height: 2px; background: var(--rule); }
+  .timeline-node:first-child .timeline-track { left: 50%; }
+  .timeline-node:last-child .timeline-track { right: 50%; }
+  .timeline-dot {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 18px; height: 18px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--violet-deep), var(--gold));
+    border: 3px solid #fff; box-shadow: 0 0 0 1px var(--rule);
+    z-index: 2;
+  }
+  .timeline-node.muted .timeline-dot { background: #D8D5DE; }
+  .timeline-body { text-align: center; padding: 0 6px; }
+  .timeline-phase { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13px; color: var(--ink); margin: 0 0 3px; }
+  .timeline-window { font-size: 11px; color: var(--faint); margin: 0 0 8px; }
+  .timeline-badge {
+    display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.3px;
+    padding: 3px 9px; border-radius: 999px; margin-bottom: 8px;
+  }
+  .timeline-badge.active { background: rgba(232,196,104,0.18); color: var(--gold); }
+  .timeline-badge.upcoming { background: rgba(0,0,0,0.05); color: var(--faint); }
+  .timeline-detail { max-height: 0; overflow: hidden; transition: max-height .35s ease; font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+  .timeline-node.open .timeline-detail { max-height: 140px; }
+
+  @media (max-width: 760px) {
+    .timeline { flex-direction: column; gap: 0; }
+    .timeline-node { padding: 0 0 0 32px; padding-top: 0; margin-bottom: 22px; }
+    .timeline-track { display: none; }
+    .timeline-node::before {
+      content: ''; position: absolute; left: 8px; top: 20px; bottom: -22px; width: 2px; background: var(--rule);
+    }
+    .timeline-node:last-child::before { display: none; }
+    .timeline-dot { top: 3px; left: 0; transform: none; }
+    .timeline-body { text-align: left; padding: 0; }
+  }
+
   footer {
-    max-width: 1180px;
-    margin: 0 auto;
-    padding: 32px 24px 64px;
-    border-top: 1px solid var(--rule);
-    font-size: 13px;
-    color: var(--faint);
-    text-align: center;
+    max-width: 1180px; margin: 0 auto; padding: 32px 24px 64px;
+    border-top: 1px solid var(--rule); font-size: 13px; color: var(--faint); text-align: center;
   }
 
   @media (max-width: 900px) {
-    .layout { flex-direction: column; gap: 8px; }
+    .layout { flex-direction: column; gap: 8px; padding: 0 0 80px; }
     nav.toc {
-      width: 100%;
-      position: sticky;
-      top: 57px;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(8px);
-      padding: 12px 0 14px;
-      border-bottom: 1px solid var(--rule);
-      margin-bottom: 8px;
-      z-index: 15;
+      width: 100%; position: sticky; top: var(--nav-h);
+      background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+      padding: 12px 0 14px; border-bottom: 1px solid var(--rule); margin-bottom: 8px; z-index: 15;
     }
     nav.toc .toc-label { padding-left: 24px; }
-    nav.toc ol {
-      display: flex;
-      overflow-x: auto;
-      border-left: none;
-      gap: 4px;
-      padding: 0 24px;
-      -webkit-overflow-scrolling: touch;
-    }
+    nav.toc ol { display: flex; overflow-x: auto; border-left: none; gap: 4px; padding: 0 24px; -webkit-overflow-scrolling: touch; }
     nav.toc li { flex-shrink: 0; }
-    nav.toc a {
-      border-left: none;
-      border: 1px solid var(--rule);
-      border-radius: 999px;
-      padding: 6px 12px;
-      white-space: nowrap;
-    }
-    main { max-width: 100%; padding: 0 0; }
-    .layout { padding: 0 0 80px; }
+    nav.toc a { border-left: none; border: 1px solid var(--rule); border-radius: 999px; padding: 6px 12px; white-space: nowrap; }
+    nav.toc a.active { background: rgba(124,87,199,0.08); }
     main, nav.toc { padding-left: 24px; padding-right: 24px; }
+    main { max-width: 100%; }
   }
 
   @media (max-width: 520px) {
-    h1.title { font-size: 27px; }
+    h1.title { font-size: 26px; }
     h2.section-title { font-size: 19px; }
-    header.hero { padding: 40px 20px 28px; }
-    section.doc-section { padding: 32px 0; }
+    header.hero { padding: 34px 20px 26px; }
+    section.doc-section { padding: 34px 0; }
+    .topnav-links { gap: 16px; }
+    .mega-hero { padding: 48px 20px 42px; }
   }
 </style>
 </head>
 <body>
 
-  <div class="topbar">
-    <div class="topbar-inner">
-      <span class="brand"><span class="brand-mark">GLASSY</span> Whitepaper</span>
-      <a class="back-link" href="./index.html">← GLASSY 앱으로 돌아가기</a>
+  <nav class="topnav">
+    <div class="topnav-inner">
+      <span class="topnav-brand">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z" fill="#E8C468"/></svg>
+        GLASSY
+      </span>
+      <div class="topnav-links">
+        <a href="./index.html">App Demo</a>
+        <a href="./whitepaper.html" class="active">Whitepaper</a>
+        <a href="https://github.com/ryuto-ship-it/glassy-app" target="_blank" rel="noopener">GitHub</a>
+      </div>
     </div>
-  </div>
+  </nav>
+
+  <section class="mega-hero">
+    <div class="mega-hero-inner">
+      <p class="mega-kicker">GLASSY Whitepaper</p>
+      <h2 class="mega-line">AI가 추천하고, 토큰이 보상하고,<br />데이터가 증명한다.</h2>
+      <p class="mega-sub">결제 한 번마다 맞춤 추천이 쌓이고, 등급이 오르고, 리워드가 남습니다.</p>
+      <p class="mega-sub">귀국 후에도 끊기지 않는 단 하나의 뷰티 헬스 멤버십.</p>
+    </div>
+  </section>
 
   <header class="hero">
     <p class="eyebrow">
@@ -474,17 +606,28 @@
           <span class="section-num">2</span>
           <h2 class="section-title">문제 정의</h2>
         </div>
-        <ul class="doc-list">
-          <li>관광객 귀국 후 재구매 채널 단절, 브랜드 로열티 연속성 없음</li>
-          <li>국가·매장별 멤버십 파편화</li>
-          <li>해외 상품 정보 접근성 부족 (자국어 설명 부재, 성분·복용법 확인 어려움)</li>
-          <li>개인 맞춤 건강기능식품 선택 의사결정 비용 높음</li>
-          <li>
-            <strong>오프라인 매장은 관광객 결제 데이터를 사실상 보유하지 못함</strong> — 카드사·POS 데이터는 매출
-            통계만 제공할 뿐, 방문객의 국적·연령·성별·구매 패턴 같은 타겟 마케팅에 필요한 데이터는 파악 불가능하다.
-            이는 온라인 커머스와 달리 오프라인 매장이 구조적으로 겪는 한계다.
-          </li>
-        </ul>
+        <div class="compare-grid">
+          <div class="compare-row">
+            <div class="compare-card compare-old"><div class="compare-flag">기존 방식</div>관광객 귀국 후 재구매 채널 단절, 브랜드 로열티 연속성 없음</div>
+            <div class="compare-card compare-new"><div class="compare-flag">GLASSY</div>귀국 후에도 앱에서 등급이 유지되고, 해외 재구매 배송비까지 무료로 이어지는 글로벌 채널</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-card compare-old"><div class="compare-flag">기존 방식</div>국가·매장별 멤버십 파편화</div>
+            <div class="compare-card compare-new"><div class="compare-flag">GLASSY</div>단일 $GLAS 등급 시스템이 모든 가맹 매장에 동일하게 적용</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-card compare-old"><div class="compare-flag">기존 방식</div>해외 상품 정보 접근성 부족 (자국어 설명 부재, 성분·복용법 확인 어려움)</div>
+            <div class="compare-card compare-new"><div class="compare-flag">GLASSY</div>제품 스캔 한 번으로 효능·복용법·주의사항을 이용자의 언어로 즉시 제공</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-card compare-old"><div class="compare-flag">기존 방식</div>개인 맞춤 건강기능식품 선택 의사결정 비용 높음</div>
+            <div class="compare-card compare-new"><div class="compare-flag">GLASSY</div>셀프 체크와 웨어러블 연동 데이터를 기반으로 AI가 맞춤 제품을 추천</div>
+          </div>
+          <div class="compare-row">
+            <div class="compare-card compare-old"><div class="compare-flag">기존 방식</div>오프라인 매장은 관광객 결제 데이터를 사실상 보유하지 못함 — 카드사·POS 데이터는 매출 통계만 제공</div>
+            <div class="compare-card compare-new"><div class="compare-flag">GLASSY</div>QR 적립으로 결제수단 무관하게 데이터가 한 곳에 모이고, 매장 운영 대시보드로 인사이트를 제공</div>
+          </div>
+        </div>
       </section>
 
       <section class="doc-section" id="solution">
@@ -492,17 +635,71 @@
           <span class="section-num">3</span>
           <h2 class="section-title">솔루션 구조</h2>
         </div>
-        <p>GLASSY는 네 개의 레이어로 구성된다.</p>
-        <ol class="doc-list-num">
-          <li><strong>결제·리워드 레이어</strong> — 결제수단(스테이블코인/신용카드/현금)과 무관하게, QR 스캔을 통해
-            통일된 방식으로 리워드가 적립된다. 결제 수단이 무엇이든 데이터는 한 곳으로 모인다.</li>
-          <li><strong>등급·멤버십 레이어</strong> — 보유 $GLAS의 현재 달러 가치 기준으로 등급을 판정하고, 등급별
-            할인·무료배송·AI 기능 차등 제공.</li>
-          <li><strong>AI 인텔리전스 레이어</strong> — 셀프 체크리스트, 웨어러블 기기 연동, 구매 이력 누적 분석을 통해
-            개인 맞춤 제품을 추천.</li>
-          <li><strong>데이터 레이어</strong> — 방문객의 국가·연령·성별·구매 패턴·재방문 여부를 집계해, 가맹점이
-            카드사·플랫폼으로부터 얻을 수 없는 오프라인 고객 데이터를 확보하고 타겟 마케팅에 활용한다.</li>
-        </ol>
+        <p>GLASSY는 네 개의 레이어로 구성된다. 각 레이어를 눌러 상세 설명을 확인할 수 있다.</p>
+
+        <div class="layer-stack" id="layerStack">
+          <div class="layer-box">
+            <button class="layer-head">
+              <span class="layer-icon" style="background:linear-gradient(135deg,#8C5CE0,#B18CFF);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 10l9-6 9 6-9 6-9-6z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 12.5V17c0 1 2.2 2 5 2s5-1 5-2v-4.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span>
+                <p class="layer-title">결제·리워드 레이어</p>
+                <p class="layer-summary">결제수단과 무관하게 QR 스캔으로 통일된 리워드 적립</p>
+              </span>
+              <svg class="layer-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="layer-detail"><div class="layer-detail-inner">결제수단(스테이블코인/신용카드/현금)과 무관하게, QR 스캔을 통해 통일된 방식으로 리워드가 적립된다. 결제 수단이 무엇이든 데이터는 한 곳으로 모인다.</div></div>
+          </div>
+
+          <div class="layer-connector"><svg width="16" height="20" viewBox="0 0 16 20"><path d="M8 0v16M2 12l6 6 6-6" stroke="var(--rule)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+          <div class="layer-box">
+            <button class="layer-head">
+              <span class="layer-icon" style="background:linear-gradient(135deg,#B18CFF,#E8C468);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.6 5.8 6.2.6-4.7 4.2 1.4 6.1L12 15.8 6.5 18.7l1.4-6.1-4.7-4.2 6.2-.6L12 2z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+              </span>
+              <span>
+                <p class="layer-title">등급·멤버십 레이어</p>
+                <p class="layer-summary">보유 $GLAS 가치 기준 등급 판정, 등급별 혜택 차등</p>
+              </span>
+              <svg class="layer-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="layer-detail"><div class="layer-detail-inner">보유 $GLAS의 현재 달러 가치 기준으로 등급을 판정하고, 등급별 할인·무료배송·AI 기능을 차등 제공한다.</div></div>
+          </div>
+
+          <div class="layer-connector"><svg width="16" height="20" viewBox="0 0 16 20"><path d="M8 0v16M2 12l6 6 6-6" stroke="var(--rule)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+          <div class="layer-box">
+            <button class="layer-head">
+              <span class="layer-icon" style="background:linear-gradient(135deg,#6FD7C4,#8C5CE0);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="12" r="8.5" stroke="#fff" stroke-width="1.6"/><path d="M12 3.5V6M12 18v2.5M3.5 12H6M18 12h2.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </span>
+              <span>
+                <p class="layer-title">AI 인텔리전스 레이어</p>
+                <p class="layer-summary">셀프 체크·웨어러블·구매 이력 분석으로 맞춤 제품 추천</p>
+              </span>
+              <svg class="layer-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="layer-detail"><div class="layer-detail-inner">셀프 체크리스트, 웨어러블 기기 연동, 구매 이력 누적 분석을 통해 개인 맞춤 제품을 추천한다.</div></div>
+          </div>
+
+          <div class="layer-connector"><svg width="16" height="20" viewBox="0 0 16 20"><path d="M8 0v16M2 12l6 6 6-6" stroke="var(--rule)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+          <div class="layer-box">
+            <button class="layer-head">
+              <span class="layer-icon" style="background:linear-gradient(135deg,#E07A9E,#C79A3D);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="4" width="17" height="13" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M3.5 8.5h17M8 20h8" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </span>
+              <span>
+                <p class="layer-title">데이터 레이어</p>
+                <p class="layer-summary">국가·연령·성별·재방문 데이터를 집계해 타겟 마케팅에 활용</p>
+              </span>
+              <svg class="layer-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="layer-detail"><div class="layer-detail-inner">방문객의 국가·연령·성별·구매 패턴·재방문 여부를 집계해, 가맹점이 카드사·플랫폼으로부터 얻을 수 없는 오프라인 고객 데이터를 확보하고 타겟 마케팅에 활용한다.</div></div>
+          </div>
+        </div>
       </section>
 
       <section class="doc-section" id="utility">
@@ -514,35 +711,48 @@
         <h3 class="sub-title">4-1. 획득 경로</h3>
         <ul class="doc-list">
           <li><strong>구매 적립</strong> — 결제액에 비례해 자동 지급 (결제수단 무관, QR 적립 방식으로 통일)</li>
-          <li><strong>등급 즉시구매</strong> — 스테이블코인 또는 신용카드(온램프 연동)로 직접 결제해 즉시 등급에
-            상당하는 $GLAS 획득</li>
-          <li><strong>스테이킹 매수</strong> — 거래소에서 직접 매수 후 지갑에 예치, 최소 30일 락업 후 등급 산정에
-            반영</li>
-          <li><strong>커뮤니티 리워드</strong> — 후기 작성, 소셜 인게이지먼트에 대한 리워드 (구매 리워드 대비 낮은
-            가중치, 일일 한도 적용)</li>
+          <li><strong>등급 즉시구매</strong> — 스테이블코인 또는 신용카드(온램프 연동)로 직접 결제해 즉시 등급에 상당하는 $GLAS 획득</li>
+          <li><strong>스테이킹 매수</strong> — 거래소에서 직접 매수 후 지갑에 예치, 최소 30일 락업 후 등급 산정에 반영</li>
+          <li><strong>커뮤니티 리워드</strong> — 후기 작성, 소셜 인게이지먼트에 대한 리워드 (구매 리워드 대비 낮은 가중치, 일일 한도 적용)</li>
         </ul>
 
         <h3 class="sub-title">4-2. 사용 경로</h3>
         <ul class="doc-list">
-          <li>약국 매장 및 앱 내 재구매 시 <strong>$GLAS 직접 결제</strong> 가능 (결제 시점 시세로 실시간 환산, 소요
-            수량은 시세에 따라 변동하되 상품 가치는 항상 동일하게 유지)</li>
+          <li>약국 매장 및 앱 내 재구매 시 <strong>$GLAS 직접 결제</strong> 가능 (결제 시점 시세로 실시간 환산, 소요 수량은 시세에 따라 변동하되 상품 가치는 항상 동일하게 유지)</li>
           <li>등급별 할인 자동 적용</li>
           <li>귀국 후 해외 재구매 배송비 무료 (일정 등급 이상)</li>
         </ul>
 
         <h3 class="sub-title">4-3. 등급 판정 및 영구 유지 원칙</h3>
         <p>등급 기준은 보유 개수가 아닌 <strong>보유량 × 현재시세 = 평가금액</strong>으로 산정한다.</p>
-        <table class="doc-table">
-          <thead>
-            <tr><th>등급</th><th>평가금액 기준</th></tr>
-          </thead>
-          <tbody>
-            <tr><td class="tier-name-cell">Bare Skin</td><td class="desc">$0 – $99</td></tr>
-            <tr><td class="tier-name-cell">Dewy Glow</td><td class="desc">$100 – $499</td></tr>
-            <tr><td class="tier-name-cell">Radiant Glass</td><td class="desc">$500 – $1,499</td></tr>
-            <tr><td class="tier-name-cell">Glass Skin</td><td class="desc">$1,500+</td></tr>
-          </tbody>
-        </table>
+
+        <div class="tier-cards">
+          <div class="tier-card" style="background:linear-gradient(160deg,#C9BEE0,#A996CF);">
+            <div class="tier-badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8" stroke="#fff" stroke-width="1.8"/></svg></div>
+            <p class="tier-name">Bare Skin</p>
+            <p class="tier-range">$0 – $99</p>
+            <p class="tier-benefit">기본 구매 리워드 적립 시작</p>
+          </div>
+          <div class="tier-card" style="background:linear-gradient(160deg,#A996CF,#8C5CE0);">
+            <div class="tier-badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M5 8l7-5 7 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <p class="tier-name">Dewy Glow</p>
+            <p class="tier-range">$100 – $499</p>
+            <p class="tier-benefit">매장 즉시 할인 적용 시작</p>
+          </div>
+          <div class="tier-card" style="background:linear-gradient(160deg,#8C5CE0,#6A3FBF);">
+            <div class="tier-badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 12h4l3 8 4-16 3 8h4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <p class="tier-name">Radiant Glass</p>
+            <p class="tier-range">$500 – $1,499</p>
+            <p class="tier-benefit">해외 재구매 배송비 무료 + AI 분석 정밀도 상승</p>
+          </div>
+          <div class="tier-card" style="background:linear-gradient(160deg,#6A3FBF,#3E2270);">
+            <div class="tier-badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.6 5.8 6.2.6-4.7 4.2 1.4 6.1L12 15.8 6.5 18.7l1.4-6.1-4.7-4.2 6.2-.6L12 2z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+            <p class="tier-name">Glass Skin</p>
+            <p class="tier-range">$1,500+</p>
+            <p class="tier-benefit">공동구매 최우선권 + 전체 AI 리포트 잠금 해제</p>
+          </div>
+        </div>
+
         <blockquote class="callout">
           <p>한번 특정 등급에 도달하면 이후 시세가 하락해도 해당 등급을 영구적으로 유지한다. 재평가에 따른 강등
           로직은 존재하지 않으며, 이는 실사용 구매를 통해 등급을 획득한 이용자의 신뢰를 보호하기 위한 설계다.</p>
@@ -554,8 +764,7 @@
           <li>매장 즉시 할인, 등급별 차등</li>
           <li>귀국 후 해외 재구매 배송비 무료 (일정 등급 이상)</li>
           <li>공동구매 우선권, 신제품 얼리 액세스</li>
-          <li>상위 등급: AI 분석 정밀도 상승 (분석 축 개수 확대, 상세 코멘터리, 웨어러블 데이터 정밀 분석 잠금
-            해제)</li>
+          <li>상위 등급: AI 분석 정밀도 상승 (분석 축 개수 확대, 상세 코멘터리, 웨어러블 데이터 정밀 분석 잠금 해제)</li>
         </ul>
       </section>
 
@@ -564,27 +773,47 @@
           <span class="section-num">5</span>
           <h2 class="section-title">AI 인텔리전스 레이어</h2>
         </div>
+        <p>각 카드를 눌러 자세한 설명을 확인할 수 있다.</p>
 
-        <h3 class="sub-title">5-1. 셀프 체크 진단</h3>
-        <p>다크서클/피로/눈떨림/피부트러블/수면 등 컨디션 체크 + 피부톤/탄력/에너지/면역/수면질 등 목표 선택 →
-          규칙 기반 매핑으로 맞춤 제품 추천 (레이더 차트 + 매칭 스코어로 시각화).</p>
+        <div class="ai-grid">
+          <div class="ai-card" data-title="셀프 체크 진단" data-desc="다크서클/피로/눈떨림/피부트러블/수면 등 컨디션 체크 + 피부톤/탄력/에너지/면역/수면질 등 목표 선택 → 규칙 기반 매핑으로 맞춤 제품 추천 (레이더 차트 + 매칭 스코어로 시각화).">
+            <div class="ai-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="5.5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M12 3v2.5M21 12h-2.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="16.5" cy="8" r="1.4" fill="currentColor"/></svg>
+            </div>
+            <p class="ai-card-title">5-1. 셀프 체크 진단</p>
+            <p class="ai-card-desc">컨디션·목표 선택으로 맞춤 제품을 규칙 기반 추천</p>
+            <p class="ai-card-cta">자세히 보기 →</p>
+          </div>
 
-        <h3 class="sub-title">5-2. 웨어러블 기기 연동</h3>
-        <p>Whoop, Apple Watch, Fitbit 등 웨어러블 기기와 연동해 심박수, 수면 패턴, 산소포화도, 스트레스 레벨,
-          회복 점수(Recovery Score) 데이터를 분석. 별도 설문 없이도 실시간 바이탈 데이터를 기반으로 "지금 필요한
-          제품"을 해석·추천한다. 미연동 유저는 셀프 체크 진단으로 대체된다.</p>
+          <div class="ai-card" data-title="웨어러블 기기 연동" data-desc="Whoop, Apple Watch, Fitbit 등 웨어러블 기기와 연동해 심박수, 수면 패턴, 산소포화도, 스트레스 레벨, 회복 점수(Recovery Score) 데이터를 분석. 별도 설문 없이도 실시간 바이탈 데이터를 기반으로 지금 필요한 제품을 해석·추천한다. 미연동 유저는 셀프 체크 진단으로 대체된다.">
+            <div class="ai-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="7" y="6" width="10" height="12" rx="3" stroke="currentColor" stroke-width="1.6"/><path d="M9.5 3.5h5v3h-5v-3zM9.5 17.5h5v3h-5v-3z" stroke="currentColor" stroke-width="1.6"/><path d="M9 12h1.6l1-2 1.4 4 1-2H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <p class="ai-card-title">5-2. 웨어러블 기기 연동</p>
+            <p class="ai-card-desc">실시간 바이탈 데이터로 지금 필요한 제품을 해석</p>
+            <p class="ai-card-cta">자세히 보기 →</p>
+          </div>
 
-        <h3 class="sub-title">5-3. 제품 스캔 및 자국어 정보 제공</h3>
-        <p>구매하려는(또는 이미 구매한) 제품을 카메라로 스캔하면, 공식 데이터 기반 효능·복용법·주의사항·부작용
-          정보를 이용자의 언어로 즉시 제공. 외국어 표기로 인한 정보 접근성 문제를 해결한다.</p>
+          <div class="ai-card" data-title="제품 스캔 및 자국어 정보 제공" data-desc="구매하려는(또는 이미 구매한) 제품을 카메라로 스캔하면, 공식 데이터 기반 효능·복용법·주의사항·부작용 정보를 이용자의 언어로 즉시 제공. 외국어 표기로 인한 정보 접근성 문제를 해결한다.">
+            <div class="ai-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 8V5.5A1.5 1.5 0 0 1 5.5 4H8M16 4h2.5A1.5 1.5 0 0 1 20 5.5V8M20 16v2.5a1.5 1.5 0 0 1-1.5 1.5H16M8 20H5.5A1.5 1.5 0 0 1 4 18.5V16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.6"/></svg>
+            </div>
+            <p class="ai-card-title">5-3. 제품 스캔 &amp; 자국어 정보</p>
+            <p class="ai-card-desc">스캔 한 번으로 효능·복용법을 이용자 언어로 제공</p>
+            <p class="ai-card-cta">자세히 보기 →</p>
+          </div>
 
-        <h3 class="sub-title">5-4. 구매 이력 기반 누적 분석 (CRM 루프)</h3>
-        <p>1회성 진단에 그치지 않고, 과거 구매 이력을 반영해 재진단 시 개선 추이를 함께 제시. 재방문·재구매
-          시점마다 추천이 점점 정교해지는 구조로 설계되어 리텐션을 강화한다.</p>
-
-        <div class="disclaimer">
-          면책 — 본 기능은 건강기능식품 추천을 위한 참고 정보이며, 의학적 진단을 대체하지 않는다.
+          <div class="ai-card" data-title="구매 이력 기반 누적 분석 (CRM 루프)" data-desc="1회성 진단에 그치지 않고, 과거 구매 이력을 반영해 재진단 시 개선 추이를 함께 제시. 재방문·재구매 시점마다 추천이 점점 정교해지는 구조로 설계되어 리텐션을 강화한다.">
+            <div class="ai-card-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 0 1 13.6-5.66M20 12a8 8 0 0 1-13.6 5.66" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M17.6 3.6v3.2h-3.2M6.4 20.4v-3.2h3.2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <p class="ai-card-title">5-4. 구매 이력 기반 누적 분석</p>
+            <p class="ai-card-desc">재방문마다 정교해지는 CRM 루프로 리텐션 강화</p>
+            <p class="ai-card-cta">자세히 보기 →</p>
+          </div>
         </div>
+
+        <div class="disclaimer">면책 — 본 기능은 건강기능식품 추천을 위한 참고 정보이며, 의학적 진단을 대체하지 않는다.</div>
       </section>
 
       <section class="doc-section" id="data-layer">
@@ -632,36 +861,42 @@
         <div class="supply-callout">
           <div>
             <div class="supply-figure">1,000,000,000 $GLAS</div>
-            <div class="supply-label">총 발행량 · 고정 공급</div>
+            <div class="supply-label">총 발행량</div>
           </div>
+          <div class="supply-badge">고정 발행량 · 추가 발행 없음</div>
         </div>
 
         <h3 class="sub-title">배분</h3>
-        <table class="doc-table">
-          <thead>
-            <tr><th>배분 대상</th><th>비율</th><th>용도</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>커뮤니티 리워드 풀</td><td class="pct">40%</td><td class="desc">구매·스테이킹·활동 리워드 재원</td></tr>
-            <tr><td>스테이킹 인센티브</td><td class="pct">20%</td><td class="desc">락업 유도, 4년 선형 방출</td></tr>
-            <tr><td>팀 · 파트너 (INITECH)</td><td class="pct">15%</td><td class="desc">1년 클리프, 3년 베스팅</td></tr>
-            <tr><td>트레저리 (배송비 보조)</td><td class="pct">10%</td><td class="desc">무료배송 혜택 재원, 별도 지갑에서 관리</td></tr>
-            <tr><td>유동성 · 상장</td><td class="pct">10%</td><td class="desc">DEX·CEX 유동성 공급</td></tr>
-            <tr><td>어드바이저</td><td class="pct">5%</td><td class="desc">1년 베스팅</td></tr>
-          </tbody>
-        </table>
+        <div class="donut-section">
+          <div class="donut-wrap">
+            <svg class="donut-svg" id="donutChart" viewBox="0 0 200 200" role="img" aria-label="토큰 배분 도넛 차트"></svg>
+            <div class="donut-center">
+              <div class="donut-center-figure">6</div>
+              <div class="donut-center-label">배분 카테고리</div>
+            </div>
+            <div class="donut-tooltip" id="donutTooltip"></div>
+          </div>
+          <div class="donut-legend" id="donutLegend"></div>
+        </div>
 
-        <h3 class="sub-title">소각 · 디플레이션</h3>
-        <ul class="doc-list">
-          <li>배송비 무료 혜택을 사용할 때 소요되는 토큰의 일부가 소각된다.</li>
-          <li>이를 통해 유통량이 자연스럽게 감소하며, 장기 홀더의 가치가 보호된다.</li>
-        </ul>
-
-        <h3 class="sub-title">공급 통제 장치</h3>
-        <ul class="doc-list">
-          <li>리워드 지급률에는 거래액 대비 비율로 상한선이 적용되어, 과다 발행을 방지한다.</li>
-          <li>스테이킹 락업 비율을 일정 수준으로 유지하여 유통량을 관리한다.</li>
-        </ul>
+        <h3 class="sub-title">소각 · 디플레이션 &amp; 공급 통제 장치</h3>
+        <div class="burn-cards">
+          <div class="burn-card">
+            <div class="burn-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 2c1.5 3-3 4.5-3 8a5 5 0 0 0 10 0c0-1.5-1-2.5-1-2.5s.5 2-1 2.5c1-2.5-1-4-1-6 0 2-3.5 3-3.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <p class="burn-title">배송비 소각</p>
+            <p class="burn-desc">배송비 무료 혜택 사용 시 소요 토큰 일부가 소각되어 유통량이 자연 감소한다.</p>
+          </div>
+          <div class="burn-card">
+            <div class="burn-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 18h16M6 18V9M12 18V5M18 18v11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M4 5.5h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="1 2.4"/></svg></div>
+            <p class="burn-title">지급률 상한 캡</p>
+            <p class="burn-desc">리워드 지급률에는 거래액 대비 비율로 상한선이 적용되어 과다 발행을 방지한다.</p>
+          </div>
+          <div class="burn-card">
+            <div class="burn-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="5" y="10.5" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M8 10.5V7a4 4 0 0 1 8 0v3.5" stroke="currentColor" stroke-width="1.6"/></svg></div>
+            <p class="burn-title">스테이킹 락업</p>
+            <p class="burn-desc">스테이킹 락업 비율을 일정 수준으로 유지하여 유통량을 관리한다.</p>
+          </div>
+        </div>
       </section>
 
       <section class="doc-section" id="roadmap">
@@ -669,28 +904,60 @@
           <span class="section-num">9</span>
           <h2 class="section-title">로드맵</h2>
         </div>
-        <ul class="roadmap">
-          <li>
-            <span class="phase-label">Phase 1 <span class="phase-window">· 0~3개월</span></span>
-            <span class="phase-desc">포인트제 운영, 앱 MVP, AI 진단 베타</span>
-          </li>
-          <li>
-            <span class="phase-label">Phase 2 <span class="phase-window">· 3~6개월</span></span>
-            <span class="phase-desc">약국 오픈 연동, QR 적립 구조 실사용 개시, 실거래 데이터 축적 시작</span>
-          </li>
-          <li>
-            <span class="phase-label">Phase 3 <span class="phase-window">· 6~12개월</span></span>
-            <span class="phase-desc">온체인 전환, 폐쇄형 유통, 매장 운영 대시보드 정식 출시</span>
-          </li>
-          <li>
-            <span class="phase-label">Phase 4 <span class="phase-window">· 12~18개월</span></span>
-            <span class="phase-desc">DEX 상장, 유동성 풀 조성, 웨어러블 연동 기능 정식 출시</span>
-          </li>
-          <li>
-            <span class="phase-label">Phase 5 <span class="phase-window">· 18개월+</span></span>
-            <span class="phase-desc">CEX 상장 검토, AI 엔진 고도화 (ML 기반 전환)</span>
-          </li>
-        </ul>
+        <p>노드를 눌러 각 단계의 상세 내용을 확인할 수 있다.</p>
+
+        <div class="timeline" id="roadmapTimeline">
+          <div class="timeline-node">
+            <div class="timeline-track"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-body">
+              <span class="timeline-badge active">진행중</span>
+              <p class="timeline-phase">Phase 1</p>
+              <p class="timeline-window">0~3개월</p>
+              <div class="timeline-detail"><div style="padding-top:2px;">포인트제 운영, 앱 MVP, AI 진단 베타</div></div>
+            </div>
+          </div>
+          <div class="timeline-node muted">
+            <div class="timeline-track"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-body">
+              <span class="timeline-badge upcoming">예정</span>
+              <p class="timeline-phase">Phase 2</p>
+              <p class="timeline-window">3~6개월</p>
+              <div class="timeline-detail"><div style="padding-top:2px;">약국 오픈 연동, QR 적립 구조 실사용 개시, 실거래 데이터 축적 시작</div></div>
+            </div>
+          </div>
+          <div class="timeline-node muted">
+            <div class="timeline-track"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-body">
+              <span class="timeline-badge upcoming">예정</span>
+              <p class="timeline-phase">Phase 3</p>
+              <p class="timeline-window">6~12개월</p>
+              <div class="timeline-detail"><div style="padding-top:2px;">온체인 전환, 폐쇄형 유통, 매장 운영 대시보드 정식 출시</div></div>
+            </div>
+          </div>
+          <div class="timeline-node muted">
+            <div class="timeline-track"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-body">
+              <span class="timeline-badge upcoming">예정</span>
+              <p class="timeline-phase">Phase 4</p>
+              <p class="timeline-window">12~18개월</p>
+              <div class="timeline-detail"><div style="padding-top:2px;">DEX 상장, 유동성 풀 조성, 웨어러블 연동 기능 정식 출시</div></div>
+            </div>
+          </div>
+          <div class="timeline-node muted">
+            <div class="timeline-track"></div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-body">
+              <span class="timeline-badge upcoming">예정</span>
+              <p class="timeline-phase">Phase 5</p>
+              <p class="timeline-window">18개월+</p>
+              <div class="timeline-detail"><div style="padding-top:2px;">CEX 상장 검토, AI 엔진 고도화 (ML 기반 전환)</div></div>
+            </div>
+          </div>
+        </div>
       </section>
 
     </main>
@@ -699,6 +966,187 @@
   <footer>
     GLASSY — Get That Glass Skin. · $GLAS Whitepaper v0.2
   </footer>
+
+  <div class="ai-modal-overlay" id="aiModalOverlay">
+    <div class="ai-modal" role="dialog" aria-modal="true">
+      <button class="ai-modal-close" id="aiModalClose" aria-label="닫기">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div class="ai-modal-icon" id="aiModalIcon"></div>
+      <h3 id="aiModalTitle"></h3>
+      <p id="aiModalDesc"></p>
+    </div>
+  </div>
+
+<script>
+(function () {
+  // ---------- Scroll reveal ----------
+  var revealEls = document.querySelectorAll('main section.doc-section');
+  if ('IntersectionObserver' in window) {
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    revealEls.forEach(function (el) { revealObserver.observe(el); });
+  } else {
+    revealEls.forEach(function (el) { el.classList.add('is-visible'); });
+  }
+
+  // ---------- Scrollspy ----------
+  var tocLinks = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+  var linkByHash = {};
+  tocLinks.forEach(function (a) { linkByHash[a.getAttribute('href').slice(1)] = a; });
+  var sections = document.querySelectorAll('main section.doc-section[id]');
+  if ('IntersectionObserver' in window) {
+    var spy = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var link = linkByHash[entry.target.id];
+        if (!link) return;
+        if (entry.isIntersecting) {
+          tocLinks.forEach(function (l) { l.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-35% 0px -50% 0px', threshold: 0 });
+    sections.forEach(function (s) { spy.observe(s); });
+  }
+
+  // ---------- Architecture accordion ----------
+  document.querySelectorAll('.layer-box').forEach(function (box) {
+    box.querySelector('.layer-head').addEventListener('click', function () {
+      box.classList.toggle('open');
+    });
+  });
+
+  // ---------- Roadmap timeline toggle ----------
+  document.querySelectorAll('.timeline-node').forEach(function (node) {
+    node.addEventListener('click', function () {
+      node.classList.toggle('open');
+    });
+  });
+
+  // ---------- AI lightbox ----------
+  var overlay = document.getElementById('aiModalOverlay');
+  var modalTitle = document.getElementById('aiModalTitle');
+  var modalDesc = document.getElementById('aiModalDesc');
+  var modalIcon = document.getElementById('aiModalIcon');
+  function openModal(card) {
+    modalTitle.textContent = card.getAttribute('data-title');
+    modalDesc.textContent = card.getAttribute('data-desc');
+    var icon = card.querySelector('.ai-card-icon svg');
+    modalIcon.innerHTML = icon ? icon.outerHTML : '';
+    overlay.classList.add('open');
+  }
+  function closeModal() { overlay.classList.remove('open'); }
+  document.querySelectorAll('.ai-card').forEach(function (card) {
+    card.addEventListener('click', function () { openModal(card); });
+  });
+  document.getElementById('aiModalClose').addEventListener('click', closeModal);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+
+  // ---------- Tokenomics donut chart ----------
+  var TOKENOMICS = [
+    { label: '커뮤니티 리워드 풀', pct: 40, color: '#B18CFF', desc: '구매·스테이킹·활동 리워드 재원' },
+    { label: '스테이킹 인센티브', pct: 20, color: '#8C5CE0', desc: '락업 유도, 4년 선형 방출' },
+    { label: '팀 · 파트너 (INITECH)', pct: 15, color: '#6FD7C4', desc: '1년 클리프, 3년 베스팅' },
+    { label: '트레저리 (배송비 보조)', pct: 10, color: '#E07A9E', desc: '무료배송 혜택 재원, 별도 지갑에서 관리' },
+    { label: '유동성 · 상장', pct: 10, color: '#E8C468', desc: 'DEX·CEX 유동성 공급' },
+    { label: '어드바이저', pct: 5, color: '#C79A3D', desc: '1년 베스팅' }
+  ];
+
+  function polar(cx, cy, r, angleDeg) {
+    var a = ((angleDeg - 90) * Math.PI) / 180;
+    return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+  }
+  function slicePath(cx, cy, rOuter, rInner, startAngle, endAngle) {
+    var so = polar(cx, cy, rOuter, endAngle);
+    var eo = polar(cx, cy, rOuter, startAngle);
+    var si = polar(cx, cy, rInner, startAngle);
+    var ei = polar(cx, cy, rInner, endAngle);
+    return 'M ' + so.x + ' ' + so.y +
+      ' A ' + rOuter + ' ' + rOuter + ' 0 0 0 ' + eo.x + ' ' + eo.y +
+      ' L ' + si.x + ' ' + si.y +
+      ' A ' + rInner + ' ' + rInner + ' 0 0 1 ' + ei.x + ' ' + ei.y + ' Z';
+  }
+
+  var svg = document.getElementById('donutChart');
+  var legendWrap = document.getElementById('donutLegend');
+  var tooltip = document.getElementById('donutTooltip');
+  var donutWrap = document.querySelector('.donut-wrap');
+  var cx = 100, cy = 100, rOuter = 90, rInner = 54;
+  var cumulative = 0;
+  var slices = [];
+
+  TOKENOMICS.forEach(function (item, i) {
+    var start = cumulative * 3.6;
+    var end = (cumulative + item.pct) * 3.6;
+    cumulative += item.pct;
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', slicePath(cx, cy, rOuter, rInner, start, end));
+    path.setAttribute('fill', item.color);
+    path.setAttribute('class', 'donut-slice');
+    path.setAttribute('tabindex', '0');
+    path.setAttribute('data-index', i);
+    svg.appendChild(path);
+    slices.push(path);
+
+    var row = document.createElement('div');
+    row.className = 'legend-row';
+    row.setAttribute('data-index', i);
+    row.innerHTML =
+      '<span class="legend-dot" style="background:' + item.color + '"></span>' +
+      '<span class="legend-label">' + item.label + '</span>' +
+      '<span class="legend-pct">' + item.pct + '%</span>';
+    legendWrap.appendChild(row);
+  });
+
+  var legendRows = legendWrap.querySelectorAll('.legend-row');
+
+  function positionTooltip(index) {
+    var start = 0;
+    for (var i = 0; i < index; i++) start += TOKENOMICS[i].pct;
+    var mid = (start + TOKENOMICS[index].pct / 2) * 3.6;
+    var point = polar(cx, cy, (rOuter + rInner) / 2, mid);
+    var scale = donutWrap.clientWidth / 200;
+    tooltip.style.left = point.x * scale + 'px';
+    tooltip.style.top = (point.y * scale) - 10 + 'px';
+  }
+
+  function activate(index) {
+    slices.forEach(function (s, i) {
+      s.classList.toggle('active', i === index);
+      s.classList.toggle('dim', index !== null && i !== index);
+    });
+    legendRows.forEach(function (r, i) { r.classList.toggle('active', i === index); });
+    if (index === null) {
+      tooltip.classList.remove('visible');
+      return;
+    }
+    var item = TOKENOMICS[index];
+    tooltip.innerHTML = '<strong>' + item.label + ' · ' + item.pct + '%</strong>' + item.desc;
+    positionTooltip(index);
+    tooltip.classList.add('visible');
+  }
+
+  slices.forEach(function (path, i) {
+    path.addEventListener('mouseenter', function () { activate(i); });
+    path.addEventListener('mouseleave', function () { activate(null); });
+    path.addEventListener('click', function () { activate(i); });
+    path.addEventListener('focus', function () { activate(i); });
+    path.addEventListener('blur', function () { activate(null); });
+  });
+  legendRows.forEach(function (row, i) {
+    row.addEventListener('mouseenter', function () { activate(i); });
+    row.addEventListener('mouseleave', function () { activate(null); });
+    row.addEventListener('click', function () { activate(i); });
+  });
+})();
+</script>
 
 </body>
 </html>

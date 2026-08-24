@@ -3,6 +3,7 @@ import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 
 import { colors, fonts, TAGLINE } from '@/constants/theme';
 import { SidePanel } from './SidePanel';
+import { TopNav } from './TopNav';
 
 const FRAME_WIDTH = 412;
 const FRAME_HEIGHT = 896;
@@ -47,6 +48,8 @@ function WebStage({ children }: { children: React.ReactNode }) {
         </Defs>
         <Rect width="100%" height="100%" fill="url(#stageGrad)" />
       </Svg>
+
+      <TopNav />
 
       {showSidePanels ? (
         <>
