@@ -6,7 +6,6 @@ import { Ionicons } from '@expo/vector-icons';
 // centered phone bezel. Web-only, same reasoning as SidePanel.
 import { darkColors as colors, darkShadow as shadow, fonts, palette } from '@/constants/theme';
 
-const GITHUB_URL = 'https://github.com/ryuto-ship-it/glassy-app';
 const WHITEPAPER_URL = '/glassy-app/whitepaper.html';
 
 function openExternal(url: string) {
@@ -45,7 +44,6 @@ export function TopNav() {
         <View style={styles.links}>
           <NavLink label="App Demo" active onPress={() => {}} />
           <NavLink label="Whitepaper" onPress={() => openExternal(WHITEPAPER_URL)} />
-          <NavLink label="GitHub" onPress={() => openExternal(GITHUB_URL)} />
         </View>
       </View>
     </View>
