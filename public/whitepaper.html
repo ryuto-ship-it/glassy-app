@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<title>GLASSY Whitepaper — Get That Glass Skin.</title>
-<meta name="description" content="GLASSY: AI 헬스 인텔리전스 & 토큰 리워드 플랫폼 백서" />
+<title>GLASSY Whitepaper v0.2 — Get That Glass Skin.</title>
+<meta name="description" content="GLASSY: AI 헬스 인텔리전스 & 데이터 기반 리텐션 플랫폼 백서 v0.2" />
 <link rel="icon" href="./favicon.ico" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -38,17 +38,16 @@
   .topbar {
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 20;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 16px 24px;
-    background: rgba(255,255,255,0.9);
+    background: rgba(255,255,255,0.92);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--rule);
   }
   .topbar-inner {
-    max-width: 760px;
+    max-width: 1180px;
     margin: 0 auto;
     width: 100%;
     display: flex;
@@ -71,6 +70,17 @@
     background-clip: text;
     color: transparent;
   }
+  .version-pill {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+    color: var(--gold);
+    border: 1px solid rgba(199,154,61,0.35);
+    background: rgba(232,196,104,0.08);
+    border-radius: 999px;
+    padding: 2px 9px;
+  }
   .back-link {
     font-size: 13px;
     font-weight: 500;
@@ -79,18 +89,22 @@
   .back-link:hover { color: var(--violet); }
 
   header.hero {
-    max-width: 760px;
+    max-width: 1180px;
     margin: 0 auto;
     padding: 56px 24px 40px;
   }
   .eyebrow {
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
+    letter-spacing: 1.2px;
     color: var(--gold);
     margin: 0 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
   }
+  .eyebrow .dot { color: var(--faint); font-weight: 400; }
   h1.title {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
@@ -98,11 +112,13 @@
     line-height: 1.25;
     margin: 0 0 10px;
     color: var(--ink);
+    max-width: 780px;
   }
   .tagline {
     font-size: 17px;
     color: var(--muted);
     margin: 0 0 22px;
+    max-width: 780px;
   }
   .hero-rule {
     height: 3px;
@@ -112,15 +128,66 @@
     margin: 0;
   }
 
-  main {
-    max-width: 760px;
+  .layout {
+    max-width: 1180px;
     margin: 0 auto;
-    padding: 8px 24px 96px;
+    padding: 0 24px 96px;
+    display: flex;
+    gap: 56px;
+    align-items: flex-start;
   }
+
+  nav.toc {
+    width: 216px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 76px;
+  }
+  nav.toc .toc-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin: 0 0 12px;
+    padding-left: 12px;
+  }
+  nav.toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 2px solid var(--rule);
+  }
+  nav.toc li { margin: 0; }
+  nav.toc a {
+    display: block;
+    padding: 7px 12px;
+    margin-left: -2px;
+    border-left: 2px solid transparent;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  nav.toc a:hover {
+    color: var(--violet);
+    text-decoration: none;
+    border-left-color: var(--violet-deep);
+  }
+  nav.toc a .toc-num {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: var(--gold);
+    margin-right: 7px;
+  }
+
+  main { flex: 1; min-width: 0; max-width: 780px; }
 
   section.doc-section {
     padding: 44px 0;
     border-top: 1px solid var(--rule);
+    scroll-margin-top: 76px;
   }
   section.doc-section:first-child { border-top: none; padding-top: 8px; }
 
@@ -184,57 +251,61 @@
     font-weight: 600;
     color: var(--ink);
   }
-
-  .tier-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+  ol.doc-list-num {
     margin: 0 0 16px;
+    padding: 0 0 0 22px;
   }
-  .tier-card {
-    border: 1px solid var(--rule);
-    border-radius: 12px;
-    padding: 14px 16px;
+  ol.doc-list-num > li {
+    margin-bottom: 14px;
+    padding-left: 4px;
+    color: var(--ink);
   }
-  .tier-name {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 13.5px;
-    color: var(--violet);
-    margin: 0 0 4px;
-  }
-  .tier-range {
-    font-size: 13.5px;
-    color: var(--muted);
-    margin: 0;
-  }
+  ol.doc-list-num > li strong { font-weight: 600; color: var(--ink); }
 
-  .alloc-table {
+  blockquote.callout {
+    margin: 4px 0 22px;
+    padding: 16px 20px;
+    border-left: 3px solid var(--gold-bright);
+    background: linear-gradient(135deg, rgba(232,196,104,0.08), rgba(124,87,199,0.04));
+    border-radius: 0 12px 12px 0;
+    font-size: 15px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  blockquote.callout p { margin: 0; }
+
+  table.doc-table {
     width: 100%;
     border-collapse: collapse;
     margin: 4px 0 20px;
-    font-size: 15px;
+    font-size: 14.5px;
   }
-  .alloc-table th, .alloc-table td {
+  table.doc-table th, table.doc-table td {
     text-align: left;
     padding: 10px 8px;
     border-bottom: 1px solid var(--rule);
   }
-  .alloc-table th {
+  table.doc-table th {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    font-size: 12.5px;
+    font-size: 12px;
     letter-spacing: 0.4px;
     text-transform: uppercase;
     color: var(--faint);
   }
-  .alloc-table td.pct {
+  table.doc-table td.tier-name-cell {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
     color: var(--violet);
     white-space: nowrap;
   }
-  .alloc-table td.desc { color: var(--muted); }
+  table.doc-table td.pct {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: var(--violet);
+    white-space: nowrap;
+  }
+  table.doc-table td.desc { color: var(--muted); }
 
   .supply-callout {
     display: flex;
@@ -252,10 +323,7 @@
     font-size: 22px;
     color: var(--ink);
   }
-  .supply-label {
-    font-size: 13px;
-    color: var(--muted);
-  }
+  .supply-label { font-size: 13px; color: var(--muted); }
 
   .roadmap {
     margin: 0;
@@ -264,11 +332,7 @@
     border-left: 2px solid var(--rule);
     padding-left: 20px;
   }
-  .roadmap li {
-    position: relative;
-    margin-bottom: 20px;
-    padding-bottom: 2px;
-  }
+  .roadmap li { position: relative; margin-bottom: 20px; padding-bottom: 2px; }
   .roadmap li::before {
     content: '';
     position: absolute;
@@ -287,11 +351,7 @@
     display: block;
     margin-bottom: 3px;
   }
-  .roadmap .phase-window {
-    color: var(--gold-bright);
-    filter: brightness(0.75);
-    font-weight: 500;
-  }
+  .roadmap .phase-window { color: var(--gold); font-weight: 500; }
   .roadmap .phase-desc { color: var(--muted); font-size: 15px; }
 
   .disclaimer {
@@ -305,7 +365,7 @@
   }
 
   footer {
-    max-width: 760px;
+    max-width: 1180px;
     margin: 0 auto;
     padding: 32px 24px 64px;
     border-top: 1px solid var(--rule);
@@ -314,12 +374,46 @@
     text-align: center;
   }
 
+  @media (max-width: 900px) {
+    .layout { flex-direction: column; gap: 8px; }
+    nav.toc {
+      width: 100%;
+      position: sticky;
+      top: 57px;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      padding: 12px 0 14px;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 8px;
+      z-index: 15;
+    }
+    nav.toc .toc-label { padding-left: 24px; }
+    nav.toc ol {
+      display: flex;
+      overflow-x: auto;
+      border-left: none;
+      gap: 4px;
+      padding: 0 24px;
+      -webkit-overflow-scrolling: touch;
+    }
+    nav.toc li { flex-shrink: 0; }
+    nav.toc a {
+      border-left: none;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      padding: 6px 12px;
+      white-space: nowrap;
+    }
+    main { max-width: 100%; padding: 0 0; }
+    .layout { padding: 0 0 80px; }
+    main, nav.toc { padding-left: 24px; padding-right: 24px; }
+  }
+
   @media (max-width: 520px) {
     h1.title { font-size: 27px; }
     h2.section-title { font-size: 19px; }
     header.hero { padding: 40px 20px 28px; }
     section.doc-section { padding: 32px 0; }
-    .tier-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -333,185 +427,277 @@
   </div>
 
   <header class="hero">
-    <p class="eyebrow">Whitepaper · v1.0</p>
+    <p class="eyebrow">
+      <span class="version-pill">v0.2</span>
+      <span class="dot">·</span>
+      <span>최종 수정일 2026-08-24</span>
+    </p>
     <h1 class="title">GLASSY — Get That Glass Skin.</h1>
-    <p class="tagline">AI 헬스 인텔리전스 &amp; 토큰 리워드 플랫폼</p>
+    <p class="tagline">AI 헬스 인텔리전스 &amp; 데이터 기반 리텐션 플랫폼</p>
     <div class="hero-rule"></div>
   </header>
 
-  <main>
+  <div class="layout">
+    <nav class="toc" aria-label="목차">
+      <p class="toc-label">목차</p>
+      <ol>
+        <li><a href="#abstract"><span class="toc-num">1</span>Abstract</a></li>
+        <li><a href="#problem"><span class="toc-num">2</span>문제 정의</a></li>
+        <li><a href="#solution"><span class="toc-num">3</span>솔루션 구조</a></li>
+        <li><a href="#utility"><span class="toc-num">4</span>토큰 유틸리티</a></li>
+        <li><a href="#ai-layer"><span class="toc-num">5</span>AI 인텔리전스 레이어</a></li>
+        <li><a href="#data-layer"><span class="toc-num">6</span>데이터 레이어</a></li>
+        <li><a href="#community"><span class="toc-num">7</span>커뮤니티 레이어</a></li>
+        <li><a href="#tokenomics"><span class="toc-num">8</span>토크노믹스</a></li>
+        <li><a href="#roadmap"><span class="toc-num">9</span>로드맵</a></li>
+      </ol>
+    </nav>
 
-    <section class="doc-section">
-      <div class="section-head">
-        <span class="section-num">1</span>
-        <h2 class="section-title">Abstract</h2>
-      </div>
-      <p class="lead">
-        GLASSY는 외국인 관광객을 대상으로 한 약국·뷰티 결제 리워드 토큰 <strong>$GLAS</strong>를 중심에 둔 플랫폼입니다.
-        결제는 스테이블코인으로 이루어지며, 토큰은 순수한 멤버십·유틸리티 자산으로 기능합니다.
-        여기에 AI 진단을 결합함으로써, 단순한 리워드 앱을 넘어 헬스 인텔리전스 플랫폼으로 포지셔닝합니다.
-      </p>
-    </section>
+    <main>
 
-    <section class="doc-section">
-      <div class="section-head">
-        <span class="section-num">2</span>
-        <h2 class="section-title">문제 정의</h2>
-      </div>
-      <ul class="doc-list">
-        <li>관광객이 귀국한 뒤에는 재구매 채널이 단절됩니다.</li>
-        <li>국가·매장별로 멤버십이 파편화되어 있어 로열티가 연속되지 않습니다.</li>
-        <li>개인 맞춤 의사결정에 드는 비용이 높습니다.</li>
-      </ul>
-    </section>
-
-    <section class="doc-section">
-      <div class="section-head">
-        <span class="section-num">3</span>
-        <h2 class="section-title">솔루션 구조</h2>
-      </div>
-      <ul class="doc-list">
-        <li><strong>결제·리워드 레이어</strong> — 스테이블코인 결제 시 $GLAS가 적립됩니다.</li>
-        <li><strong>등급 레이어</strong> — 보유가치를 기준으로 등급이 나뉘고, 등급별로 혜택이 차등 적용됩니다.</li>
-        <li><strong>AI 레이어</strong> — 셀프 체크리스트를 통해 맞춤 추천을 제공합니다.</li>
-      </ul>
-    </section>
-
-    <section class="doc-section">
-      <div class="section-head">
-        <span class="section-num">4</span>
-        <h2 class="section-title">토큰 유틸리티</h2>
-      </div>
-
-      <h3 class="sub-title">획득 경로</h3>
-      <ul class="doc-list">
-        <li><strong>구매 적립</strong> — 결제액에 비례해 자동으로 지급됩니다.</li>
-        <li><strong>스테이킹 매수</strong> — 거래소에서 매수한 뒤 예치하며, 최소 30일 락업이 적용됩니다.</li>
-        <li><strong>커뮤니티 리워드</strong> — 후기·소셜 활동에 대해 지급되며, 낮은 가중치와 일일 한도가 적용됩니다.</li>
-      </ul>
-
-      <h3 class="sub-title">등급 판정</h3>
-      <p>기준은 보유 개수가 아닙니다. <strong>보유량 × 현재 시세 = 평가금액</strong>으로 등급을 판정합니다.</p>
-      <div class="tier-grid">
-        <div class="tier-card">
-          <p class="tier-name">Bare Skin</p>
-          <p class="tier-range">$0 – $99</p>
+      <section class="doc-section" id="abstract">
+        <div class="section-head">
+          <span class="section-num">1</span>
+          <h2 class="section-title">Abstract</h2>
         </div>
-        <div class="tier-card">
-          <p class="tier-name">Dewy Glow</p>
-          <p class="tier-range">$100 – $499</p>
+        <p class="lead">
+          GLASSY는 외국인 관광객이 한국 약국에서 결제할 때마다 $GLAS 토큰을 리워드로 받고 등급에 따라 실질 혜택을 얻는
+          멤버십 플랫폼이다. 단순 토큰 리워드 앱이 아니라, (1) AI 기반 개인 맞춤 헬스 인텔리전스, (2) 오프라인 관광객
+          결제 데이터 확보, (3) 귀국 후에도 이어지는 글로벌 재구매 채널이라는 세 개의 축으로 설계되었다. 결제는
+          스테이블코인으로 처리해 가격 변동 리스크를 결제 경험에서 분리하고, $GLAS는 순수 유틸리티·멤버십 토큰으로
+          기능한다.
+        </p>
+      </section>
+
+      <section class="doc-section" id="problem">
+        <div class="section-head">
+          <span class="section-num">2</span>
+          <h2 class="section-title">문제 정의</h2>
         </div>
-        <div class="tier-card">
-          <p class="tier-name">Radiant Glass</p>
-          <p class="tier-range">$500 – $1,499</p>
+        <ul class="doc-list">
+          <li>관광객 귀국 후 재구매 채널 단절, 브랜드 로열티 연속성 없음</li>
+          <li>국가·매장별 멤버십 파편화</li>
+          <li>해외 상품 정보 접근성 부족 (자국어 설명 부재, 성분·복용법 확인 어려움)</li>
+          <li>개인 맞춤 건강기능식품 선택 의사결정 비용 높음</li>
+          <li>
+            <strong>오프라인 매장은 관광객 결제 데이터를 사실상 보유하지 못함</strong> — 카드사·POS 데이터는 매출
+            통계만 제공할 뿐, 방문객의 국적·연령·성별·구매 패턴 같은 타겟 마케팅에 필요한 데이터는 파악 불가능하다.
+            이는 온라인 커머스와 달리 오프라인 매장이 구조적으로 겪는 한계다.
+          </li>
+        </ul>
+      </section>
+
+      <section class="doc-section" id="solution">
+        <div class="section-head">
+          <span class="section-num">3</span>
+          <h2 class="section-title">솔루션 구조</h2>
         </div>
-        <div class="tier-card">
-          <p class="tier-name">Glass Skin</p>
-          <p class="tier-range">$1,500+</p>
+        <p>GLASSY는 네 개의 레이어로 구성된다.</p>
+        <ol class="doc-list-num">
+          <li><strong>결제·리워드 레이어</strong> — 결제수단(스테이블코인/신용카드/현금)과 무관하게, QR 스캔을 통해
+            통일된 방식으로 리워드가 적립된다. 결제 수단이 무엇이든 데이터는 한 곳으로 모인다.</li>
+          <li><strong>등급·멤버십 레이어</strong> — 보유 $GLAS의 현재 달러 가치 기준으로 등급을 판정하고, 등급별
+            할인·무료배송·AI 기능 차등 제공.</li>
+          <li><strong>AI 인텔리전스 레이어</strong> — 셀프 체크리스트, 웨어러블 기기 연동, 구매 이력 누적 분석을 통해
+            개인 맞춤 제품을 추천.</li>
+          <li><strong>데이터 레이어</strong> — 방문객의 국가·연령·성별·구매 패턴·재방문 여부를 집계해, 가맹점이
+            카드사·플랫폼으로부터 얻을 수 없는 오프라인 고객 데이터를 확보하고 타겟 마케팅에 활용한다.</li>
+        </ol>
+      </section>
+
+      <section class="doc-section" id="utility">
+        <div class="section-head">
+          <span class="section-num">4</span>
+          <h2 class="section-title">토큰 유틸리티</h2>
         </div>
-      </div>
-      <p>등급 기준에 미달하는 유저에게는 다음 등급까지 필요한 개수가 실시간으로 표시됩니다.</p>
 
-      <h3 class="sub-title">등급 혜택 <span style="color:var(--faint); font-weight:500; font-size:13px;">(쿠팡와우 벤치마킹)</span></h3>
-      <ul class="doc-list">
-        <li>매장에서 즉시 할인되며, 등급별로 차등 적용됩니다.</li>
-        <li>귀국 후 해외 재구매 시 일정 등급 이상부터 배송비가 무료입니다.</li>
-        <li>공동구매 우선권과 신제품 얼리 액세스가 제공됩니다.</li>
-        <li>상위 등급일수록 AI 분석 정밀도가 상승합니다 (분석 축 개수 확대, 상세 코멘터리).</li>
-      </ul>
-    </section>
+        <h3 class="sub-title">4-1. 획득 경로</h3>
+        <ul class="doc-list">
+          <li><strong>구매 적립</strong> — 결제액에 비례해 자동 지급 (결제수단 무관, QR 적립 방식으로 통일)</li>
+          <li><strong>등급 즉시구매</strong> — 스테이블코인 또는 신용카드(온램프 연동)로 직접 결제해 즉시 등급에
+            상당하는 $GLAS 획득</li>
+          <li><strong>스테이킹 매수</strong> — 거래소에서 직접 매수 후 지갑에 예치, 최소 30일 락업 후 등급 산정에
+            반영</li>
+          <li><strong>커뮤니티 리워드</strong> — 후기 작성, 소셜 인게이지먼트에 대한 리워드 (구매 리워드 대비 낮은
+            가중치, 일일 한도 적용)</li>
+        </ul>
 
-    <section class="doc-section">
-      <div class="section-head">
-        <span class="section-num">5</span>
-        <h2 class="section-title">토크노믹스</h2>
-      </div>
+        <h3 class="sub-title">4-2. 사용 경로</h3>
+        <ul class="doc-list">
+          <li>약국 매장 및 앱 내 재구매 시 <strong>$GLAS 직접 결제</strong> 가능 (결제 시점 시세로 실시간 환산, 소요
+            수량은 시세에 따라 변동하되 상품 가치는 항상 동일하게 유지)</li>
+          <li>등급별 할인 자동 적용</li>
+          <li>귀국 후 해외 재구매 배송비 무료 (일정 등급 이상)</li>
+        </ul>
 
-      <div class="supply-callout">
-        <div>
-          <div class="supply-figure">1,000,000,000 $GLAS</div>
-          <div class="supply-label">총 발행량 · 고정 공급</div>
+        <h3 class="sub-title">4-3. 등급 판정 및 영구 유지 원칙</h3>
+        <p>등급 기준은 보유 개수가 아닌 <strong>보유량 × 현재시세 = 평가금액</strong>으로 산정한다.</p>
+        <table class="doc-table">
+          <thead>
+            <tr><th>등급</th><th>평가금액 기준</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="tier-name-cell">Bare Skin</td><td class="desc">$0 – $99</td></tr>
+            <tr><td class="tier-name-cell">Dewy Glow</td><td class="desc">$100 – $499</td></tr>
+            <tr><td class="tier-name-cell">Radiant Glass</td><td class="desc">$500 – $1,499</td></tr>
+            <tr><td class="tier-name-cell">Glass Skin</td><td class="desc">$1,500+</td></tr>
+          </tbody>
+        </table>
+        <blockquote class="callout">
+          <p>한번 특정 등급에 도달하면 이후 시세가 하락해도 해당 등급을 영구적으로 유지한다. 재평가에 따른 강등
+          로직은 존재하지 않으며, 이는 실사용 구매를 통해 등급을 획득한 이용자의 신뢰를 보호하기 위한 설계다.</p>
+        </blockquote>
+        <p>아직 등급 미달인 유저에게는 현재 시세 기준 다음 등급까지 필요한 수량이 실시간으로 표시된다.</p>
+
+        <h3 class="sub-title">4-4. 등급 혜택 <span style="color:var(--faint); font-weight:500; font-size:13px;">(쿠팡와우 벤치마킹)</span></h3>
+        <ul class="doc-list">
+          <li>매장 즉시 할인, 등급별 차등</li>
+          <li>귀국 후 해외 재구매 배송비 무료 (일정 등급 이상)</li>
+          <li>공동구매 우선권, 신제품 얼리 액세스</li>
+          <li>상위 등급: AI 분석 정밀도 상승 (분석 축 개수 확대, 상세 코멘터리, 웨어러블 데이터 정밀 분석 잠금
+            해제)</li>
+        </ul>
+      </section>
+
+      <section class="doc-section" id="ai-layer">
+        <div class="section-head">
+          <span class="section-num">5</span>
+          <h2 class="section-title">AI 인텔리전스 레이어</h2>
         </div>
-      </div>
 
-      <h3 class="sub-title">배분</h3>
-      <table class="alloc-table">
-        <thead>
-          <tr><th>배분 대상</th><th>비율</th><th>용도</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>커뮤니티 리워드 풀</td><td class="pct">40%</td><td class="desc">구매·스테이킹·활동 리워드 재원</td></tr>
-          <tr><td>스테이킹 인센티브</td><td class="pct">20%</td><td class="desc">락업 유도, 4년 선형 방출</td></tr>
-          <tr><td>팀 · 파트너 (INITECH)</td><td class="pct">15%</td><td class="desc">1년 클리프, 3년 베스팅</td></tr>
-          <tr><td>트레저리 (배송비 보조)</td><td class="pct">10%</td><td class="desc">무료배송 혜택 재원, 별도 지갑에서 관리</td></tr>
-          <tr><td>유동성 · 상장</td><td class="pct">10%</td><td class="desc">DEX·CEX 유동성 공급</td></tr>
-          <tr><td>어드바이저</td><td class="pct">5%</td><td class="desc">1년 베스팅</td></tr>
-        </tbody>
-      </table>
+        <h3 class="sub-title">5-1. 셀프 체크 진단</h3>
+        <p>다크서클/피로/눈떨림/피부트러블/수면 등 컨디션 체크 + 피부톤/탄력/에너지/면역/수면질 등 목표 선택 →
+          규칙 기반 매핑으로 맞춤 제품 추천 (레이더 차트 + 매칭 스코어로 시각화).</p>
 
-      <h3 class="sub-title">소각 · 디플레이션</h3>
-      <ul class="doc-list">
-        <li>배송비 무료 혜택을 사용할 때 소요되는 토큰의 일부가 소각됩니다.</li>
-        <li>이를 통해 유통량이 자연스럽게 감소하며, 장기 홀더의 가치가 보호됩니다.</li>
-      </ul>
+        <h3 class="sub-title">5-2. 웨어러블 기기 연동</h3>
+        <p>Whoop, Apple Watch, Fitbit 등 웨어러블 기기와 연동해 심박수, 수면 패턴, 산소포화도, 스트레스 레벨,
+          회복 점수(Recovery Score) 데이터를 분석. 별도 설문 없이도 실시간 바이탈 데이터를 기반으로 "지금 필요한
+          제품"을 해석·추천한다. 미연동 유저는 셀프 체크 진단으로 대체된다.</p>
 
-      <h3 class="sub-title">공급 통제 장치</h3>
-      <ul class="doc-list">
-        <li>리워드 지급률에는 거래액 대비 비율로 상한선이 적용되어, 과다 발행을 방지합니다.</li>
-        <li>스테이킹 락업 비율을 일정 수준으로 유지하여 유통량을 관리합니다.</li>
-      </ul>
-    </section>
+        <h3 class="sub-title">5-3. 제품 스캔 및 자국어 정보 제공</h3>
+        <p>구매하려는(또는 이미 구매한) 제품을 카메라로 스캔하면, 공식 데이터 기반 효능·복용법·주의사항·부작용
+          정보를 이용자의 언어로 즉시 제공. 외국어 표기로 인한 정보 접근성 문제를 해결한다.</p>
 
-    <section class="doc-section">
-      <div class="section-head">
-        <span class="section-num">6</span>
-        <h2 class="section-title">AI 인텔리전스 레이어</h2>
-      </div>
-      <ul class="doc-list">
-        <li><strong>셀프 체크</strong> — 다크서클·피로·눈떨림·피부트러블·수면 등의 항목을 선택합니다.</li>
-        <li><strong>목표 선택</strong> — 피부톤·탄력·에너지·면역·수면질 중에서 목표를 선택합니다.</li>
-        <li><strong>규칙 기반 매핑</strong> — 선택 항목을 바탕으로 추천 조합을 제시합니다 (예: 다크서클+피로 → 비타민B+홍삼).</li>
-        <li><strong>결과</strong> — 레이더 차트, 매칭 스코어, 추천 제품으로 제공됩니다.</li>
-        <li><strong>등급 연동</strong> — 상위 등급일수록 분석 축이 확대되고 상세 리포트가 잠금 해제됩니다.</li>
-      </ul>
-      <div class="disclaimer">
-        면책 — 본 AI 분석은 의학적 진단이 아니며, 건강기능식품 추천을 위한 참고 자료입니다.
-      </div>
-    </section>
+        <h3 class="sub-title">5-4. 구매 이력 기반 누적 분석 (CRM 루프)</h3>
+        <p>1회성 진단에 그치지 않고, 과거 구매 이력을 반영해 재진단 시 개선 추이를 함께 제시. 재방문·재구매
+          시점마다 추천이 점점 정교해지는 구조로 설계되어 리텐션을 강화한다.</p>
 
-    <section class="doc-section">
-      <div class="section-head">
-        <span class="section-num">7</span>
-        <h2 class="section-title">로드맵</h2>
-      </div>
-      <ul class="roadmap">
-        <li>
-          <span class="phase-label">Phase 1 <span class="phase-window">· 0~3개월</span></span>
-          <span class="phase-desc">포인트제 운영, 앱 MVP, AI 진단 베타</span>
-        </li>
-        <li>
-          <span class="phase-label">Phase 2 <span class="phase-window">· 3~6개월</span></span>
-          <span class="phase-desc">약국 오픈 연동, 실거래 데이터 축적</span>
-        </li>
-        <li>
-          <span class="phase-label">Phase 3 <span class="phase-window">· 6~12개월</span></span>
-          <span class="phase-desc">온체인 전환, 폐쇄형 유통</span>
-        </li>
-        <li>
-          <span class="phase-label">Phase 4 <span class="phase-window">· 12~18개월</span></span>
-          <span class="phase-desc">DEX 상장, 유동성 풀 조성</span>
-        </li>
-        <li>
-          <span class="phase-label">Phase 5 <span class="phase-window">· 18개월+</span></span>
-          <span class="phase-desc">CEX 상장 검토, AI 엔진 고도화 (ML 기반 전환)</span>
-        </li>
-      </ul>
-    </section>
+        <div class="disclaimer">
+          면책 — 본 기능은 건강기능식품 추천을 위한 참고 정보이며, 의학적 진단을 대체하지 않는다.
+        </div>
+      </section>
 
-  </main>
+      <section class="doc-section" id="data-layer">
+        <div class="section-head">
+          <span class="section-num">6</span>
+          <h2 class="section-title">데이터 레이어</h2>
+        </div>
+
+        <h3 class="sub-title">6-1. 결제수단 무관 데이터 통합</h3>
+        <p>현금, 신용카드, 스테이블코인 등 결제수단과 무관하게 QR 스캔을 통해 적립이 이루어지며, 이 과정에서
+          국가·연령대·성별 등 프로필 정보와 구매 데이터가 자동으로 매칭·축적된다.</p>
+
+        <h3 class="sub-title">6-2. 온보딩 전환 장치</h3>
+        <p>매장 입구 QR 스캔을 통한 즉시 가입 및 웰컴 리워드 지급으로 데이터 수집 동의 및 가입 전환율을 높인다.</p>
+
+        <h3 class="sub-title">6-3. 매장 운영 대시보드</h3>
+        <p>가맹점은 방문객의 국가별 비중, 연령대×성별 구매 패턴, 결제수단별 비중, 인기 카테고리, 재방문 고객
+          비중 등을 시각화된 대시보드로 확인할 수 있다. 이는 카드사나 기존 온라인 플랫폼이 제공할 수 없는, 오프라인
+          매장 고유의 고객 인사이트다.</p>
+
+        <h3 class="sub-title">6-4. 블록체인 기반 거래 기록</h3>
+        <p>모든 결제 내역은 온체인에 기록되어 위변조 없는 매출 데이터로 보관되며, 이용자에게는 "체인 인증됨" 배지로
+          신뢰성을 표시한다.</p>
+      </section>
+
+      <section class="doc-section" id="community">
+        <div class="section-head">
+          <span class="section-num">7</span>
+          <h2 class="section-title">커뮤니티 레이어</h2>
+        </div>
+        <ul class="doc-list">
+          <li>후기, 성분 정보, Q&amp;A, 공동구매 카테고리로 구성된 정보 허브</li>
+          <li>인플루언서(왕홍 등)가 직접 공동구매를 개설할 수 있는 기능 제공</li>
+          <li>활동(후기 작성, 좋아요, 댓글, 팔로워 확보)에 비례한 토큰 리워드</li>
+          <li>목표: 여기저기 흩어진 정보를 하나의 신뢰 가능한 채널로 통합</li>
+        </ul>
+      </section>
+
+      <section class="doc-section" id="tokenomics">
+        <div class="section-head">
+          <span class="section-num">8</span>
+          <h2 class="section-title">토크노믹스</h2>
+        </div>
+
+        <div class="supply-callout">
+          <div>
+            <div class="supply-figure">1,000,000,000 $GLAS</div>
+            <div class="supply-label">총 발행량 · 고정 공급</div>
+          </div>
+        </div>
+
+        <h3 class="sub-title">배분</h3>
+        <table class="doc-table">
+          <thead>
+            <tr><th>배분 대상</th><th>비율</th><th>용도</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>커뮤니티 리워드 풀</td><td class="pct">40%</td><td class="desc">구매·스테이킹·활동 리워드 재원</td></tr>
+            <tr><td>스테이킹 인센티브</td><td class="pct">20%</td><td class="desc">락업 유도, 4년 선형 방출</td></tr>
+            <tr><td>팀 · 파트너 (INITECH)</td><td class="pct">15%</td><td class="desc">1년 클리프, 3년 베스팅</td></tr>
+            <tr><td>트레저리 (배송비 보조)</td><td class="pct">10%</td><td class="desc">무료배송 혜택 재원, 별도 지갑에서 관리</td></tr>
+            <tr><td>유동성 · 상장</td><td class="pct">10%</td><td class="desc">DEX·CEX 유동성 공급</td></tr>
+            <tr><td>어드바이저</td><td class="pct">5%</td><td class="desc">1년 베스팅</td></tr>
+          </tbody>
+        </table>
+
+        <h3 class="sub-title">소각 · 디플레이션</h3>
+        <ul class="doc-list">
+          <li>배송비 무료 혜택을 사용할 때 소요되는 토큰의 일부가 소각된다.</li>
+          <li>이를 통해 유통량이 자연스럽게 감소하며, 장기 홀더의 가치가 보호된다.</li>
+        </ul>
+
+        <h3 class="sub-title">공급 통제 장치</h3>
+        <ul class="doc-list">
+          <li>리워드 지급률에는 거래액 대비 비율로 상한선이 적용되어, 과다 발행을 방지한다.</li>
+          <li>스테이킹 락업 비율을 일정 수준으로 유지하여 유통량을 관리한다.</li>
+        </ul>
+      </section>
+
+      <section class="doc-section" id="roadmap">
+        <div class="section-head">
+          <span class="section-num">9</span>
+          <h2 class="section-title">로드맵</h2>
+        </div>
+        <ul class="roadmap">
+          <li>
+            <span class="phase-label">Phase 1 <span class="phase-window">· 0~3개월</span></span>
+            <span class="phase-desc">포인트제 운영, 앱 MVP, AI 진단 베타</span>
+          </li>
+          <li>
+            <span class="phase-label">Phase 2 <span class="phase-window">· 3~6개월</span></span>
+            <span class="phase-desc">약국 오픈 연동, QR 적립 구조 실사용 개시, 실거래 데이터 축적 시작</span>
+          </li>
+          <li>
+            <span class="phase-label">Phase 3 <span class="phase-window">· 6~12개월</span></span>
+            <span class="phase-desc">온체인 전환, 폐쇄형 유통, 매장 운영 대시보드 정식 출시</span>
+          </li>
+          <li>
+            <span class="phase-label">Phase 4 <span class="phase-window">· 12~18개월</span></span>
+            <span class="phase-desc">DEX 상장, 유동성 풀 조성, 웨어러블 연동 기능 정식 출시</span>
+          </li>
+          <li>
+            <span class="phase-label">Phase 5 <span class="phase-window">· 18개월+</span></span>
+            <span class="phase-desc">CEX 상장 검토, AI 엔진 고도화 (ML 기반 전환)</span>
+          </li>
+        </ul>
+      </section>
+
+    </main>
+  </div>
 
   <footer>
-    GLASSY — Get That Glass Skin. · $GLAS Whitepaper
+    GLASSY — Get That Glass Skin. · $GLAS Whitepaper v0.2
   </footer>
 
 </body>
