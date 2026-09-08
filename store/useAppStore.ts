@@ -4,7 +4,7 @@ import { getTierById, getTierForUsdValue, STAKE_LOCKUP_DAYS, TierId } from '@/co
 import {
   COMMUNITY_POSTS,
   CommunityPost,
-  GLAS_PRICE_USD,
+  CHARM_PRICE_USD,
   LanguageCode,
   PRODUCTS,
   STAKE_ENTRIES,
@@ -18,17 +18,17 @@ import { addDays, daysSince } from '@/lib/date';
 export type Toast = {
   id: string;
   message: string;
-  glasAmount?: number;
+  charmAmount?: number;
 };
 
-export type PaymentMethod = 'stablecoin' | 'card' | 'glas' | 'cash';
+export type PaymentMethod = 'stablecoin' | 'card' | 'charm' | 'cash';
 
 type AppState = {
-  // wallet — GLAS held, split by source
-  purchaseEarnedGlas: number; // 구매 적립분
-  directPurchaseGlas: number; // 등급 즉시구매분
-  communityRewardGlas: number; // 커뮤니티 리워드분
-  liquidBoughtGlas: number; // exchange-bought, not yet staked
+  // wallet — CHARM held, split by source
+  purchaseEarnedCharm: number; // 구매 적립분
+  directPurchaseCharm: number; // 등급 즉시구매분
+  communityRewardCharm: number; // 커뮤니티 리워드분
+  liquidBoughtCharm: number; // exchange-bought, not yet staked
   stakeEntries: StakeEntry[]; // 스테이킹 매수분 (matures after lockup)
   usdtBalance: number;
   usdcBalance: number;
@@ -36,7 +36,7 @@ type AppState = {
   demoFastForward: boolean;
 
   // permanent tier record — set once on promotion, never re-evaluated
-  // downward even if $GLAS price later drops (see checkTierPromotion).
+  // downward even if $CHARM price later drops (see checkTierPromotion).
   achievedTier: TierId;
   achievedAt: string;
   achievedAtPrice: number;
@@ -49,7 +49,7 @@ type AppState = {
   // screen — Mode A once connected, Mode B (AI survey) until then.
   wearableProvider: 'whoop' | 'apple-watch' | 'fitbit' | null;
 
-  // welcome gateway — only actually credits GLAS the first time; replaying
+  // welcome gateway — only actually credits CHARM the first time; replaying
   // the welcome flow from the Profile tab still shows the full animation
   // but won't re-grant the bonus.
   welcomeBonusClaimed: boolean;
@@ -62,14 +62,14 @@ type AppState = {
   levelUpTier: TierId | null;
 
   // derived getters
-  maturedStakedGlas: () => number;
-  pendingStakedGlas: () => number;
-  totalGlas: () => number;
-  spendableGlas: () => number;
+  maturedStakedCharm: () => number;
+  pendingStakedCharm: () => number;
+  totalCharm: () => number;
+  spendableCharm: () => number;
 
   // actions
-  buyGlas: (usdtAmount: number) => void;
-  stakeGlas: (amount: number) => void;
+  buyCharm: (usdtAmount: number) => void;
+  stakeCharm: (amount: number) => void;
   unstakeEntry: (entryId: string) => { ok: boolean; reason?: string };
   toggleDemoFastForward: () => void;
   addCommunityPost: (caption: string, images: string[]) => void;
@@ -80,7 +80,7 @@ type AppState = {
   clearLevelUp: () => void;
   simulatePharmacyPurchase: (title: string, subtitle: string, usdAmount: number) => void;
   checkTierPromotion: () => void;
-  spendGlas: (amount: number) => boolean;
+  spendCharm: (amount: number) => boolean;
   checkoutPurchase: (
     title: string,
     subtitle: string,
@@ -93,7 +93,7 @@ type AppState = {
   connectWearable: (provider: 'whoop' | 'apple-watch' | 'fitbit') => void;
 };
 
-export const WELCOME_BONUS_GLAS = 500;
+export const WELCOME_BONUS_CHARM = 500;
 
 let idCounter = 1;
 function nextId(prefix: string) {
@@ -107,10 +107,10 @@ function isEntryMatured(entry: StakeEntry, fastForward: boolean): boolean {
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
-  purchaseEarnedGlas: USER.purchaseEarnedGlas,
-  directPurchaseGlas: 0,
-  communityRewardGlas: 0,
-  liquidBoughtGlas: 0,
+  purchaseEarnedCharm: USER.purchaseEarnedCharm,
+  directPurchaseCharm: 0,
+  communityRewardCharm: 0,
+  liquidBoughtCharm: 0,
   stakeEntries: STAKE_ENTRIES,
   usdtBalance: USER.usdtBalance,
   usdcBalance: USER.usdcBalance,
@@ -130,102 +130,102 @@ export const useAppStore = create<AppState>((set, get) => ({
   toasts: [],
   levelUpTier: null,
 
-  maturedStakedGlas: () => {
+  maturedStakedCharm: () => {
     const { stakeEntries, demoFastForward } = get();
     return stakeEntries
       .filter((e) => isEntryMatured(e, demoFastForward))
       .reduce((sum, e) => sum + e.amount, 0);
   },
-  pendingStakedGlas: () => {
+  pendingStakedCharm: () => {
     const { stakeEntries, demoFastForward } = get();
     return stakeEntries
       .filter((e) => !isEntryMatured(e, demoFastForward))
       .reduce((sum, e) => sum + e.amount, 0);
   },
-  totalGlas: () => {
-    const { purchaseEarnedGlas, directPurchaseGlas, communityRewardGlas } = get();
-    return purchaseEarnedGlas + directPurchaseGlas + communityRewardGlas + get().maturedStakedGlas();
+  totalCharm: () => {
+    const { purchaseEarnedCharm, directPurchaseCharm, communityRewardCharm } = get();
+    return purchaseEarnedCharm + directPurchaseCharm + communityRewardCharm + get().maturedStakedCharm();
   },
-  // GLAS that can actually be spent at checkout (excludes locked stake entries).
-  spendableGlas: () => {
-    const { liquidBoughtGlas, purchaseEarnedGlas, directPurchaseGlas, communityRewardGlas } = get();
-    return liquidBoughtGlas + purchaseEarnedGlas + directPurchaseGlas + communityRewardGlas;
+  // CHARM that can actually be spent at checkout (excludes locked stake entries).
+  spendableCharm: () => {
+    const { liquidBoughtCharm, purchaseEarnedCharm, directPurchaseCharm, communityRewardCharm } = get();
+    return liquidBoughtCharm + purchaseEarnedCharm + directPurchaseCharm + communityRewardCharm;
   },
 
-  // Promote (never demote) based on current USD value of held GLAS. Called
-  // after any action that can change totalGlas().
+  // Promote (never demote) based on current USD value of held CHARM. Called
+  // after any action that can change totalCharm().
   checkTierPromotion: () => {
-    const { achievedTier, totalGlas } = get();
-    const usdValue = totalGlas() * GLAS_PRICE_USD;
+    const { achievedTier, totalCharm } = get();
+    const usdValue = totalCharm() * CHARM_PRICE_USD;
     const evaluated = getTierForUsdValue(usdValue);
     const current = getTierById(achievedTier);
     if (evaluated.order > current.order) {
       set({
         achievedTier: evaluated.id,
         achievedAt: new Date().toISOString(),
-        achievedAtPrice: GLAS_PRICE_USD,
+        achievedAtPrice: CHARM_PRICE_USD,
         levelUpTier: evaluated.id,
       });
     }
   },
 
-  // Deduct GLAS spent at checkout from the liquid, spendable buckets only
+  // Deduct CHARM spent at checkout from the liquid, spendable buckets only
   // (never from locked stake entries). Returns false if insufficient.
-  spendGlas: (amount) => {
+  spendCharm: (amount) => {
     const s = get();
-    if (s.spendableGlas() < amount) return false;
+    if (s.spendableCharm() < amount) return false;
     let remaining = amount;
     const takeFrom = (bucket: number) => {
       const take = Math.min(bucket, remaining);
       remaining -= take;
       return bucket - take;
     };
-    const liquidBoughtGlas = takeFrom(s.liquidBoughtGlas);
-    const purchaseEarnedGlas = takeFrom(s.purchaseEarnedGlas);
-    const directPurchaseGlas = takeFrom(s.directPurchaseGlas);
-    const communityRewardGlas = takeFrom(s.communityRewardGlas);
-    set({ liquidBoughtGlas, purchaseEarnedGlas, directPurchaseGlas, communityRewardGlas });
+    const liquidBoughtCharm = takeFrom(s.liquidBoughtCharm);
+    const purchaseEarnedCharm = takeFrom(s.purchaseEarnedCharm);
+    const directPurchaseCharm = takeFrom(s.directPurchaseCharm);
+    const communityRewardCharm = takeFrom(s.communityRewardCharm);
+    set({ liquidBoughtCharm, purchaseEarnedCharm, directPurchaseCharm, communityRewardCharm });
     return true;
   },
 
-  buyGlas: (usdtAmount) => {
-    const glas = Math.round(usdtAmount / GLAS_PRICE_USD);
+  buyCharm: (usdtAmount) => {
+    const charm = Math.round(usdtAmount / CHARM_PRICE_USD);
     set((s) => ({
       usdtBalance: s.usdtBalance - usdtAmount,
-      liquidBoughtGlas: s.liquidBoughtGlas + glas,
+      liquidBoughtCharm: s.liquidBoughtCharm + charm,
       transactions: [
         {
           id: nextId('tx'),
           type: 'buy',
-          title: '$GLAS 거래소 매수',
-          subtitle: 'GLASSY EX 체결',
+          title: '$CHARM 거래소 매수',
+          subtitle: 'CHARM EX 체결',
           date: new Date().toISOString(),
-          glasDelta: glas,
+          charmDelta: charm,
           usdAmount: usdtAmount,
         },
         ...s.transactions,
       ],
-      toasts: [...s.toasts, { id: nextId('toast'), message: `${glas.toLocaleString()} GLAS 매수 완료`, glasAmount: glas }],
+      toasts: [...s.toasts, { id: nextId('toast'), message: `${charm.toLocaleString()} CHARM 매수 완료`, charmAmount: charm }],
     }));
-    // buying alone doesn't move totalGlas() (still unstaked), so no promotion check here.
+    // buying alone doesn't move totalCharm() (still unstaked), so no promotion check here.
   },
 
-  stakeGlas: (amount) => {
+  stakeCharm: (amount) => {
     set((s) => ({
-      liquidBoughtGlas: Math.max(0, s.liquidBoughtGlas - amount),
+      liquidBoughtCharm: Math.max(0, s.liquidBoughtCharm - amount),
       stakeEntries: [...s.stakeEntries, { id: nextId('stake'), amount, startDate: new Date().toISOString() }],
       transactions: [
         {
           id: nextId('tx'),
           type: 'stake',
-          title: '$GLAS 스테이킹 예치',
+          title: '$CHARM 스테이킹 예치',
           subtitle: '30일 락업 시작',
           date: new Date().toISOString(),
-          glasDelta: amount,
+          charmDelta: amount,
         },
         ...s.transactions,
       ],
-      toasts: [...s.toasts, { id: nextId('toast'), message: `${amount.toLocaleString()} GLAS 스테이킹 시작`, glasAmount: amount }],
+      toasts: [...s.toasts, { id: nextId('toast'), message: `${amount.toLocaleString()} CHARM 스테이킹 시작`, charmAmount: amount }],
     }));
     get().checkTierPromotion();
   },
@@ -240,21 +240,21 @@ export const useAppStore = create<AppState>((set, get) => ({
     }
     set((s) => ({
       stakeEntries: s.stakeEntries.filter((e) => e.id !== entryId),
-      liquidBoughtGlas: s.liquidBoughtGlas + entry.amount,
+      liquidBoughtCharm: s.liquidBoughtCharm + entry.amount,
       transactions: [
         {
           id: nextId('tx'),
           type: 'unstake',
-          title: '$GLAS 언스테이킹',
+          title: '$CHARM 언스테이킹',
           subtitle: '지갑으로 회수',
           date: new Date().toISOString(),
-          glasDelta: entry.amount,
+          charmDelta: entry.amount,
         },
         ...s.transactions,
       ],
-      toasts: [...s.toasts, { id: nextId('toast'), message: `${entry.amount.toLocaleString()} GLAS 언스테이킹 완료` }],
+      toasts: [...s.toasts, { id: nextId('toast'), message: `${entry.amount.toLocaleString()} CHARM 언스테이킹 완료` }],
     }));
-    // note: unstaking lowers totalGlas(), but achievedTier is permanent — no re-check needed, no demotion possible.
+    // note: unstaking lowers totalCharm(), but achievedTier is permanent — no re-check needed, no demotion possible.
     return { ok: true };
   },
 
@@ -280,11 +280,11 @@ export const useAppStore = create<AppState>((set, get) => ({
           isFollowing: true,
           createdAt: new Date().toISOString(),
           tags: [],
-          glasEarned: reward,
+          charmEarned: reward,
         },
         ...s.posts,
       ],
-      communityRewardGlas: s.communityRewardGlas + reward,
+      communityRewardCharm: s.communityRewardCharm + reward,
       transactions: [
         {
           id: nextId('tx'),
@@ -292,11 +292,11 @@ export const useAppStore = create<AppState>((set, get) => ({
           title: '커뮤니티 후기 작성 리워드',
           subtitle: 'Glow Feed',
           date: new Date().toISOString(),
-          glasDelta: reward,
+          charmDelta: reward,
         },
         ...s.transactions,
       ],
-      toasts: [...s.toasts, { id: nextId('toast'), message: '후기 작성 완료!', glasAmount: reward }],
+      toasts: [...s.toasts, { id: nextId('toast'), message: '후기 작성 완료!', charmAmount: reward }],
     }));
     get().checkTierPromotion();
   },
@@ -320,13 +320,13 @@ export const useAppStore = create<AppState>((set, get) => ({
           isFollowing: true,
           createdAt: new Date().toISOString(),
           tags: ['공동구매', '인증크리에이터'],
-          glasEarned: reward,
+          charmEarned: reward,
           category: 'groupbuy' as const,
           authorFollowers: USER.followers,
         },
         ...s.posts,
       ],
-      communityRewardGlas: s.communityRewardGlas + reward,
+      communityRewardCharm: s.communityRewardCharm + reward,
       transactions: [
         {
           id: nextId('tx'),
@@ -334,11 +334,11 @@ export const useAppStore = create<AppState>((set, get) => ({
           title: '인플루언서 공동구매 개설 리워드',
           subtitle: 'Glow Feed',
           date: new Date().toISOString(),
-          glasDelta: reward,
+          charmDelta: reward,
         },
         ...s.transactions,
       ],
-      toasts: [...s.toasts, { id: nextId('toast'), message: '공동구매가 개설됐어요!', glasAmount: reward }],
+      toasts: [...s.toasts, { id: nextId('toast'), message: '공동구매가 개설됐어요!', charmAmount: reward }],
     }));
     get().checkTierPromotion();
   },
@@ -361,7 +361,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   simulatePharmacyPurchase: (title, subtitle, usdAmount) => {
     const reward = Math.round(usdAmount * 4);
     set((s) => ({
-      purchaseEarnedGlas: s.purchaseEarnedGlas + reward,
+      purchaseEarnedCharm: s.purchaseEarnedCharm + reward,
       transactions: [
         {
           id: nextId('tx'),
@@ -369,48 +369,48 @@ export const useAppStore = create<AppState>((set, get) => ({
           title,
           subtitle,
           date: new Date().toISOString(),
-          glasDelta: reward,
+          charmDelta: reward,
           usdAmount,
         },
         ...s.transactions,
       ],
-      toasts: [...s.toasts, { id: nextId('toast'), message: `구매 적립 +${reward} GLAS`, glasAmount: reward }],
+      toasts: [...s.toasts, { id: nextId('toast'), message: `구매 적립 +${reward} CHARM`, charmAmount: reward }],
     }));
     get().checkTierPromotion();
   },
 
   // Checkout with a choice of payment methods. Stablecoin, card, and cash
-  // (via QR) all earn the usual purchase-reward GLAS — the point is that
+  // (via QR) all earn the usual purchase-reward CHARM — the point is that
   // payment method is irrelevant to earning; only the QR step differs.
-  // Paying with GLAS itself spends from the spendable buckets and earns no
+  // Paying with CHARM itself spends from the spendable buckets and earns no
   // reward.
   checkoutPurchase: (title, subtitle, priceUSD, method) => {
-    if (method === 'glas') {
-      const glasCost = Math.ceil(priceUSD / GLAS_PRICE_USD);
-      const ok = get().spendGlas(glasCost);
-      if (!ok) return { ok: false, reason: '보유 GLAS가 부족해요.' };
+    if (method === 'charm') {
+      const charmCost = Math.ceil(priceUSD / CHARM_PRICE_USD);
+      const ok = get().spendCharm(charmCost);
+      if (!ok) return { ok: false, reason: '보유 CHARM이 부족해요.' };
       set((s) => ({
         transactions: [
           {
             id: nextId('tx'),
-            type: 'purchase_glas',
+            type: 'purchase_charm',
             title,
             subtitle,
             date: new Date().toISOString(),
-            glasDelta: glasCost,
+            charmDelta: charmCost,
             direction: 'out',
             usdAmount: priceUSD,
           },
           ...s.transactions,
         ],
-        toasts: [...s.toasts, { id: nextId('toast'), message: `${glasCost.toLocaleString()} GLAS로 결제 완료` }],
+        toasts: [...s.toasts, { id: nextId('toast'), message: `${charmCost.toLocaleString()} CHARM으로 결제 완료` }],
       }));
       return { ok: true };
     }
 
     const reward = Math.round(priceUSD * 4);
     set((s) => ({
-      purchaseEarnedGlas: s.purchaseEarnedGlas + reward,
+      purchaseEarnedCharm: s.purchaseEarnedCharm + reward,
       transactions: [
         {
           id: nextId('tx'),
@@ -419,25 +419,25 @@ export const useAppStore = create<AppState>((set, get) => ({
           subtitle:
             method === 'card' ? `${subtitle} · 신용카드` : method === 'cash' ? `${subtitle} · 현금(QR 적립)` : `${subtitle} · 스테이블코인`,
           date: new Date().toISOString(),
-          glasDelta: reward,
+          charmDelta: reward,
           usdAmount: priceUSD,
         },
         ...s.transactions,
       ],
-      toasts: [...s.toasts, { id: nextId('toast'), message: `구매 적립 +${reward} GLAS`, glasAmount: reward }],
+      toasts: [...s.toasts, { id: nextId('toast'), message: `구매 적립 +${reward} CHARM`, charmAmount: reward }],
     }));
     get().checkTierPromotion();
     return { ok: true };
   },
 
-  // "지금 바로 구매" — instantly buy enough GLAS to cross into a tier. This
+  // "지금 바로 구매" — instantly buy enough CHARM to cross into a tier. This
   // bucket counts toward the tier immediately (no 30-day lockup), and the
   // resulting tier is permanent per checkTierPromotion's usual rule.
   buyTierDirect: (usdCost, method) => {
-    const glas = Math.round(usdCost / GLAS_PRICE_USD);
+    const charm = Math.round(usdCost / CHARM_PRICE_USD);
     set((s) => ({
       usdtBalance: method === 'stablecoin' ? s.usdtBalance - usdCost : s.usdtBalance,
-      directPurchaseGlas: s.directPurchaseGlas + glas,
+      directPurchaseCharm: s.directPurchaseCharm + charm,
       transactions: [
         {
           id: nextId('tx'),
@@ -445,12 +445,12 @@ export const useAppStore = create<AppState>((set, get) => ({
           title: '등급 즉시구매',
           subtitle: method === 'stablecoin' ? '스테이블코인 결제' : '신용카드 결제 (MoonPay)',
           date: new Date().toISOString(),
-          glasDelta: glas,
+          charmDelta: charm,
           usdAmount: usdCost,
         },
         ...s.transactions,
       ],
-      toasts: [...s.toasts, { id: nextId('toast'), message: `${glas.toLocaleString()} GLAS 즉시구매 완료`, glasAmount: glas }],
+      toasts: [...s.toasts, { id: nextId('toast'), message: `${charm.toLocaleString()} CHARM 즉시구매 완료`, charmAmount: charm }],
     }));
     get().checkTierPromotion();
   },
@@ -459,7 +459,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     if (get().welcomeBonusClaimed) return { credited: false, amount: 0 };
     set((s) => ({
       welcomeBonusClaimed: true,
-      purchaseEarnedGlas: s.purchaseEarnedGlas + WELCOME_BONUS_GLAS,
+      purchaseEarnedCharm: s.purchaseEarnedCharm + WELCOME_BONUS_CHARM,
       transactions: [
         {
           id: nextId('tx'),
@@ -467,13 +467,13 @@ export const useAppStore = create<AppState>((set, get) => ({
           title: '웰컴 리워드',
           subtitle: '가입 즉시 지급',
           date: new Date().toISOString(),
-          glasDelta: WELCOME_BONUS_GLAS,
+          charmDelta: WELCOME_BONUS_CHARM,
         },
         ...s.transactions,
       ],
     }));
     get().checkTierPromotion();
-    return { credited: true, amount: WELCOME_BONUS_GLAS };
+    return { credited: true, amount: WELCOME_BONUS_CHARM };
   },
 
   setLanguage: (lang) => set({ language: lang }),

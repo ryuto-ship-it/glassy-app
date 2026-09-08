@@ -33,7 +33,7 @@ export function PillButton({ label, onPress, variant = 'solid', colors_, disable
   return (
     <Pressable onPress={onPress} disabled={disabled} style={[styles.solidWrap, disabled && styles.disabled, style]}>
       <LinearGradient
-        colors={(colors_ ?? [darkColors.accentViolet, '#8C5CE0']) as any}
+        colors={(colors_ ?? [darkColors.accentBlue, '#1B5FA8']) as any}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={StyleSheet.absoluteFill}

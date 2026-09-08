@@ -22,7 +22,7 @@ function Arrow() {
 }
 
 // The core onboarding idea from task 1: payment method is irrelevant, only
-// the QR at checkout matters for earning GLAS. Shown as a small explainer
+// the QR at checkout matters for earning CHARM. Shown as a small explainer
 // card in the Wallet tab (rather than a one-time gate) so it's always
 // reachable for demo purposes.
 export function QrFlowDiagram() {
@@ -32,7 +32,7 @@ export function QrFlowDiagram() {
         <Ionicons name="qr-code" size={15} color={colors.accentGold} />
         <Text style={styles.title}>결제는 무엇으로 하든, 적립은 QR로</Text>
       </View>
-      <Text style={styles.body}>현금·카드·스테이블코인 중 무엇으로 결제하든 상관없어요. 계산대의 QR만 있으면 자동으로 GLAS가 적립돼요.</Text>
+      <Text style={styles.body}>현금·카드·스테이블코인 중 무엇으로 결제하든 상관없어요. 계산대의 QR만 있으면 자동으로 CHARM이 적립돼요.</Text>
 
       <View style={styles.row}>
         <FlowIcon icon="cash-outline" label="현금" tint={colors.textMuted} />
@@ -41,7 +41,7 @@ export function QrFlowDiagram() {
         <Arrow />
         <FlowIcon icon="qr-code-outline" label="QR 스캔" tint={colors.accentGold} />
         <Arrow />
-        <FlowIcon icon="flash" label="GLAS 지급" tint={colors.accentViolet} />
+        <FlowIcon icon="flash" label="CHARM 지급" tint={colors.accentBlue} />
       </View>
     </GlassSurface>
   );

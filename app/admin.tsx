@@ -35,7 +35,7 @@ export default function AdminScreen() {
         <View style={styles.section}>
           <View style={styles.headerRow}>
             <View>
-              <Text style={styles.kicker}>GLASSY FOR BUSINESS</Text>
+              <Text style={styles.kicker}>CHARM FOR BUSINESS</Text>
               <Text style={styles.title}>매장 관리자 대시보드</Text>
             </View>
             <Pressable onPress={() => router.back()} style={styles.exitBtn}>
@@ -48,7 +48,7 @@ export default function AdminScreen() {
         <View style={styles.section}>
           <GlassSurface radius={radius.lg} padding={spacing.lg} style={styles.pitchBanner}>
             <Ionicons name="sparkles" size={14} color={colors.accentGold} />
-            <Text style={styles.pitchText}>카드사도, 어떤 브랜드도 가질 수 없는 오프라인 고객 데이터입니다.</Text>
+            <Text style={styles.pitchText}>참약사가 카드사도 갖지 못한 오프라인 고객 데이터를 확보하는 화면입니다.</Text>
           </GlassSurface>
         </View>
 
@@ -75,7 +75,7 @@ export default function AdminScreen() {
             <GroupedBarChart
               groups={a.ageGenderShare}
               seriesLabels={['남성', '여성']}
-              colorA={colors.accentViolet}
+              colorA={colors.accentBlue}
               colorB={colors.accentTeal}
             />
           </SectionCard>
@@ -92,7 +92,7 @@ export default function AdminScreen() {
             <View style={styles.trendBlock}>
               <Text style={styles.trendLabel}>스테이블코인 결제 비중 성장 추이 (6개월)</Text>
               <View style={styles.trendRow}>
-                <MiniTrendLine points={a.stablecoinTrend} color={colors.accentViolet} width={220} height={44} />
+                <MiniTrendLine points={a.stablecoinTrend} color={colors.accentBlue} width={220} height={44} />
                 <Text style={styles.trendNow}>{a.stablecoinTrend[a.stablecoinTrend.length - 1]}%</Text>
               </View>
             </View>
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   trendBlock: { marginTop: spacing.lg, paddingTop: spacing.md, borderTopWidth: 1, borderTopColor: colors.borderDim },
   trendLabel: { fontFamily: fonts.bodyMed, fontSize: 10.5, color: colors.textMuted, marginBottom: 6 },
   trendRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  trendNow: { fontFamily: fonts.displaySemi, fontSize: 16, color: colors.accentViolet },
+  trendNow: { fontFamily: fonts.displaySemi, fontSize: 16, color: colors.accentBlue },
   retentionCard: { flexDirection: 'row', alignItems: 'center' },
   retentionLabel: { fontFamily: fonts.bodySemi, fontSize: 12.5, color: colors.text },
   retentionSub: { fontFamily: fonts.body, fontSize: 10.5, color: colors.textMuted, marginTop: 3, lineHeight: 14 },

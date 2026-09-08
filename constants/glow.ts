@@ -1,5 +1,5 @@
-// Glow Level tier definitions — entry is decided by USD value of held GLAS
-// (count × current mock price), NOT a raw GLAS count. Once a tier is
+// Glow Level tier definitions — entry is decided by USD value of held CHARM
+// (count × current mock price), NOT a raw CHARM count. Once a tier is
 // achieved it is kept forever, even if price later drops — see
 // store/useAppStore.ts `achievedTier` / `achievedAt` / `achievedAtPrice`.
 // This file only knows about USD thresholds; it never demotes anyone.
@@ -54,9 +54,9 @@ export const TIERS: Tier[] = [
     usdMin: 500,
     usdMax: 1499.99,
     tagline: 'Light bends beautifully on you.',
-    colors: ['#8C5CE0', '#B18CFF'],
-    accent: '#B18CFF',
-    soft: 'rgba(177,140,255,0.14)',
+    colors: ['#1B5FA8', '#4FB6E8'],
+    accent: '#4FB6E8',
+    soft: 'rgba(79,182,232,0.14)',
     discountPct: 7,
     benefits: ['전 상품 7% 상시 할인', '공동구매 우선 참여권', '전담 뷰티 컨시어지 채팅', '무료 익일배송'],
   },
@@ -67,7 +67,7 @@ export const TIERS: Tier[] = [
     usdMin: 1500,
     usdMax: null,
     tagline: 'Total clarity. Total glass.',
-    colors: ['#B18CFF', '#8C5CE0', '#E8C468', '#F5F0FF'],
+    colors: ['#4FB6E8', '#1B5FA8', '#E8C468', '#EAF6FD'],
     accent: '#E8C468',
     soft: 'rgba(232,196,104,0.16)',
     discountPct: 15,
@@ -93,29 +93,29 @@ export function getNextTier(tier: Tier): Tier | null {
   return TIERS.find((t) => t.order === tier.order + 1) ?? null;
 }
 
-// How many additional GLAS (at the given price) are needed to cross into
+// How many additional CHARM (at the given price) are needed to cross into
 // the next tier, evaluated against the tier the user has already achieved
 // (permanent — never recomputed downward).
-export function getGlasNeededAtPrice(achievedTier: Tier, totalGlas: number, priceUsd: number): number {
+export function getCharmNeededAtPrice(achievedTier: Tier, totalCharm: number, priceUsd: number): number {
   const next = getNextTier(achievedTier);
   if (!next) return 0;
-  const usdValue = totalGlas * priceUsd;
+  const usdValue = totalCharm * priceUsd;
   return Math.max(0, Math.ceil((next.usdMin - usdValue) / priceUsd));
 }
 
 export function getTierProgress(
   achievedTier: Tier,
-  totalGlas: number,
+  totalCharm: number,
   priceUsd: number
-): { tier: Tier; next: Tier | null; progress: number; remainingGlas: number; usdValue: number } {
-  const usdValue = totalGlas * priceUsd;
+): { tier: Tier; next: Tier | null; progress: number; remainingCharm: number; usdValue: number } {
+  const usdValue = totalCharm * priceUsd;
   const next = getNextTier(achievedTier);
-  if (!next) return { tier: achievedTier, next: null, progress: 1, remainingGlas: 0, usdValue };
+  if (!next) return { tier: achievedTier, next: null, progress: 1, remainingCharm: 0, usdValue };
   const span = next.usdMin - achievedTier.usdMin;
   const into = usdValue - achievedTier.usdMin;
   const progress = Math.max(0, Math.min(1, into / span));
-  const remainingGlas = getGlasNeededAtPrice(achievedTier, totalGlas, priceUsd);
-  return { tier: achievedTier, next, progress, remainingGlas, usdValue };
+  const remainingCharm = getCharmNeededAtPrice(achievedTier, totalCharm, priceUsd);
+  return { tier: achievedTier, next, progress, remainingCharm, usdValue };
 }
 
 export const STAKE_LOCKUP_DAYS = 30;

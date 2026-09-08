@@ -4,7 +4,7 @@ import Svg, { Defs, LinearGradient, Path, Stop } from 'react-native-svg';
 
 import { colors, darkColors, fonts, spacing } from '@/constants/theme';
 import { useIsDarkScope } from '@/constants/themeScope';
-import { GLAS_PRICE_HISTORY, PricePoint } from '@/data/mock';
+import { CHARM_PRICE_HISTORY, PricePoint } from '@/data/mock';
 import { formatUsd } from '@/lib/format';
 
 function buildLinePath(prices: number[], width: number, height: number, padY = 4) {
@@ -38,7 +38,7 @@ export function PriceChart({
   data,
   width = 320,
   height = 120,
-  color = colors.accentViolet,
+  color = colors.accentBlue,
   showArea = true,
   strokeWidth = 2.5,
 }: ChartProps) {
@@ -75,8 +75,8 @@ export function Sparkline({
 }
 
 export function get24hChange(): { price: number; changePct: number; up: boolean } {
-  const last = GLAS_PRICE_HISTORY[GLAS_PRICE_HISTORY.length - 1].price;
-  const prev = GLAS_PRICE_HISTORY[GLAS_PRICE_HISTORY.length - 2].price;
+  const last = CHARM_PRICE_HISTORY[CHARM_PRICE_HISTORY.length - 1].price;
+  const prev = CHARM_PRICE_HISTORY[CHARM_PRICE_HISTORY.length - 2].price;
   const changePct = ((last - prev) / prev) * 100;
   return { price: last, changePct, up: changePct >= 0 };
 }
@@ -94,7 +94,7 @@ export function PriceTicker({ showSparkline = true }: TickerProps) {
   return (
     <View style={styles.row}>
       <View style={{ flex: 1 }}>
-        <Text style={[styles.label, { color: c.textMuted }]}>$GLAS</Text>
+        <Text style={[styles.label, { color: c.textMuted }]}>$CHARM</Text>
         <Text style={[styles.price, { color: c.text }]}>{formatUsd(price)}</Text>
         <View style={styles.changeRow}>
           <Text style={[styles.changeArrow, { color: trendColor }]}>{up ? '▲' : '▼'}</Text>
@@ -102,7 +102,7 @@ export function PriceTicker({ showSparkline = true }: TickerProps) {
           <Text style={[styles.changeSub, { color: c.textFaint }]}>24H</Text>
         </View>
       </View>
-      {showSparkline && <Sparkline data={GLAS_PRICE_HISTORY.slice(-14)} color={trendColor} />}
+      {showSparkline && <Sparkline data={CHARM_PRICE_HISTORY.slice(-14)} color={trendColor} />}
     </View>
   );
 }

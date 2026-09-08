@@ -27,7 +27,7 @@ import { TabFade } from '@/components/glass/TabFade';
 import { colors, fonts, radius, spacing, TAGLINE } from '@/constants/theme';
 import { FEATURED_GROUP_BUY, PRODUCTS, REAL_PRODUCT_BADGE, USER } from '@/data/mock';
 import { formatDateShort } from '@/lib/date';
-import { formatGlas, formatSigned, formatUsd } from '@/lib/format';
+import { formatCharm, formatSigned, formatUsd } from '@/lib/format';
 import { CATEGORY_ICON } from '@/lib/productIcon';
 import { useTierStatus } from '@/lib/useTierStatus';
 import { useAppStore } from '@/store/useAppStore';
@@ -63,7 +63,7 @@ export default function HomeScreen() {
     setTimeout(() => setRefreshing(false), 1000);
   }, []);
 
-  const { tier, next, progress, totalGlas, remainingGlas, remainingDelta, price, achievedAt } = useTierStatus();
+  const { tier, next, progress, totalCharm, remainingCharm, remainingDelta, price, achievedAt } = useTierStatus();
   const isPrecision = tier.order >= 2;
   const recent = transactions.slice(0, 3);
   const catalog = PRODUCTS.slice(0, 12);
@@ -82,7 +82,7 @@ export default function HomeScreen() {
         {/* header */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.brand}>GLASSY</Text>
+            <Text style={styles.brand}>CHARM</Text>
             <Text style={styles.tagline}>{TAGLINE}</Text>
             <Text style={styles.hello}>안녕하세요, {USER.name.split(' ')[0]}님</Text>
             <Text style={styles.valueProp}>여행 중에도 AI가 컨디션을 분석하고, 결제할 때마다 등급이 오르는 K-beauty 멤버십</Text>
@@ -125,12 +125,12 @@ export default function HomeScreen() {
                 <View style={{ flex: 1 }}>
                   <Text style={styles.tierKicker}>내 피부 광채 등급</Text>
                   <Text style={[styles.tierName, { color: tier.accent }]}>{tier.name}</Text>
-                  <Text style={styles.tierBalance}>{formatGlas(totalGlas)} GLAS 보유</Text>
+                  <Text style={styles.tierBalance}>{formatCharm(totalCharm)} CHARM 보유</Text>
                   {next ? (
                     <>
                       <Text style={styles.tierRemaining}>
                         지금 시세({formatUsd(price)} 기준)로는 {next.name}까지 앞으로{' '}
-                        {formatGlas(remainingGlas)} GLAS 더 필요해요
+                        {formatCharm(remainingCharm)} CHARM 더 필요해요
                       </Text>
                       <Text style={styles.tierDelta}>어제보다 {formatSigned(remainingDelta)}개</Text>
                     </>
@@ -251,7 +251,7 @@ export default function HomeScreen() {
                       {tx.subtitle} · {formatDateShort(tx.date)}
                     </Text>
                   </View>
-                  <Text style={styles.txAmount}>+{formatGlas(tx.glasDelta)} GLAS</Text>
+                  <Text style={styles.txAmount}>+{formatCharm(tx.charmDelta)} CHARM</Text>
                 </View>
               ))}
             </GlassSurface>
@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
     overflow: 'hidden',
   },
-  progressFill: { height: '100%', backgroundColor: colors.accentViolet, borderRadius: 3 },
+  progressFill: { height: '100%', backgroundColor: colors.accentBlue, borderRadius: 3 },
   txRow: { flexDirection: 'row', alignItems: 'center', padding: spacing.lg, gap: spacing.sm },
   txDivider: { borderBottomWidth: 1, borderBottomColor: colors.borderDim },
   txTitle: { fontFamily: fonts.bodySemi, fontSize: 13, color: colors.text },

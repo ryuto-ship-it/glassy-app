@@ -1,4 +1,4 @@
-export function formatGlas(n: number): string {
+export function formatCharm(n: number): string {
   return Math.round(n).toLocaleString('en-US');
 }
 

@@ -62,7 +62,7 @@ export default function ShopScreen() {
 
   const handleBuy = (p: Product, price: number) => {
     openPayment(
-      { kind: 'product', title: p.name, subtitle: 'GLASSY Myeongdong Pharmacy', priceUSD: price },
+      { kind: 'product', title: p.name, subtitle: '참약사 명동점', priceUSD: price },
       () => {
         setJustBought(p.id);
         setTimeout(() => setJustBought(null), 1600);
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderDim,
   },
-  chipActive: { backgroundColor: colors.accentViolet, borderColor: colors.accentViolet },
+  chipActive: { backgroundColor: colors.accentBlue, borderColor: colors.accentBlue },
   chipText: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.textMuted },
   chipTextActive: { color: '#0B0B0D' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md },
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
     paddingVertical: 9,
     borderRadius: radius.pill,
-    backgroundColor: colors.accentViolet,
+    backgroundColor: colors.accentBlue,
     alignItems: 'center',
   },
   buyBtnDone: { backgroundColor: colors.success },

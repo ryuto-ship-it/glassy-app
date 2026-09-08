@@ -12,7 +12,7 @@ import { TOKENOMICS_ALLOCATION } from '@/constants/tokenomics';
 import TokenomicsChart from './TokenomicsChart';
 
 const FLYOUT_WIDTH = 250;
-const RAIL_GRADIENT = [colors.accentViolet, palette.rose] as const;
+const RAIL_GRADIENT = [colors.accentBlue, palette.rose] as const;
 
 function XIcon({ size = 14, color = '#fff' }: { size?: number; color?: string }) {
   return (
@@ -108,7 +108,7 @@ export function SidePanel({ side }: { side: 'left' | 'right' }) {
         >
           <View style={styles.flyoutCard}>
             <View style={styles.flyoutHeaderRow}>
-              <Text style={styles.flyoutTitle}>$GLAS 토큰 분배</Text>
+              <Text style={styles.flyoutTitle}>$CHARM 토큰 분배</Text>
               <Pressable onPress={toggleFlyout} style={styles.flyoutCloseBtn} hitSlop={8}>
                 <Ionicons name="close" size={12} color={colors.textMuted} />
               </Pressable>

@@ -123,7 +123,7 @@ export default function CommunityScreen() {
           <GlassSurface radius={radius.lg} padding={spacing.lg}>
             <View style={styles.activityHeaderRow}>
               <Ionicons name="flash" size={14} color={colors.accentGold} />
-              <Text style={styles.activityTitle}>활동하고 GLAS 받기</Text>
+              <Text style={styles.activityTitle}>활동하고 CHARM 받기</Text>
             </View>
             <View style={styles.activityGrid}>
               <ActivityRule label="후기 작성" amount="+15" />
@@ -157,7 +157,7 @@ export default function CommunityScreen() {
 function ActivityRule({ label, amount }: { label: string; amount: string }) {
   return (
     <View style={styles.activityItem}>
-      <Text style={styles.activityAmount}>{amount} GLAS</Text>
+      <Text style={styles.activityAmount}>{amount} CHARM</Text>
       <Text style={styles.activityLabel}>{label}</Text>
     </View>
   );
@@ -188,10 +188,10 @@ function PostCard({
           <Text style={styles.pinnedChipText}>인기 후기</Text>
         </View>
       )}
-      {post.glasEarned > 0 && (
+      {post.charmEarned > 0 && (
         <View style={styles.earnedChip}>
           <Ionicons name="add-circle" size={11} color={colors.success} />
-          <Text style={styles.earnedChipText}>+{post.glasEarned} GLAS 획득</Text>
+          <Text style={styles.earnedChipText}>+{post.charmEarned} CHARM 획득</Text>
         </View>
       )}
       <View style={styles.categoryChip}>
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  filterChipActive: { backgroundColor: colors.accentViolet, borderColor: colors.accentViolet },
+  filterChipActive: { backgroundColor: colors.accentBlue, borderColor: colors.accentBlue },
   filterChipText: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.textMuted },
   filterChipTextActive: { color: '#FFFFFF' },
   categoryChip: {
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     marginBottom: spacing.sm,
   },
-  categoryChipText: { fontFamily: fonts.bodyBold, fontSize: 9.5, color: colors.accentViolet },
+  categoryChipText: { fontFamily: fonts.bodyBold, fontSize: 9.5, color: colors.accentBlue },
   postAuthorRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   creatorBadgeTiny: {
     flexDirection: 'row',
@@ -360,9 +360,9 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: radius.pill,
     borderWidth: 1,
-    borderColor: colors.accentViolet,
+    borderColor: colors.accentBlue,
   },
-  followBtnActive: { backgroundColor: colors.accentViolet, borderColor: colors.accentViolet },
+  followBtnActive: { backgroundColor: colors.accentBlue, borderColor: colors.accentBlue },
   followBtnText: { fontFamily: fonts.bodyBold, fontSize: 11, color: colors.text },
   followBtnTextActive: { color: '#0B0B0D' },
   postImage: { width: 300, height: 220, borderRadius: radius.md, marginRight: spacing.sm },

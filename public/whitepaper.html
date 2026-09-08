@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<title>GLASSY Whitepaper v0.2 — Get That Glass Skin.</title>
-<meta name="description" content="GLASSY: AI 헬스 인텔리전스 & 데이터 기반 리텐션 플랫폼 백서 v0.2" />
+<title>CHARM Whitepaper v0.2 — Your Charmacist Rewards.</title>
+<meta name="description" content="CHARM: AI 헬스 인텔리전스 & 데이터 기반 리텐션 플랫폼 백서 v0.2" />
 <link rel="icon" href="./favicon.ico" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --violet: #7C57C7;
-    --violet-vivid: #B18CFF;
-    --violet-deep: #8C5CE0;
+    --blue: #1670B4;
+    --blue-vivid: #4FB6E8;
+    --blue-deep: #1B5FA8;
     --teal: #6FD7C4;
     --rose: #E07A9E;
     --gold: #C79A3D;
@@ -21,7 +21,7 @@
     --ink: #1A1A1A;
     --muted: #5B5B5B;
     --faint: #8A8A93;
-    --rule: rgba(124,87,199,0.16);
+    --rule: rgba(22,112,180,0.16);
     --bg: #FFFFFF;
     --nav-h: 60px;
   }
@@ -36,7 +36,7 @@
     line-height: 1.75;
     -webkit-font-smoothing: antialiased;
   }
-  a { color: var(--violet); text-decoration: none; }
+  a { color: var(--blue); text-decoration: none; }
   a:hover { text-decoration: underline; }
   button { font-family: inherit; }
 
@@ -115,7 +115,7 @@
     font-size: clamp(26px, 4.6vw, 42px);
     line-height: 1.32;
     margin: 0 0 20px;
-    background: linear-gradient(100deg, #F5F0FF 10%, var(--violet-vivid) 45%, var(--gold-bright) 85%);
+    background: linear-gradient(100deg, #EAF6FD 10%, var(--blue-vivid) 45%, var(--gold-bright) 85%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -171,7 +171,7 @@
     height: 3px;
     width: 64px;
     border-radius: 2px;
-    background: linear-gradient(90deg, var(--violet-deep), var(--gold-bright));
+    background: linear-gradient(90deg, var(--blue-deep), var(--gold-bright));
   }
 
   /* ---------- Layout ---------- */
@@ -207,8 +207,8 @@
     line-height: 1.4;
     transition: color .15s ease, border-color .15s ease;
   }
-  nav.toc a:hover { color: var(--violet); text-decoration: none; border-left-color: var(--violet-deep); }
-  nav.toc a.active { color: var(--violet); border-left-color: var(--gold-bright); font-weight: 600; }
+  nav.toc a:hover { color: var(--blue); text-decoration: none; border-left-color: var(--blue-deep); }
+  nav.toc a.active { color: var(--blue); border-left-color: var(--gold-bright); font-weight: 600; }
   nav.toc a .toc-num { font-family: 'Poppins', sans-serif; font-weight: 600; color: var(--gold); margin-right: 7px; }
 
   main { flex: 1; min-width: 0; max-width: 780px; }
@@ -230,7 +230,7 @@
     font-weight: 600;
     font-size: 13px;
     color: #fff;
-    background: linear-gradient(135deg, var(--violet-deep), var(--gold));
+    background: linear-gradient(135deg, var(--blue-deep), var(--gold));
     border-radius: 999px;
     padding: 3px 11px;
     flex-shrink: 0;
@@ -246,7 +246,7 @@
   ul.doc-list > li { position: relative; padding-left: 20px; margin-bottom: 12px; }
   ul.doc-list > li::before {
     content: ''; position: absolute; left: 2px; top: 9px; width: 6px; height: 6px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--violet-deep), var(--gold));
+    background: linear-gradient(135deg, var(--blue-deep), var(--gold));
   }
   ul.doc-list > li strong { font-weight: 600; }
   ol.doc-list-num { margin: 0 0 16px; padding: 0 0 0 22px; }
@@ -257,7 +257,7 @@
     margin: 4px 0 22px;
     padding: 16px 20px;
     border-left: 3px solid var(--gold-bright);
-    background: linear-gradient(135deg, rgba(232,196,104,0.08), rgba(124,87,199,0.04));
+    background: linear-gradient(135deg, rgba(232,196,104,0.08), rgba(22,112,180,0.04));
     border-radius: 0 12px 12px 0;
     font-size: 15px;
     font-weight: 500;
@@ -269,7 +269,7 @@
     padding: 14px 16px;
     border-radius: 12px;
     border: 1px dashed var(--rule);
-    background: rgba(124,87,199,0.035);
+    background: rgba(22,112,180,0.035);
     font-size: 14px;
     color: var(--muted);
   }
@@ -285,10 +285,10 @@
     border: 1px solid var(--rule);
   }
   .compare-old { background: #F7F6F5; color: var(--muted); }
-  .compare-new { background: linear-gradient(135deg, rgba(124,87,199,0.07), rgba(232,196,104,0.08)); color: var(--ink); }
+  .compare-new { background: linear-gradient(135deg, rgba(22,112,180,0.07), rgba(232,196,104,0.08)); color: var(--ink); }
   .compare-flag { display: flex; align-items: center; gap: 6px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 11.5px; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
   .compare-old .compare-flag { color: #A6A6A6; }
-  .compare-new .compare-flag { color: var(--violet); }
+  .compare-new .compare-flag { color: var(--blue); }
   @media (max-width: 620px) { .compare-row { grid-template-columns: 1fr; } }
 
   /* ---------- Architecture diagram (section 3) ---------- */
@@ -360,16 +360,16 @@
     background: #fff;
     transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
   }
-  .ai-card:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(124,87,199,0.14); border-color: rgba(124,87,199,0.3); }
+  .ai-card:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(22,112,180,0.14); border-color: rgba(22,112,180,0.3); }
   .ai-card-icon {
     width: 48px; height: 48px; border-radius: 13px; margin-bottom: 12px;
     display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, rgba(124,87,199,0.1), rgba(232,196,104,0.12));
-    color: var(--violet);
+    background: linear-gradient(135deg, rgba(22,112,180,0.1), rgba(232,196,104,0.12));
+    color: var(--blue);
   }
   .ai-card-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14.5px; margin: 0 0 6px; color: var(--ink); }
   .ai-card-desc { font-size: 13px; color: var(--muted); margin: 0 0 10px; line-height: 1.55; }
-  .ai-card-cta { font-size: 12px; font-weight: 600; color: var(--violet); }
+  .ai-card-cta { font-size: 12px; font-weight: 600; color: var(--blue); }
   @media (max-width: 560px) { .ai-grid { grid-template-columns: 1fr; } }
 
   .ai-modal-overlay {
@@ -396,8 +396,8 @@
   .ai-modal-icon {
     width: 84px; height: 84px; border-radius: 20px; margin: 0 auto 18px;
     display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, rgba(124,87,199,0.12), rgba(232,196,104,0.14));
-    color: var(--violet);
+    background: linear-gradient(135deg, rgba(22,112,180,0.12), rgba(232,196,104,0.14));
+    color: var(--blue);
   }
   .ai-modal-icon svg { width: 44px; height: 44px; }
   .ai-modal h3 { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 18px; text-align: center; margin: 0 0 10px; color: var(--ink); }
@@ -408,7 +408,7 @@
     display: flex; align-items: center; gap: 16px;
     border: 1px solid var(--rule); border-radius: 14px;
     padding: 18px 20px; margin: 0 0 22px;
-    background: linear-gradient(135deg, rgba(124,87,199,0.05), rgba(232,196,104,0.06));
+    background: linear-gradient(135deg, rgba(22,112,180,0.05), rgba(232,196,104,0.06));
     flex-wrap: wrap;
   }
   .supply-figure { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 22px; color: var(--ink); }
@@ -416,7 +416,7 @@
   .supply-badge {
     margin-left: auto;
     font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 11.5px;
-    color: #fff; background: linear-gradient(135deg, var(--violet-deep), var(--gold));
+    color: #fff; background: linear-gradient(135deg, var(--blue-deep), var(--gold));
     padding: 5px 12px; border-radius: 999px;
   }
 
@@ -447,18 +447,18 @@
     cursor: pointer; transition: background .15s ease;
     border: 1px solid transparent;
   }
-  .legend-row:hover, .legend-row.active { background: rgba(124,87,199,0.06); border-color: var(--rule); }
+  .legend-row:hover, .legend-row.active { background: rgba(22,112,180,0.06); border-color: var(--rule); }
   .legend-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
   .legend-label { font-size: 13.5px; color: var(--ink); flex: 1; }
-  .legend-pct { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13.5px; color: var(--violet); }
+  .legend-pct { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13.5px; color: var(--blue); }
 
   .burn-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 4px 0 8px; }
   .burn-card { border: 1px solid var(--rule); border-radius: 14px; padding: 16px; }
   .burn-icon {
     width: 34px; height: 34px; border-radius: 10px; margin-bottom: 10px;
     display: flex; align-items: center; justify-content: center;
-    background: linear-gradient(135deg, rgba(124,87,199,0.12), rgba(232,196,104,0.14));
-    color: var(--violet);
+    background: linear-gradient(135deg, rgba(22,112,180,0.12), rgba(232,196,104,0.14));
+    color: var(--blue);
   }
   .burn-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 13.5px; margin: 0 0 5px; color: var(--ink); }
   .burn-desc { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin: 0; }
@@ -473,7 +473,7 @@
   .timeline-dot {
     position: absolute; top: 0; left: 50%; transform: translateX(-50%);
     width: 18px; height: 18px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--violet-deep), var(--gold));
+    background: linear-gradient(135deg, var(--blue-deep), var(--gold));
     border: 3px solid #fff; box-shadow: 0 0 0 1px var(--rule);
     z-index: 2;
   }
@@ -518,7 +518,7 @@
     nav.toc ol { display: flex; overflow-x: auto; border-left: none; gap: 4px; padding: 0 24px; -webkit-overflow-scrolling: touch; }
     nav.toc li { flex-shrink: 0; }
     nav.toc a { border-left: none; border: 1px solid var(--rule); border-radius: 999px; padding: 6px 12px; white-space: nowrap; }
-    nav.toc a.active { background: rgba(124,87,199,0.08); }
+    nav.toc a.active { background: rgba(22,112,180,0.08); }
     main, nav.toc { padding-left: 24px; padding-right: 24px; }
     main { max-width: 100%; }
   }
@@ -539,7 +539,7 @@
     <div class="topnav-inner">
       <span class="topnav-brand">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z" fill="#E8C468"/></svg>
-        GLASSY
+        CHARM
       </span>
       <div class="topnav-links">
         <a href="./index.html">App Demo</a>
@@ -551,7 +551,7 @@
 
   <section class="mega-hero">
     <div class="mega-hero-inner">
-      <p class="mega-kicker">GLASSY Whitepaper</p>
+      <p class="mega-kicker">CHARM Whitepaper</p>
       <h2 class="mega-line">AI가 추천하고, 토큰이 보상하고,<br />데이터가 증명한다.</h2>
       <p class="mega-sub">결제 한 번마다 맞춤 추천이 쌓이고, 등급이 오르고, 리워드가 남습니다.</p>
       <p class="mega-sub">귀국 후에도 끊기지 않는 단 하나의 뷰티 헬스 멤버십.</p>
@@ -564,7 +564,7 @@
       <span class="dot">·</span>
       <span>최종 수정일 2026-08-24</span>
     </p>
-    <h1 class="title">GLASSY — Get That Glass Skin.</h1>
+    <h1 class="title">CHARM — Your Charmacist Rewards.</h1>
     <p class="tagline">AI 헬스 인텔리전스 &amp; 데이터 기반 리텐션 플랫폼</p>
     <div class="hero-rule"></div>
   </header>
@@ -593,11 +593,15 @@
           <h2 class="section-title">Abstract</h2>
         </div>
         <p class="lead">
-          GLASSY는 외국인 관광객이 한국 약국에서 결제할 때마다 $GLAS 토큰을 리워드로 받고 등급에 따라 실질 혜택을 얻는
+          CHARM은 외국인 관광객이 한국 약국에서 결제할 때마다 $CHARM 토큰을 리워드로 받고 등급에 따라 실질 혜택을 얻는
           멤버십 플랫폼이다. 단순 토큰 리워드 앱이 아니라, (1) AI 기반 개인 맞춤 헬스 인텔리전스, (2) 오프라인 관광객
           결제 데이터 확보, (3) 귀국 후에도 이어지는 글로벌 재구매 채널이라는 세 개의 축으로 설계되었다. 결제는
-          스테이블코인으로 처리해 가격 변동 리스크를 결제 경험에서 분리하고, $GLAS는 순수 유틸리티·멤버십 토큰으로
+          스테이블코인으로 처리해 가격 변동 리스크를 결제 경험에서 분리하고, $CHARM은 순수 유틸리티·멤버십 토큰으로
           기능한다.
+        </p>
+        <p class="lead">
+          본 플랫폼은 국내 트렌디 약국 체인 <strong>참약사(Charmacist)</strong>와의 협업을 기반으로, 오프라인 약국
+          결제 데이터 확보 및 AI 헬스 인텔리전스를 실증하는 것을 목표로 한다.
         </p>
       </section>
 
@@ -609,23 +613,23 @@
         <div class="compare-grid">
           <div class="compare-row">
             <div class="compare-card compare-old"><div class="compare-flag">기존 방식</div>관광객 귀국 후 재구매 채널 단절, 브랜드 로열티 연속성 없음</div>
-            <div class="compare-card compare-new"><div class="compare-flag">GLASSY</div>귀국 후에도 앱에서 등급이 유지되고, 해외 재구매 배송비까지 무료로 이어지는 글로벌 채널</div>
+            <div class="compare-card compare-new"><div class="compare-flag">CHARM</div>귀국 후에도 앱에서 등급이 유지되고, 해외 재구매 배송비까지 무료로 이어지는 글로벌 채널</div>
           </div>
           <div class="compare-row">
             <div class="compare-card compare-old"><div class="compare-flag">기존 방식</div>국가·매장별 멤버십 파편화</div>
-            <div class="compare-card compare-new"><div class="compare-flag">GLASSY</div>단일 $GLAS 등급 시스템이 모든 가맹 매장에 동일하게 적용</div>
+            <div class="compare-card compare-new"><div class="compare-flag">CHARM</div>단일 $CHARM 등급 시스템이 모든 가맹 매장에 동일하게 적용</div>
           </div>
           <div class="compare-row">
             <div class="compare-card compare-old"><div class="compare-flag">기존 방식</div>해외 상품 정보 접근성 부족 (자국어 설명 부재, 성분·복용법 확인 어려움)</div>
-            <div class="compare-card compare-new"><div class="compare-flag">GLASSY</div>제품 스캔 한 번으로 효능·복용법·주의사항을 이용자의 언어로 즉시 제공</div>
+            <div class="compare-card compare-new"><div class="compare-flag">CHARM</div>제품 스캔 한 번으로 효능·복용법·주의사항을 이용자의 언어로 즉시 제공</div>
           </div>
           <div class="compare-row">
             <div class="compare-card compare-old"><div class="compare-flag">기존 방식</div>개인 맞춤 건강기능식품 선택 의사결정 비용 높음</div>
-            <div class="compare-card compare-new"><div class="compare-flag">GLASSY</div>셀프 체크와 웨어러블 연동 데이터를 기반으로 AI가 맞춤 제품을 추천</div>
+            <div class="compare-card compare-new"><div class="compare-flag">CHARM</div>셀프 체크와 웨어러블 연동 데이터를 기반으로 AI가 맞춤 제품을 추천</div>
           </div>
           <div class="compare-row">
             <div class="compare-card compare-old"><div class="compare-flag">기존 방식</div>오프라인 매장은 관광객 결제 데이터를 사실상 보유하지 못함 — 카드사·POS 데이터는 매출 통계만 제공</div>
-            <div class="compare-card compare-new"><div class="compare-flag">GLASSY</div>QR 적립으로 결제수단 무관하게 데이터가 한 곳에 모이고, 매장 운영 대시보드로 인사이트를 제공</div>
+            <div class="compare-card compare-new"><div class="compare-flag">CHARM</div>QR 적립으로 결제수단 무관하게 데이터가 한 곳에 모이고, 매장 운영 대시보드로 인사이트를 제공</div>
           </div>
         </div>
       </section>
@@ -635,12 +639,12 @@
           <span class="section-num">3</span>
           <h2 class="section-title">솔루션 구조</h2>
         </div>
-        <p>GLASSY는 네 개의 레이어로 구성된다. 각 레이어를 눌러 상세 설명을 확인할 수 있다.</p>
+        <p>CHARM은 네 개의 레이어로 구성된다. 각 레이어를 눌러 상세 설명을 확인할 수 있다.</p>
 
         <div class="layer-stack" id="layerStack">
           <div class="layer-box">
             <button class="layer-head">
-              <span class="layer-icon" style="background:linear-gradient(135deg,#8C5CE0,#B18CFF);">
+              <span class="layer-icon" style="background:linear-gradient(135deg,#1B5FA8,#4FB6E8);">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 10l9-6 9 6-9 6-9-6z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M7 12.5V17c0 1 2.2 2 5 2s5-1 5-2v-4.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </span>
               <span>
@@ -656,23 +660,23 @@
 
           <div class="layer-box">
             <button class="layer-head">
-              <span class="layer-icon" style="background:linear-gradient(135deg,#B18CFF,#E8C468);">
+              <span class="layer-icon" style="background:linear-gradient(135deg,#4FB6E8,#E8C468);">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.6 5.8 6.2.6-4.7 4.2 1.4 6.1L12 15.8 6.5 18.7l1.4-6.1-4.7-4.2 6.2-.6L12 2z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
               </span>
               <span>
                 <p class="layer-title">등급·멤버십 레이어</p>
-                <p class="layer-summary">보유 $GLAS 가치 기준 등급 판정, 등급별 혜택 차등</p>
+                <p class="layer-summary">보유 $CHARM 가치 기준 등급 판정, 등급별 혜택 차등</p>
               </span>
               <svg class="layer-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <div class="layer-detail"><div class="layer-detail-inner">보유 $GLAS의 현재 달러 가치 기준으로 등급을 판정하고, 등급별 할인·무료배송·AI 기능을 차등 제공한다.</div></div>
+            <div class="layer-detail"><div class="layer-detail-inner">보유 $CHARM의 현재 달러 가치 기준으로 등급을 판정하고, 등급별 할인·무료배송·AI 기능을 차등 제공한다.</div></div>
           </div>
 
           <div class="layer-connector"><svg width="16" height="20" viewBox="0 0 16 20"><path d="M8 0v16M2 12l6 6 6-6" stroke="var(--rule)" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
 
           <div class="layer-box">
             <button class="layer-head">
-              <span class="layer-icon" style="background:linear-gradient(135deg,#6FD7C4,#8C5CE0);">
+              <span class="layer-icon" style="background:linear-gradient(135deg,#6FD7C4,#1B5FA8);">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="#fff" stroke-width="1.6"/><circle cx="12" cy="12" r="8.5" stroke="#fff" stroke-width="1.6"/><path d="M12 3.5V6M12 18v2.5M3.5 12H6M18 12h2.5" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
               </span>
               <span>
@@ -711,14 +715,14 @@
         <h3 class="sub-title">4-1. 획득 경로</h3>
         <ul class="doc-list">
           <li><strong>구매 적립</strong> — 결제액에 비례해 자동 지급 (결제수단 무관, QR 적립 방식으로 통일)</li>
-          <li><strong>등급 즉시구매</strong> — 스테이블코인 또는 신용카드(온램프 연동)로 직접 결제해 즉시 등급에 상당하는 $GLAS 획득</li>
+          <li><strong>등급 즉시구매</strong> — 스테이블코인 또는 신용카드(온램프 연동)로 직접 결제해 즉시 등급에 상당하는 $CHARM 획득</li>
           <li><strong>스테이킹 매수</strong> — 거래소에서 직접 매수 후 지갑에 예치, 최소 30일 락업 후 등급 산정에 반영</li>
           <li><strong>커뮤니티 리워드</strong> — 후기 작성, 소셜 인게이지먼트에 대한 리워드 (구매 리워드 대비 낮은 가중치, 일일 한도 적용)</li>
         </ul>
 
         <h3 class="sub-title">4-2. 사용 경로</h3>
         <ul class="doc-list">
-          <li>약국 매장 및 앱 내 재구매 시 <strong>$GLAS 직접 결제</strong> 가능 (결제 시점 시세로 실시간 환산, 소요 수량은 시세에 따라 변동하되 상품 가치는 항상 동일하게 유지)</li>
+          <li>약국 매장 및 앱 내 재구매 시 <strong>$CHARM 직접 결제</strong> 가능 (결제 시점 시세로 실시간 환산, 소요 수량은 시세에 따라 변동하되 상품 가치는 항상 동일하게 유지)</li>
           <li>등급별 할인 자동 적용</li>
           <li>귀국 후 해외 재구매 배송비 무료 (일정 등급 이상)</li>
         </ul>
@@ -733,13 +737,13 @@
             <p class="tier-range">$0 – $99</p>
             <p class="tier-benefit">기본 구매 리워드 적립 시작</p>
           </div>
-          <div class="tier-card" style="background:linear-gradient(160deg,#A996CF,#8C5CE0);">
+          <div class="tier-card" style="background:linear-gradient(160deg,#A996CF,#1B5FA8);">
             <div class="tier-badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M5 8l7-5 7 5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
             <p class="tier-name">Dewy Glow</p>
             <p class="tier-range">$100 – $499</p>
             <p class="tier-benefit">매장 즉시 할인 적용 시작</p>
           </div>
-          <div class="tier-card" style="background:linear-gradient(160deg,#8C5CE0,#6A3FBF);">
+          <div class="tier-card" style="background:linear-gradient(160deg,#1B5FA8,#6A3FBF);">
             <div class="tier-badge"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 12h4l3 8 4-16 3 8h4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
             <p class="tier-name">Radiant Glass</p>
             <p class="tier-range">$500 – $1,499</p>
@@ -860,7 +864,7 @@
 
         <div class="supply-callout">
           <div>
-            <div class="supply-figure">1,000,000,000 $GLAS</div>
+            <div class="supply-figure">1,000,000,000 $CHARM</div>
             <div class="supply-label">총 발행량</div>
           </div>
           <div class="supply-badge">고정 발행량 · 추가 발행 없음</div>
@@ -964,7 +968,7 @@
   </div>
 
   <footer>
-    GLASSY — Get That Glass Skin. · $GLAS Whitepaper v0.2
+    CHARM — Your Charmacist Rewards. · $CHARM Whitepaper v0.2
   </footer>
 
   <div class="ai-modal-overlay" id="aiModalOverlay">
@@ -1051,8 +1055,8 @@
 
   // ---------- Tokenomics donut chart ----------
   var TOKENOMICS = [
-    { label: '커뮤니티 리워드 풀', pct: 40, color: '#B18CFF', desc: '구매·스테이킹·활동 리워드 재원' },
-    { label: '스테이킹 인센티브', pct: 20, color: '#8C5CE0', desc: '락업 유도, 4년 선형 방출' },
+    { label: '커뮤니티 리워드 풀', pct: 40, color: '#4FB6E8', desc: '구매·스테이킹·활동 리워드 재원' },
+    { label: '스테이킹 인센티브', pct: 20, color: '#1B5FA8', desc: '락업 유도, 4년 선형 방출' },
     { label: '팀 · 파트너 (INITECH)', pct: 15, color: '#6FD7C4', desc: '1년 클리프, 3년 베스팅' },
     { label: '트레저리 (배송비 보조)', pct: 10, color: '#E07A9E', desc: '무료배송 혜택 재원, 별도 지갑에서 관리' },
     { label: '유동성 · 상장', pct: 10, color: '#E8C468', desc: 'DEX·CEX 유동성 공급' },

@@ -1,4 +1,4 @@
-// Rule-based "AI" health-intelligence engine for the GLASSY demo.
+// Rule-based "AI" health-intelligence engine for the CHARM demo.
 // There is no model call here — condition/goal selections are mapped
 // through a fixed lookup table to produce a deterministic report. It is
 // built to feel like an AI analysis, but it's pure data plumbing.

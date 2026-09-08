@@ -11,7 +11,7 @@ import { PillButton } from '@/components/glass/PillButton';
 // moment regardless of the app's light default elsewhere.
 import { darkBackgroundGradient, darkColors as colors, fonts, radius, spacing, TAGLINE } from '@/constants/theme';
 import { DarkScope } from '@/constants/themeScope';
-import { WELCOME_BONUS_GLAS, useAppStore } from '@/store/useAppStore';
+import { WELCOME_BONUS_CHARM, useAppStore } from '@/store/useAppStore';
 import { useUiStore } from '@/store/useUiStore';
 
 type Step = 'intro' | 'joining' | 'reward';
@@ -57,11 +57,11 @@ export default function WelcomeScreen() {
           </View>
           <Text style={styles.scannedText}>매장 QR 스캔 완료</Text>
 
-          <Text style={styles.brand}>GLASSY</Text>
+          <Text style={styles.brand}>CHARM</Text>
           <Text style={styles.tagline}>{TAGLINE}</Text>
 
           <Text style={styles.headline}>지금 가입하면{'\n'}즉시 리워드 지급</Text>
-          <Text style={styles.sub}>간편 가입하고 웰컴 GLAS를 바로 받아보세요. 결제수단은 나중에 무엇을 쓰든 상관없어요.</Text>
+          <Text style={styles.sub}>간편 가입하고 웰컴 CHARM을 바로 받아보세요. 결제수단은 나중에 무엇을 쓰든 상관없어요.</Text>
 
           <View style={styles.btnCol}>
             <Pressable style={styles.oauthBtn} onPress={() => startSignup('google')}>
@@ -78,7 +78,7 @@ export default function WelcomeScreen() {
 
       {step === 'joining' && (
         <View style={styles.centerWrap}>
-          <ActivityIndicator color={colors.accentViolet} size="large" />
+          <ActivityIndicator color={colors.accentBlue} size="large" />
           <Text style={styles.joiningText}>가입 처리 중...</Text>
         </View>
       )}
@@ -87,21 +87,21 @@ export default function WelcomeScreen() {
         <View style={styles.centerWrap}>
           <Animated.View entering={ZoomIn.duration(420).springify()}>
             <View style={styles.rewardIconWrap}>
-              <LinearGradient colors={['#B18CFF', '#E8C468']} style={StyleSheet.absoluteFill} />
+              <LinearGradient colors={['#4FB6E8', '#E8C468']} style={StyleSheet.absoluteFill} />
               <Ionicons name="gift" size={34} color="#0B0B0D" />
             </View>
           </Animated.View>
           <Animated.Text entering={FadeInDown.delay(150)} style={styles.rewardAmount}>
-            +{WELCOME_BONUS_GLAS} GLAS
+            +{WELCOME_BONUS_CHARM} CHARM
           </Animated.Text>
           <Animated.Text entering={FadeInDown.delay(220)} style={styles.rewardTitle}>
             웰컴 리워드 지급 완료!
           </Animated.Text>
           <Animated.Text entering={FadeInDown.delay(280)} style={styles.rewardSub}>
-            GLASSY 멤버십이 시작됐어요. 이제 어떤 방식으로 결제하든 GLAS가 쌓여요.
+            CHARM 멤버십이 시작됐어요. 이제 어떤 방식으로 결제하든 CHARM이 쌓여요.
           </Animated.Text>
           <Animated.View entering={FadeInDown.delay(340)} style={{ width: '100%', marginTop: spacing.xl }}>
-            <PillButton label="홈으로 이동" onPress={goHome} colors_={['#B18CFF', '#8C5CE0']} />
+            <PillButton label="홈으로 이동" onPress={goHome} colors_={['#4FB6E8', '#1B5FA8']} />
           </Animated.View>
         </View>
       )}

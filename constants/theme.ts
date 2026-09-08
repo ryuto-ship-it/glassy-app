@@ -1,4 +1,4 @@
-// GLASSY design system.
+// CHARM design system.
 //
 // The app is light-by-default now — a premium beauty-commerce look (think
 // Sephora/iHerb) — with a handful of screens deliberately kept on the
@@ -20,16 +20,16 @@ export const palette = {
   white: '#FFFFFF',
   fog: '#C7C7CE',
   fogDim: '#8A8A93',
-  // Vivid brand violet — used for dark-scope surfaces and for every
+  // Vivid brand blue — used for dark-scope surfaces and for every
   // gradient CTA fill (buttons, hero banners) regardless of page theme,
   // since accent fills read fine on either background.
-  violet: '#B18CFF',
-  violetDeep: '#8C5CE0',
-  violetDim: '#5A4A82',
-  // Slightly desaturated violet tuned for the light theme's text/icon
-  // accents (the vivid violet above is too pale for good contrast on a
+  blue: '#4FB6E8',
+  blueDeep: '#1B5FA8',
+  blueDim: '#2C4A68',
+  // Slightly desaturated blue tuned for the light theme's text/icon
+  // accents (the vivid blue above is too pale for good contrast on a
   // near-white background).
-  violetOnLight: '#7C57C7',
+  blueOnLight: '#1670B4',
   gold: '#E8C468',
   goldDeep: '#C79A3D',
   rose: '#E07A9E',
@@ -37,14 +37,14 @@ export const palette = {
   tealOnLight: '#2E9C89',
 };
 
-export const holoGradient = ['#B18CFF', '#8C5CE0', '#E8C468', '#F5F0FF'] as const;
+export const holoGradient = ['#4FB6E8', '#1B5FA8', '#E8C468', '#EAF6FD'] as const;
 
-// Accent gradients — deliberately theme-independent; a vivid violet/gold
+// Accent gradients — deliberately theme-independent; a vivid blue/gold
 // CTA fill looks right whether it's sitting on the light or dark base.
 export const gradients = {
   card: ['rgba(255,255,255,0.06)', 'rgba(255,255,255,0.02)'] as const,
-  violetGold: ['#B18CFF', '#E8C468'] as const,
-  violet: ['#8C5CE0', '#B18CFF'] as const,
+  blueGold: ['#4FB6E8', '#E8C468'] as const,
+  blue: ['#1B5FA8', '#4FB6E8'] as const,
   holo: holoGradient,
   panelHeader: ['#1D1D22', '#16161A'] as const,
 };
@@ -63,7 +63,7 @@ export type ColorTokens = {
   textMuted: string;
   textFaint: string;
   textOnDark: string;
-  accentViolet: string;
+  accentBlue: string;
   accentGold: string;
   accentTeal: string;
   border: string;
@@ -86,7 +86,7 @@ export const colors: ColorTokens = {
   textMuted: '#6B6B6B',
   textFaint: '#9B9B9B',
   textOnDark: '#F5F5F7',
-  accentViolet: palette.violetOnLight,
+  accentBlue: palette.blueOnLight,
   accentGold: palette.gold,
   accentTeal: palette.tealOnLight,
   border: 'rgba(0,0,0,0.08)',
@@ -110,7 +110,7 @@ export const darkColors: ColorTokens = {
   textMuted: palette.fog,
   textFaint: palette.fogDim,
   textOnDark: '#F5F5F7',
-  accentViolet: palette.violet,
+  accentBlue: palette.blue,
   accentGold: palette.gold,
   accentTeal: palette.teal,
   border: 'rgba(255,255,255,0.08)',
@@ -185,6 +185,6 @@ export const darkShadow = {
   },
 };
 
-export const TOKEN_TICKER = '$GLAS';
-export const APP_NAME = 'GLASSY';
-export const TAGLINE = 'Get That Glass Skin.';
+export const TOKEN_TICKER = '$CHARM';
+export const APP_NAME = 'CHARM';
+export const TAGLINE = 'Your Charmacist Rewards.';

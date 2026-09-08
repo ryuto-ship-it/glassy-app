@@ -72,9 +72,9 @@ export default function WearableScreen() {
                   {PROVIDERS.map((p) => (
                     <Pressable key={p.id} onPress={() => startConnect(p.id)} style={styles.providerBtn} disabled={!!connecting}>
                       {connecting === p.id ? (
-                        <ActivityIndicator color={colors.accentViolet} size="small" />
+                        <ActivityIndicator color={colors.accentBlue} size="small" />
                       ) : (
-                        <Ionicons name={p.icon} size={20} color={colors.accentViolet} />
+                        <Ionicons name={p.icon} size={20} color={colors.accentBlue} />
                       )}
                       <Text style={styles.providerLabel}>{connecting === p.id ? '연동 중...' : p.label}</Text>
                     </Pressable>
@@ -105,7 +105,7 @@ export default function WearableScreen() {
                       cx={RING_SIZE / 2}
                       cy={RING_SIZE / 2}
                       r={RING_RADIUS}
-                      stroke={colors.accentViolet}
+                      stroke={colors.accentBlue}
                       strokeWidth={RING_STROKE}
                       fill="none"
                       strokeLinecap="round"
@@ -133,7 +133,7 @@ export default function WearableScreen() {
                 value={`${today.heartRateAvg} bpm`}
                 sub={`최고 ${today.heartRateMax} · 최저 ${today.heartRateMin}`}
                 points={WEARABLE_VITALS.map((v) => v.heartRateAvg)}
-                color={colors.accentViolet}
+                color={colors.accentBlue}
               />
               <MetricCard
                 label="수면"
@@ -196,7 +196,7 @@ export default function WearableScreen() {
                 onPress={() =>
                   openPayment({ kind: 'product', title: `내 컨디션 추천 제품 ${recProducts.length}건`, subtitle: '웨어러블 연동 분석', priceUSD: bundlePrice })
                 }
-                colors_={['#B18CFF', '#8C5CE0']}
+                colors_={['#4FB6E8', '#1B5FA8']}
                 style={{ marginTop: spacing.lg }}
               />
             </View>
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
   surveySub: { fontFamily: fonts.body, fontSize: 11.5, color: colors.textMuted, marginTop: 6, lineHeight: 16 },
   gaugeWrap: { width: RING_SIZE, height: RING_SIZE, alignItems: 'center', justifyContent: 'center' },
   gaugeCenter: { position: 'absolute', alignItems: 'center' },
-  gaugeValue: { fontFamily: fonts.display, fontSize: 28, color: colors.accentViolet },
+  gaugeValue: { fontFamily: fonts.display, fontSize: 28, color: colors.accentBlue },
   gaugeLabel: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.textMuted, marginTop: 2 },
   gaugeCaption: { fontFamily: fonts.bodySemi, fontSize: 12.5, color: colors.text, marginTop: spacing.md },
   syncRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 6 },

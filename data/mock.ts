@@ -1,14 +1,14 @@
-// All mock data for the GLASSY demo — no backend, everything lives here.
+// All mock data for the CHARM demo — no backend, everything lives here.
 
 import { TierId } from '@/constants/glow';
 
-// Mock $GLAS market price. Tier ENTRY is decided by (held GLAS × this price),
+// Mock $CHARM market price. Tier ENTRY is decided by (held CHARM × this price),
 // but once a tier is achieved it is kept forever regardless of later price
 // moves — see USER.achievedTier below and store/useAppStore.ts.
-export const GLAS_PRICE_USD = 0.42;
-// A second price point purely so the UI can show how many GLAS "you'd still
+export const CHARM_PRICE_USD = 0.42;
+// A second price point purely so the UI can show how many CHARM "you'd still
 // need today" has moved since yesterday's price.
-export const GLAS_PRICE_USD_YESTERDAY = 0.44;
+export const CHARM_PRICE_USD_YESTERDAY = 0.44;
 
 function daysAgoIso(daysAgo: number): string {
   const d = new Date();
@@ -16,8 +16,8 @@ function daysAgoIso(daysAgo: number): string {
   return d.toISOString().slice(0, 10);
 }
 
-// 30 trading days of mock $GLAS price action. The last two points are
-// anchored to GLAS_PRICE_USD / GLAS_PRICE_USD_YESTERDAY so every screen
+// 30 trading days of mock $CHARM price action. The last two points are
+// anchored to CHARM_PRICE_USD / CHARM_PRICE_USD_YESTERDAY so every screen
 // agrees on "today" and "24h ago".
 const PRICE_SEQUENCE = [
   0.38, 0.385, 0.39, 0.4, 0.395, 0.405, 0.415, 0.41, 0.42, 0.435, 0.445, 0.455,
@@ -27,7 +27,7 @@ const PRICE_SEQUENCE = [
 
 export type PricePoint = { date: string; price: number };
 
-export const GLAS_PRICE_HISTORY: PricePoint[] = PRICE_SEQUENCE.map((price, i) => ({
+export const CHARM_PRICE_HISTORY: PricePoint[] = PRICE_SEQUENCE.map((price, i) => ({
   date: daysAgoIso(PRICE_SEQUENCE.length - 1 - i),
   price,
 }));
@@ -46,7 +46,7 @@ const PRICE_SEQUENCE_24H = [
   0.421, 0.42,
 ];
 
-export const GLAS_PRICE_HISTORY_24H: PricePoint[] = PRICE_SEQUENCE_24H.map((price, i) => ({
+export const CHARM_PRICE_HISTORY_24H: PricePoint[] = PRICE_SEQUENCE_24H.map((price, i) => ({
   date: hoursAgoIso(PRICE_SEQUENCE_24H.length - 1 - i),
   price,
 }));
@@ -65,7 +65,7 @@ export type Product = {
   reviewCount: number;
   isRepurchase?: boolean;
   // A real, widely-known Korean pharmacy product (as opposed to the
-  // fictional GLASSY-brand catalog) — shown with a "약국 인기 스테디셀러"
+  // fictional CHARM-brand catalog) — shown with a "약국 인기 스테디셀러"
   // trust badge and surfaced first in Home/Shop. Illustrated the same way
   // as every other product (no real product photography/logos bundled —
   // see PRODUCTS below), with the real product name kept as-is.
@@ -89,7 +89,7 @@ export const CATEGORY_LABEL: Record<ProductCategory, string> = {
 
 // Real, widely-known Korean pharmacy products that foreign tourists
 // actually buy — used as a trust signal ("this app is connected to what's
-// really on the shelf"), not a replacement for the fictional GLASSY catalog
+// really on the shelf"), not a replacement for the fictional CHARM catalog
 // below. Illustrated with the same custom silhouette art as every other
 // product (no scraped photography or brand logos), with real product names
 // kept exactly as sold.
@@ -544,11 +544,11 @@ export const SCAN_PRODUCTS: ScanProduct[] = [
 
 export type Transaction = {
   id: string;
-  type: 'purchase' | 'stake' | 'unstake' | 'buy' | 'post_reward' | 'tier_purchase' | 'purchase_glas' | 'welcome_bonus';
+  type: 'purchase' | 'stake' | 'unstake' | 'buy' | 'post_reward' | 'tier_purchase' | 'purchase_charm' | 'welcome_bonus';
   title: string;
   subtitle: string;
   date: string; // ISO
-  glasDelta: number; // always a positive magnitude — see `direction`
+  charmDelta: number; // always a positive magnitude — see `direction`
   direction?: 'in' | 'out'; // defaults to 'in' when omitted
   usdAmount?: number;
 };
@@ -558,98 +558,98 @@ export const TRANSACTIONS: Transaction[] = [
     id: 't1',
     type: 'purchase',
     title: 'Ceramide Barrier Cream + Vitamin C 1000',
-    subtitle: 'GLASSY Myeongdong Pharmacy',
+    subtitle: '참약사 명동점',
     date: '2026-08-05',
-    glasDelta: 220,
+    charmDelta: 220,
     usdAmount: 55,
   },
   {
     id: 't2',
     type: 'purchase',
     title: 'Snail Mucin 96% Essence Mask',
-    subtitle: 'GLASSY Hongdae Pharmacy',
+    subtitle: '참약사 홍대점',
     date: '2026-07-22',
-    glasDelta: 150,
+    charmDelta: 150,
     usdAmount: 37.5,
   },
   {
     id: 't3',
     type: 'stake',
-    title: '$GLAS 스테이킹 예치',
+    title: '$CHARM 스테이킹 예치',
     subtitle: '30일 락업 시작',
     date: '2026-07-05',
-    glasDelta: 650,
+    charmDelta: 650,
   },
   {
     id: 't4',
     type: 'purchase',
     title: 'Mineral Sunscreen SPF50+',
-    subtitle: 'GLASSY Itaewon Pharmacy',
+    subtitle: '참약사 이태원점',
     date: '2026-07-10',
-    glasDelta: 90,
+    charmDelta: 90,
     usdAmount: 22.5,
   },
   {
     id: 't5',
     type: 'purchase',
     title: 'Marine Collagen Jelly Ampoule x2',
-    subtitle: 'GLASSY Myeongdong Pharmacy',
+    subtitle: '참약사 명동점',
     date: '2026-06-28',
-    glasDelta: 180,
+    charmDelta: 180,
     usdAmount: 45,
   },
   {
     id: 't6',
     type: 'purchase',
     title: 'Probiotic Skin-Gut Capsules',
-    subtitle: 'GLASSY Hongdae Pharmacy',
+    subtitle: '참약사 홍대점',
     date: '2026-06-14',
-    glasDelta: 60,
+    charmDelta: 60,
     usdAmount: 15,
   },
   {
     id: 't7',
     type: 'buy',
-    title: '$GLAS 거래소 매수',
-    subtitle: 'GLASSY EX 체결',
+    title: '$CHARM 거래소 매수',
+    subtitle: 'CHARM EX 체결',
     date: '2026-06-20',
-    glasDelta: 650,
+    charmDelta: 650,
     usdAmount: 273,
   },
   {
     id: 't8',
     type: 'purchase',
     title: 'Centella Calming Ampoule',
-    subtitle: 'GLASSY Myeongdong Pharmacy',
+    subtitle: '참약사 명동점',
     date: '2026-05-30',
-    glasDelta: 140,
+    charmDelta: 140,
     usdAmount: 35,
   },
   {
     id: 't9',
     type: 'purchase',
     title: 'Biotin & Glow Multivitamin',
-    subtitle: 'GLASSY Gangnam Pharmacy',
+    subtitle: '참약사 강남점',
     date: '2026-05-12',
-    glasDelta: 75,
+    charmDelta: 75,
     usdAmount: 18.75,
   },
   {
     id: 't10',
     type: 'purchase',
     title: 'Rice Bran Brightening Mask + Vitamin C Serum',
-    subtitle: 'GLASSY Itaewon Pharmacy',
+    subtitle: '참약사 이태원점',
     date: '2026-04-25',
-    glasDelta: 200,
+    charmDelta: 200,
     usdAmount: 50,
   },
   {
     id: 't11',
     type: 'purchase',
     title: 'Marine Collagen Peptide Powder',
-    subtitle: 'GLASSY Gangnam Pharmacy',
+    subtitle: '참약사 강남점',
     date: '2026-04-02',
-    glasDelta: 85,
+    charmDelta: 85,
     usdAmount: 21.25,
   },
 ];
@@ -677,14 +677,14 @@ export const USER = {
   name: 'Declan Murphy',
   location: 'Dublin, Ireland',
   avatar: 'https://i.pravatar.cc/300?img=15',
-  purchaseEarnedGlas: 1200,
+  purchaseEarnedCharm: 1200,
   usdtBalance: 2300,
   usdcBalance: 480,
   followers: 120,
   following: 76,
   memberSince: '2025-11-02',
   // Permanent tier record — set once on promotion, never re-evaluated
-  // downward even if $GLAS price later drops.
+  // downward even if $CHARM price later drops.
   achievedTier: 'radiant-glass' as TierId,
   achievedAt: '2026-06-20T09:00:00.000Z',
   achievedAtPrice: 0.45,
@@ -700,7 +700,7 @@ export const USER = {
 
 // Mock analytics for the store-owner admin dashboard — entirely
 // illustrative, standing in for real POS/CRM data a pharmacy would only
-// get by adopting GLASSY.
+// get by adopting CHARM.
 export const ADMIN_ANALYTICS = {
   totalUsers: 12480,
   monthlyVisitors: 3240,
@@ -708,11 +708,11 @@ export const ADMIN_ANALYTICS = {
   qrRedemptionRatePct: 87,
   returningCustomerPct: 41,
   countryShare: [
-    { label: '🇻🇳 베트남', value: 28, color: '#B18CFF' },
+    { label: '🇻🇳 베트남', value: 28, color: '#4FB6E8' },
     { label: '🇨🇳 중국', value: 24, color: '#E8C468' },
     { label: '🇺🇸 미국', value: 18, color: '#6FD7C4' },
     { label: '🇯🇵 일본', value: 15, color: '#E07A9E' },
-    { label: '기타', value: 15, color: '#5A4A82' },
+    { label: '기타', value: 15, color: '#2C4A68' },
   ],
   ageGenderShare: [
     { label: '20대', a: 14, b: 18 },
@@ -721,18 +721,18 @@ export const ADMIN_ANALYTICS = {
     { label: '50대+', a: 5, b: 6 },
   ],
   paymentMethodShare: [
-    { label: '스테이블코인', value: 33, color: '#B18CFF' },
+    { label: '스테이블코인', value: 33, color: '#4FB6E8' },
     { label: '카드', value: 30, color: '#6FD7C4' },
     { label: '현금', value: 22, color: '#E07A9E' },
-    { label: '$GLAS', value: 15, color: '#E8C468' },
+    { label: '$CHARM', value: 15, color: '#E8C468' },
   ],
   stablecoinTrend: [12, 18, 22, 27, 30, 33],
   topCategories: [
-    { label: '스킨케어', value: 32, color: '#B18CFF' },
+    { label: '스킨케어', value: 32, color: '#4FB6E8' },
     { label: '비타민', value: 22, color: '#E8C468' },
     { label: '건기식', value: 20, color: '#6FD7C4' },
     { label: '앰플', value: 16, color: '#E07A9E' },
-    { label: '기타', value: 10, color: '#5A4A82' },
+    { label: '기타', value: 10, color: '#2C4A68' },
   ],
 };
 
@@ -745,7 +745,7 @@ export const POST_CATEGORY_LABEL: Record<PostCategory, string> = {
   groupbuy: '공동구매',
 };
 
-// Followers needed to unlock "인플루언서 공동구매 개설" — GLASSY's seed user
+// Followers needed to unlock "인플루언서 공동구매 개설" — CHARM's seed user
 // (120 followers) is intentionally just above this so the feature is
 // demoable without switching accounts.
 export const INFLUENCER_FOLLOWER_THRESHOLD = 100;
@@ -764,7 +764,7 @@ export type CommunityPost = {
   isFollowing: boolean;
   createdAt: string;
   tags: string[];
-  glasEarned: number;
+  charmEarned: number;
   showEarnedCaption?: boolean;
   // Defaults to 'review' when omitted (all the original seed posts).
   category?: PostCategory;
@@ -781,7 +781,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     location: 'Lisbon, Portugal',
     images: ['feed1'],
     caption:
-      '3주째 Centella Calming Ampoule 쓰는 중인데 진짜 붉음증이 가라앉았어요. Radiant Glass 등급 찍고 할인까지 받아서 계속 재구매 중입니다. 이 후기로 18 GLAS 받았어요.',
+      '3주째 Centella Calming Ampoule 쓰는 중인데 진짜 붉음증이 가라앉았어요. Radiant Glass 등급 찍고 할인까지 받아서 계속 재구매 중입니다. 이 후기로 18 CHARM 받았어요.',
     likes: 342,
     comments: [
       { id: 'c1-1', author: 'minji_seoul', text: '저도 이거 쓰는데 완전 공감이요!' },
@@ -791,7 +791,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     isFollowing: true,
     createdAt: '2026-08-18',
     tags: ['앰플', '진정케어'],
-    glasEarned: 18,
+    charmEarned: 18,
     showEarnedCaption: true,
   },
   {
@@ -801,14 +801,14 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     location: 'Osaka, Japan',
     images: ['feed2', 'feed2b'],
     caption:
-      'Glass Skin 등급 드디어 달성했어요. 홀로그램 이펙트 실제로 보니 스테이킹 30일 기다린 보람이 있네요. 이 후기로 25 GLAS 받았어요.',
+      'Glass Skin 등급 드디어 달성했어요. 홀로그램 이펙트 실제로 보니 스테이킹 30일 기다린 보람이 있네요. 이 후기로 25 CHARM 받았어요.',
     likes: 891,
     comments: [{ id: 'c2-1', author: 'k.beauty.fan', text: '축하합니다!! 저도 목표예요' }],
     pinned: true,
     isFollowing: false,
     createdAt: '2026-08-16',
     tags: ['등급업', 'GlassSkin'],
-    glasEarned: 25,
+    charmEarned: 25,
     showEarnedCaption: true,
   },
   {
@@ -823,7 +823,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     isFollowing: true,
     createdAt: '2026-08-14',
     tags: ['마스크', '민감케어'],
-    glasEarned: 12,
+    charmEarned: 12,
   },
   {
     id: 'c4',
@@ -832,13 +832,13 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     location: 'Dublin, Ireland',
     images: ['feed4'],
     caption:
-      'Vitamin C 세럼 한 병 다 쓰고 재구매했어요. 톤이 밝아진 게 느껴지고 GLAS 적립도 꾸준히 쌓이는 중입니다. 이 후기로 15 GLAS 받았어요.',
+      'Vitamin C 세럼 한 병 다 쓰고 재구매했어요. 톤이 밝아진 게 느껴지고 CHARM 적립도 꾸준히 쌓이는 중입니다. 이 후기로 15 CHARM 받았어요.',
     likes: 98,
     comments: [{ id: 'c4-1', author: 'Sofia Almeida', text: '피부 진짜 좋아지신 듯!' }],
     isFollowing: true,
     createdAt: '2026-08-11',
     tags: ['비타민C', '재구매'],
-    glasEarned: 15,
+    charmEarned: 15,
     showEarnedCaption: true,
   },
   {
@@ -847,13 +847,13 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     avatar: 'https://i.pravatar.cc/300?img=52',
     location: 'Porto, Portugal',
     images: ['feed5'],
-    caption: 'Red Ginseng 앰플 공동구매 참여했어요! 15% 추가할인 + GLAS 적립까지 완전 이득.',
+    caption: 'Red Ginseng 앰플 공동구매 참여했어요! 15% 추가할인 + CHARM 적립까지 완전 이득.',
     likes: 214,
     comments: [{ id: 'c5-1', author: 'haruka.ito', text: '저도 참여했어요 같이가요~' }],
     isFollowing: false,
     createdAt: '2026-08-09',
     tags: ['공동구매', '앰플'],
-    glasEarned: 20,
+    charmEarned: 20,
   },
   {
     id: 'c6',
@@ -867,7 +867,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     isFollowing: true,
     createdAt: '2026-08-06',
     tags: ['선크림', '재구매'],
-    glasEarned: 14,
+    charmEarned: 14,
   },
   {
     id: 'c7',
@@ -881,7 +881,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     isFollowing: false,
     createdAt: '2026-08-02',
     tags: ['콜라겐', '건기식'],
-    glasEarned: 16,
+    charmEarned: 16,
   },
   {
     id: 'c8',
@@ -895,7 +895,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     isFollowing: false,
     createdAt: '2026-07-30',
     tags: ['홍삼', '선물세트'],
-    glasEarned: 13,
+    charmEarned: 13,
   },
   {
     id: 'c9',
@@ -904,13 +904,13 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     location: 'Lyon, France',
     images: ['feed9'],
     caption:
-      'Probiotic Skin-Gut Capsules 2주째 먹는 중인데 속이 편해졌어요. 팔로워가 늘어서 리워드도 같이 받았습니다. 이 후기로 22 GLAS 받았어요.',
+      'Probiotic Skin-Gut Capsules 2주째 먹는 중인데 속이 편해졌어요. 팔로워가 늘어서 리워드도 같이 받았습니다. 이 후기로 22 CHARM 받았어요.',
     likes: 145,
     comments: [],
     isFollowing: true,
     createdAt: '2026-07-27',
     tags: ['프로바이오틱', '건기식'],
-    glasEarned: 22,
+    charmEarned: 22,
     showEarnedCaption: true,
   },
   {
@@ -925,7 +925,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     isFollowing: false,
     createdAt: '2026-07-24',
     tags: ['크림', '보습'],
-    glasEarned: 17,
+    charmEarned: 17,
   },
   {
     id: 'c11',
@@ -940,7 +940,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     isFollowing: false,
     createdAt: '2026-08-17',
     tags: ['나이아신아마이드', '성분정보'],
-    glasEarned: 0,
+    charmEarned: 0,
     category: 'ingredient',
     authorFollowers: 8400,
   },
@@ -958,7 +958,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     isFollowing: false,
     createdAt: '2026-08-13',
     tags: ['홍삼', 'QnA'],
-    glasEarned: 0,
+    charmEarned: 0,
     category: 'qna',
   },
   {
@@ -974,7 +974,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     isFollowing: true,
     createdAt: '2026-08-08',
     tags: ['센텔라', '성분정보'],
-    glasEarned: 0,
+    charmEarned: 0,
     category: 'ingredient',
     authorFollowers: 8400,
   },
@@ -990,7 +990,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     isFollowing: false,
     createdAt: '2026-08-03',
     tags: ['트러블케어', 'QnA'],
-    glasEarned: 0,
+    charmEarned: 0,
     category: 'qna',
   },
 ];

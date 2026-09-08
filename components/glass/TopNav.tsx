@@ -40,7 +40,7 @@ export function TopNav() {
       <View style={styles.inner}>
         <View style={styles.brandRow}>
           <Ionicons name="sparkles" size={15} color={palette.gold} />
-          <Text style={styles.brand}>GLASSY</Text>
+          <Text style={styles.brand}>CHARM</Text>
         </View>
         <View style={styles.links}>
           <NavLink label="App Demo" active onPress={() => {}} />

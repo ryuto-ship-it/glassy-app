@@ -24,7 +24,7 @@ import { TabFade } from '@/components/glass/TabFade';
 import { Tier, TIERS } from '@/constants/glow';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { formatDateShort } from '@/lib/date';
-import { formatGlas, formatSigned, formatUsd } from '@/lib/format';
+import { formatCharm, formatSigned, formatUsd } from '@/lib/format';
 import { useTierStatus } from '@/lib/useTierStatus';
 import { useUiStore } from '@/store/useUiStore';
 
@@ -53,14 +53,14 @@ export default function LevelsScreen() {
     tier: currentTier,
     next,
     progress,
-    totalGlas,
-    remainingGlas,
+    totalCharm,
+    remainingCharm,
     remainingDelta,
     price,
     achievedAt,
   } = useTierStatus();
 
-  const costUsd = remainingGlas * price;
+  const costUsd = remainingCharm * price;
   const currentIndex = currentTier.order;
   const [activeIndex, setActiveIndex] = useState(currentIndex);
   const progressPct = Math.round(progress * 100);
@@ -81,7 +81,7 @@ export default function LevelsScreen() {
         <View style={styles.section}>
           <Text style={styles.pageTitle}>Glow Levels</Text>
           <Text style={styles.pageSub}>
-            등급은 보유 GLAS의 달러 가치(개수 × 시세)로 승급돼요. 한번 오른 등급은 시세가 내려가도 강등되지
+            등급은 보유 CHARM의 달러 가치(개수 × 시세)로 승급돼요. 한번 오른 등급은 시세가 내려가도 강등되지
             않아요.
           </Text>
         </View>
@@ -157,7 +157,7 @@ export default function LevelsScreen() {
               <>
                 <View style={styles.miniProgressHeaderRow}>
                   <Text style={styles.miniProgressLabel}>
-                    {next.name}까지 {formatGlas(remainingGlas)} GLAS 남음
+                    {next.name}까지 {formatCharm(remainingCharm)} CHARM 남음
                   </Text>
                   <Text style={[styles.miniProgressPct, { color: next.accent }]}>{progressPct}%</Text>
                 </View>
@@ -182,18 +182,18 @@ export default function LevelsScreen() {
                 <GradeBadge tier={currentTier.id} size={56} />
               </DropletProgress>
               <Text style={[styles.currentName, { color: currentTier.accent }]}>{currentTier.name}</Text>
-              <Text style={styles.currentCount}>{formatGlas(totalGlas)} GLAS 보유 중</Text>
+              <Text style={styles.currentCount}>{formatCharm(totalCharm)} CHARM 보유 중</Text>
               {next ? (
                 <>
                   <Text style={styles.currentRemaining}>
                     지금 시세({formatUsd(price)} 기준)로는 {next.name}까지 앞으로{' '}
-                    {formatGlas(remainingGlas)} GLAS 더 필요해요
+                    {formatCharm(remainingCharm)} CHARM 더 필요해요
                   </Text>
                   <Text style={styles.currentDelta}>어제보다 {formatSigned(remainingDelta)}개</Text>
                   <PillButton
                     label="지금 바로 구매"
                     onPress={() =>
-                      openPayment({ kind: 'tier', tierName: next.name, usdCost: costUsd, glasAmount: remainingGlas })
+                      openPayment({ kind: 'tier', tierName: next.name, usdCost: costUsd, charmAmount: remainingCharm })
                     }
                     colors_={['#E8C468', '#C79A3D']}
                     icon={<Ionicons name="flash" size={14} color="#0B0B0D" />}
@@ -230,11 +230,11 @@ export default function LevelsScreen() {
             <Text style={styles.pathTitle}>등급을 올리는 3가지 방법</Text>
             <View style={styles.pathRow}>
               <Ionicons name="bag-handle-outline" size={16} color={colors.textMuted} />
-              <Text style={styles.pathText}>① 제휴 약국에서 스테이블코인 결제 시 즉시 GLAS 적립</Text>
+              <Text style={styles.pathText}>① 제휴 약국에서 스테이블코인 결제 시 즉시 CHARM 적립</Text>
             </View>
             <View style={styles.pathRow}>
               <Ionicons name="lock-closed-outline" size={16} color={colors.textMuted} />
-              <Text style={styles.pathText}>② 거래소에서 GLAS 매수 후 최소 30일 스테이킹 예치</Text>
+              <Text style={styles.pathText}>② 거래소에서 CHARM 매수 후 최소 30일 스테이킹 예치</Text>
             </View>
             <View style={styles.pathRow}>
               <Ionicons name="flash" size={16} color={colors.accentGold} />
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
 
   dotsRow: { flexDirection: 'row', justifyContent: 'center', gap: 6, marginTop: spacing.md },
   dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.borderStrong },
-  dotActive: { width: 16, backgroundColor: colors.accentViolet },
+  dotActive: { width: 16, backgroundColor: colors.accentBlue },
 
   miniProgressHeaderRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   miniProgressLabel: { fontFamily: fonts.bodySemi, fontSize: 12.5, color: colors.text },

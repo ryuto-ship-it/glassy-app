@@ -25,7 +25,7 @@ type Props = {
   historyInsight?: string | null;
 };
 
-// The home screen's hero — AI Health Intelligence is GLASSY's flagship
+// The home screen's hero — AI Health Intelligence is CHARM's flagship
 // feature, not a side widget, so this banner outranks every other card in
 // size and visual energy (gradient glow + a continuously scanning light
 // sweep) whether or not the user has diagnosed yet.
@@ -58,7 +58,7 @@ export function AiHeroBanner({ hasCompletedQuiz, topPickLabel, matchScore, isPre
       <Animated.View style={[styles.glowHalo, glowStyle]} />
       <Animated.View style={[styles.sweep, sweepStyle]} pointerEvents="none">
         <LinearGradient
-          colors={['transparent', 'rgba(177,140,255,0.35)', 'transparent']}
+          colors={['transparent', 'rgba(79,182,232,0.35)', 'transparent']}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={StyleSheet.absoluteFill}
@@ -80,7 +80,7 @@ export function AiHeroBanner({ hasCompletedQuiz, topPickLabel, matchScore, isPre
             <PillButton
               label="AI 진단 시작하기"
               onPress={onPress}
-              colors_={['#B18CFF', '#8C5CE0']}
+              colors_={['#4FB6E8', '#1B5FA8']}
               icon={<Ionicons name="scan-outline" size={15} color="#0B0B0D" />}
               style={{ marginTop: spacing.lg, alignSelf: 'flex-start' }}
             />
@@ -118,14 +118,14 @@ const styles = StyleSheet.create({
     borderRadius: radius.xl,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(177,140,255,0.3)',
-    shadowColor: '#8C5CE0',
+    borderColor: 'rgba(79,182,232,0.3)',
+    shadowColor: '#1B5FA8',
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.35,
     shadowRadius: 24,
   },
   wrapHero: {
-    borderColor: 'rgba(177,140,255,0.45)',
+    borderColor: 'rgba(79,182,232,0.45)',
   },
   glowHalo: {
     position: 'absolute',
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     width: 220,
     height: 220,
     borderRadius: 140,
-    backgroundColor: 'rgba(177,140,255,0.22)',
+    backgroundColor: 'rgba(79,182,232,0.22)',
   },
   sweep: {
     position: 'absolute',
@@ -171,5 +171,5 @@ const styles = StyleSheet.create({
   unlockChipActive: { backgroundColor: colors.accentGold },
   unlockText: { fontFamily: fonts.bodyMed, fontSize: 10, color: 'rgba(255,255,255,0.6)' },
   unlockTextActive: { color: '#0B0B0D', fontFamily: fonts.bodyBold },
-  retakeText: { fontFamily: fonts.bodySemi, fontSize: 11, color: colors.accentViolet },
+  retakeText: { fontFamily: fonts.bodySemi, fontSize: 11, color: colors.accentBlue },
 });

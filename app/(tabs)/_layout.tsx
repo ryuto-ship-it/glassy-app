@@ -15,7 +15,7 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.accentViolet,
+        tabBarActiveTintColor: colors.accentBlue,
         tabBarInactiveTintColor: colors.textFaint,
         tabBarShowLabel: true,
         tabBarLabelStyle: { fontFamily: 'Inter_600SemiBold', fontSize: 11 },
@@ -52,7 +52,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? 'wallet' : 'wallet-outline'} size={22} color={color} />
           ),
-          tabBarActiveTintColor: darkColors.accentViolet,
+          tabBarActiveTintColor: darkColors.accentBlue,
           tabBarInactiveTintColor: darkColors.textFaint,
           tabBarStyle: {
             position: 'absolute',

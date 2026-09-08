@@ -7,8 +7,8 @@ import Animated, { FadeIn } from 'react-native-reanimated';
 // of which screen opened them — see constants/theme.ts / themeScope.tsx.
 import { darkColors as colors, fonts, radius, spacing } from '@/constants/theme';
 import { DarkScope } from '@/constants/themeScope';
-import { GLAS_PRICE_USD, USER } from '@/data/mock';
-import { formatGlas, formatUsd } from '@/lib/format';
+import { CHARM_PRICE_USD, USER } from '@/data/mock';
+import { formatCharm, formatUsd } from '@/lib/format';
 import { PaymentMethod, useAppStore } from '@/store/useAppStore';
 import { AppModal } from './AppModal';
 import { GlassSurface } from './GlassSurface';
@@ -17,7 +17,7 @@ import { PillButton } from './PillButton';
 
 export type PaymentVariant =
   | { kind: 'product'; title: string; subtitle: string; priceUSD: number }
-  | { kind: 'tier'; tierName: string; usdCost: number; glasAmount: number };
+  | { kind: 'tier'; tierName: string; usdCost: number; charmAmount: number };
 
 type Props = {
   visible: boolean;
@@ -36,8 +36,8 @@ type Step =
   | 'stable-processing'
   | 'card-input'
   | 'card-processing'
-  | 'glas-confirm'
-  | 'glas-processing'
+  | 'charm-confirm'
+  | 'charm-processing'
   | 'cash-qr'
   | 'cash-scanning'
   | 'cash-matched'
@@ -60,19 +60,19 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
   const [wallet, setWallet] = useState<(typeof WALLETS)[number] | null>(null);
   const [token, setToken] = useState<'USDT' | 'USDC'>('USDT');
   const [error, setError] = useState<string | null>(null);
-  const [result, setResult] = useState<{ creditGlas?: number; debitGlas?: number; ref: string } | null>(null);
+  const [result, setResult] = useState<{ creditCharm?: number; debitCharm?: number; ref: string } | null>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const [gasFee] = useState(() => (0.06 + Math.random() * 0.09).toFixed(2));
 
   const checkoutPurchase = useAppStore((s) => s.checkoutPurchase);
   const buyTierDirect = useAppStore((s) => s.buyTierDirect);
-  const spendableGlas = useAppStore((s) => s.spendableGlas());
+  const spendableCharm = useAppStore((s) => s.spendableCharm());
 
   const priceUSD = variant.kind === 'product' ? variant.priceUSD : variant.usdCost;
   const title = variant.kind === 'product' ? variant.title : `${variant.tierName} 등급 즉시구매`;
   const subtitle = variant.kind === 'product' ? variant.subtitle : '락업 없이 즉시 등급에 반영돼요';
-  const glasCost = Math.ceil(priceUSD / GLAS_PRICE_USD);
-  const canPayGlas = variant.kind === 'product' && spendableGlas >= glasCost;
+  const charmCost = Math.ceil(priceUSD / CHARM_PRICE_USD);
+  const canPayCharm = variant.kind === 'product' && spendableCharm >= charmCost;
 
   useEffect(() => {
     if (visible) {
@@ -94,11 +94,11 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
     if (method === 'stablecoin') setStep('wallet-select');
     else if (method === 'card') setStep('card-input');
     else if (method === 'cash') startCashFlow();
-    else setStep('glas-confirm');
+    else setStep('charm-confirm');
   };
 
-  // Cash paid at the register — the point of this flow is that GLASSY
-  // doesn't care how you paid; the QR at checkout is what earns the GLAS,
+  // Cash paid at the register — the point of this flow is that CHARM
+  // doesn't care how you paid; the QR at checkout is what earns the CHARM,
   // matched automatically against the profile info collected at signup.
   const startCashFlow = () => {
     setStep('cash-qr');
@@ -107,12 +107,12 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
       after(1500, () => {
         setStep('cash-matched');
         after(1400, () => {
-          let creditGlas = 0;
+          let creditCharm = 0;
           if (variant.kind === 'product') {
             checkoutPurchase(title, subtitle, priceUSD, 'cash');
-            creditGlas = Math.round(priceUSD * 4);
+            creditCharm = Math.round(priceUSD * 4);
           }
-          setResult({ creditGlas, ref: `QR-${mockHex(6).toUpperCase()}` });
+          setResult({ creditCharm, ref: `QR-${mockHex(6).toUpperCase()}` });
           setStep('success');
         });
       });
@@ -133,15 +133,15 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
   const signApprove = () => {
     setStep('stable-processing');
     after(1100, () => {
-      let creditGlas = 0;
+      let creditCharm = 0;
       if (variant.kind === 'product') {
         checkoutPurchase(title, subtitle, priceUSD, 'stablecoin');
-        creditGlas = Math.round(priceUSD * 4);
+        creditCharm = Math.round(priceUSD * 4);
       } else {
         buyTierDirect(priceUSD, 'stablecoin');
-        creditGlas = variant.glasAmount;
+        creditCharm = variant.charmAmount;
       }
-      setResult({ creditGlas, ref: `0x${mockHex(8)}...${mockHex(6)}` });
+      setResult({ creditCharm, ref: `0x${mockHex(8)}...${mockHex(6)}` });
       setStep('success');
     });
   };
@@ -151,30 +151,30 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
   const confirmCard = () => {
     setStep('card-processing');
     after(1300, () => {
-      let creditGlas = 0;
+      let creditCharm = 0;
       if (variant.kind === 'product') {
         checkoutPurchase(title, subtitle, priceUSD, 'card');
-        creditGlas = Math.round(priceUSD * 4);
+        creditCharm = Math.round(priceUSD * 4);
       } else {
         buyTierDirect(priceUSD, 'card');
-        creditGlas = variant.glasAmount;
+        creditCharm = variant.charmAmount;
       }
-      setResult({ creditGlas, ref: `GLS-${mockHex(6).toUpperCase()}` });
+      setResult({ creditCharm, ref: `CHM-${mockHex(6).toUpperCase()}` });
       setStep('success');
     });
   };
 
-  const confirmGlas = () => {
-    if (variant.kind !== 'product' || !canPayGlas) return;
-    setStep('glas-processing');
+  const confirmCharm = () => {
+    if (variant.kind !== 'product' || !canPayCharm) return;
+    setStep('charm-processing');
     after(900, () => {
-      const res = checkoutPurchase(title, subtitle, priceUSD, 'glas');
+      const res = checkoutPurchase(title, subtitle, priceUSD, 'charm');
       if (!res.ok) {
         setError(res.reason ?? '결제에 실패했어요.');
-        setStep('glas-confirm');
+        setStep('charm-confirm');
         return;
       }
-      setResult({ debitGlas: glasCost, ref: `GLS-${mockHex(6).toUpperCase()}` });
+      setResult({ debitCharm: charmCost, ref: `CHM-${mockHex(6).toUpperCase()}` });
       setStep('success');
     });
   };
@@ -184,7 +184,7 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
     onClose();
   };
 
-  const dismissable = !['stable-processing', 'card-processing', 'glas-processing', 'wallet-connecting', 'cash-scanning'].includes(
+  const dismissable = !['stable-processing', 'card-processing', 'charm-processing', 'wallet-connecting', 'cash-scanning'].includes(
     step
   );
 
@@ -205,9 +205,9 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
               {variant.kind === 'product' && (
                 <MethodRow
                   icon="flash-outline"
-                  label="$GLAS"
-                  sub={`보유 ${formatGlas(spendableGlas)} GLAS`}
-                  onPress={() => selectMethod('glas')}
+                  label="$CHARM"
+                  sub={`보유 ${formatCharm(spendableCharm)} CHARM`}
+                  onPress={() => selectMethod('charm')}
                 />
               )}
             </View>
@@ -235,7 +235,7 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
         {step === 'wallet-connecting' && (
           <StepFade>
             <View style={styles.centerBlock}>
-              <ActivityIndicator color={colors.accentViolet} />
+              <ActivityIndicator color={colors.accentBlue} />
               <Text style={styles.centerText}>{wallet?.name}에 연결 중...</Text>
             </View>
           </StepFade>
@@ -278,7 +278,7 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
               <SummaryRow label="네트워크 수수료 (가스비)" value={`~$${gasFee}`} />
             </View>
 
-            <PillButton label="결제 확인" onPress={confirmStable} colors_={['#B18CFF', '#8C5CE0']} style={{ marginTop: spacing.lg }} />
+            <PillButton label="결제 확인" onPress={confirmStable} colors_={['#4FB6E8', '#1B5FA8']} style={{ marginTop: spacing.lg }} />
           </StepFade>
         )}
 
@@ -293,14 +293,14 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
               </View>
               <Text style={styles.signBody}>다음 트랜잭션에 서명하시겠습니까?</Text>
               <View style={styles.summaryBox}>
-                <SummaryRow label="받는 곳" value="GLASSY Checkout" />
+                <SummaryRow label="받는 곳" value="CHARM Checkout" />
                 <SummaryRow label="금액" value={`${priceUSD.toFixed(2)} ${token}`} />
                 <SummaryRow label="가스비" value={`~$${gasFee}`} />
                 <SummaryRow label="네트워크" value="Ethereum (Mock)" />
               </View>
               <View style={styles.signBtnRow}>
                 <PillButton label="거부" variant="ghost" onPress={signReject} style={{ flex: 1 }} />
-                <PillButton label="확인" onPress={signApprove} colors_={['#B18CFF', '#8C5CE0']} style={{ flex: 1 }} />
+                <PillButton label="확인" onPress={signApprove} colors_={['#4FB6E8', '#1B5FA8']} style={{ flex: 1 }} />
               </View>
             </View>
           </StepFade>
@@ -309,7 +309,7 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
         {step === 'stable-processing' && (
           <StepFade>
             <View style={styles.centerBlock}>
-              <ActivityIndicator color={colors.accentViolet} />
+              <ActivityIndicator color={colors.accentBlue} />
               <Text style={styles.centerText}>결제 처리 중...</Text>
             </View>
           </StepFade>
@@ -339,34 +339,34 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
           </StepFade>
         )}
 
-        {step === 'glas-confirm' && (
+        {step === 'charm-confirm' && (
           <StepFade>
-            <BackHeader onBack={() => setStep('method')} title="$GLAS 결제" subtitle={title} />
+            <BackHeader onBack={() => setStep('method')} title="$CHARM 결제" subtitle={title} />
             <Text style={styles.price}>{formatUsd(priceUSD)}</Text>
             <View style={styles.summaryBox}>
-              <SummaryRow label="상품가 → GLAS 환산" value={`${formatGlas(glasCost)} GLAS`} />
-              <SummaryRow label={`현재가(${formatUsd(GLAS_PRICE_USD)}) 기준`} value="결제 시점 시세로 재계산" />
-              <SummaryRow label="보유 GLAS" value={`${formatGlas(spendableGlas)} GLAS`} />
-              <SummaryRow label="결제 후 잔액" value={`${formatGlas(Math.max(0, spendableGlas - glasCost))} GLAS`} />
+              <SummaryRow label="상품가 → CHARM 환산" value={`${formatCharm(charmCost)} CHARM`} />
+              <SummaryRow label={`현재가(${formatUsd(CHARM_PRICE_USD)}) 기준`} value="결제 시점 시세로 재계산" />
+              <SummaryRow label="보유 CHARM" value={`${formatCharm(spendableCharm)} CHARM`} />
+              <SummaryRow label="결제 후 잔액" value={`${formatCharm(Math.max(0, spendableCharm - charmCost))} CHARM`} />
             </View>
-            {!canPayGlas && <Text style={styles.errorText}>보유 GLAS가 부족해요.</Text>}
+            {!canPayCharm && <Text style={styles.errorText}>보유 CHARM이 부족해요.</Text>}
             {error && <Text style={styles.errorText}>{error}</Text>}
-            <Text style={styles.detailNote}>GLAS 결제는 등급 영구 유지 규칙에 영향을 주지 않아요.</Text>
+            <Text style={styles.detailNote}>CHARM 결제는 등급 영구 유지 규칙에 영향을 주지 않아요.</Text>
             <PillButton
               label="차감 확인"
-              onPress={confirmGlas}
-              disabled={!canPayGlas}
-              colors_={['#B18CFF', '#8C5CE0']}
+              onPress={confirmCharm}
+              disabled={!canPayCharm}
+              colors_={['#4FB6E8', '#1B5FA8']}
               style={{ marginTop: spacing.lg }}
             />
           </StepFade>
         )}
 
-        {step === 'glas-processing' && (
+        {step === 'charm-processing' && (
           <StepFade>
             <View style={styles.centerBlock}>
-              <ActivityIndicator color={colors.accentViolet} />
-              <Text style={styles.centerText}>GLAS 차감 처리 중...</Text>
+              <ActivityIndicator color={colors.accentBlue} />
+              <Text style={styles.centerText}>CHARM 차감 처리 중...</Text>
             </View>
           </StepFade>
         )}
@@ -378,7 +378,7 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
             <View style={styles.qrWrap}>
               <MockQRCode size={168} seed={7} />
             </View>
-            <Text style={styles.qrHint}>현금으로 결제하고, 이 QR로 GLAS를 적립받아요.</Text>
+            <Text style={styles.qrHint}>현금으로 결제하고, 이 QR로 CHARM을 적립받아요.</Text>
           </StepFade>
         )}
 
@@ -415,18 +415,18 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
                 <Ionicons name="checkmark" size={30} color="#0B0B0D" />
               </View>
               <Text style={styles.centerTitle}>결제 완료!</Text>
-              {result.creditGlas !== undefined ? (
+              {result.creditCharm !== undefined ? (
                 <Text style={styles.centerText}>
-                  {variant.kind === 'tier' ? `${formatGlas(result.creditGlas)} GLAS 즉시구매 완료` : `+${formatGlas(result.creditGlas)} GLAS 적립됨`}
+                  {variant.kind === 'tier' ? `${formatCharm(result.creditCharm)} CHARM 즉시구매 완료` : `+${formatCharm(result.creditCharm)} CHARM 적립됨`}
                 </Text>
               ) : (
-                <Text style={styles.centerText}>{formatGlas(result.debitGlas ?? 0)} GLAS 차감 완료</Text>
+                <Text style={styles.centerText}>{formatCharm(result.debitCharm ?? 0)} CHARM 차감 완료</Text>
               )}
               <View style={styles.refBox}>
                 <Text style={styles.refLabel}>{result.ref.startsWith('0x') ? '트랜잭션' : '주문 번호'}</Text>
                 <Text style={styles.refValue}>{result.ref}</Text>
               </View>
-              <PillButton label="완료" onPress={finish} colors_={['#B18CFF', '#8C5CE0']} style={{ marginTop: spacing.lg, alignSelf: 'stretch' }} />
+              <PillButton label="완료" onPress={finish} colors_={['#4FB6E8', '#1B5FA8']} style={{ marginTop: spacing.lg, alignSelf: 'stretch' }} />
             </View>
           </StepFade>
         )}
@@ -588,7 +588,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderDim,
   },
-  tokenChipActive: { backgroundColor: colors.accentViolet, borderColor: colors.accentViolet },
+  tokenChipActive: { backgroundColor: colors.accentBlue, borderColor: colors.accentBlue },
   tokenChipText: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.textMuted },
   tokenChipTextActive: { color: '#0B0B0D' },
   summaryBox: { marginTop: spacing.md, gap: 8 },

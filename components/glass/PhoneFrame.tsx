@@ -60,11 +60,11 @@ function WebStage({ children }: { children: React.ReactNode }) {
         showWatermarks && (
           <>
             <View style={[styles.watermark, styles.watermarkLeft]}>
-              <Text style={styles.watermarkTitle}>GLASSY</Text>
+              <Text style={styles.watermarkTitle}>CHARM</Text>
               <Text style={styles.watermarkTagline}>{TAGLINE}</Text>
             </View>
             <View style={[styles.watermark, styles.watermarkRight]}>
-              <Text style={[styles.watermarkTitle, styles.watermarkTitleRight]}>GLASSY</Text>
+              <Text style={[styles.watermarkTitle, styles.watermarkTitleRight]}>CHARM</Text>
               <Text style={[styles.watermarkTagline, styles.watermarkTaglineRight]}>{TAGLINE}</Text>
             </View>
           </>

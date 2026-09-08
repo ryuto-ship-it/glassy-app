@@ -24,7 +24,7 @@ const SWIPE_THRESHOLD = 0.2;
 export const HOME_SLIDES: HomeSlide[] = [
   {
     key: 'promo',
-    gradient: [palette.violetDeep, palette.violet],
+    gradient: [palette.blueDeep, palette.blue],
     eyebrow: '신규 프로모션',
     title: '이달의 공동구매, 최대 15% 추가 할인',
     caption: '지금 참여 중인 공동구매에 합류하고 정가보다 훨씬 저렴하게 받아보세요.',
@@ -40,7 +40,7 @@ export const HOME_SLIDES: HomeSlide[] = [
   },
   {
     key: 'upgrade',
-    gradient: [palette.violet, palette.gold],
+    gradient: [palette.blue, palette.gold],
     eyebrow: '등급 업그레이드',
     title: '다음 등급까지 얼마 안 남았어요',
     caption: "'지금 바로 구매'로 락업 없이 즉시 다음 등급을 달성해보세요.",
@@ -51,7 +51,7 @@ export const HOME_SLIDES: HomeSlide[] = [
     gradient: ['#3FAE9C', palette.teal],
     eyebrow: '커뮤니티 소식',
     title: 'Glow Feed에서 지금 가장 인기있는 후기',
-    caption: '실제 회원들의 솔직한 후기를 보고 GLAS 리워드 획득 현황도 확인해보세요.',
+    caption: '실제 회원들의 솔직한 후기를 보고 CHARM 리워드 획득 현황도 확인해보세요.',
     icon: '💬',
     video: require('../../assets/videos/hero-placeholder.mp4'),
   },

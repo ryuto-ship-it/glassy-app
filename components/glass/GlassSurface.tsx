@@ -15,7 +15,7 @@ type Props = ViewProps & {
   style?: StyleProp<ViewStyle>;
 };
 
-// The core card primitive used across GLASSY. Light by default — a clean
+// The core card primitive used across CHARM. Light by default — a clean
 // white "premium beauty commerce" card with a soft shadow — except inside
 // <DarkScope> (Wallet, payment modals, admin, etc), where it renders the
 // original blurred, near-black translucent "premium dark glass" treatment.

@@ -124,7 +124,7 @@ function ProfileRow({
   return (
     <Pressable onPress={onPress} style={[styles.profileRow, !last && styles.profileRowDivider]}>
       <View style={styles.profileRowIcon}>
-        <Ionicons name={icon} size={16} color={colors.accentViolet} />
+        <Ionicons name={icon} size={16} color={colors.accentBlue} />
       </View>
       <View style={{ flex: 1 }}>
         <Text style={styles.profileRowLabel}>{label}</Text>
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderDim,
   },
-  langChipActive: { backgroundColor: colors.accentViolet, borderColor: colors.accentViolet },
+  langChipActive: { backgroundColor: colors.accentBlue, borderColor: colors.accentBlue },
   langChipText: { fontFamily: fonts.bodyBold, fontSize: 11.5, color: colors.textMuted },
   langChipTextActive: { color: '#0B0B0D' },
   profileRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, padding: spacing.lg },
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 10,
-    backgroundColor: 'rgba(177,140,255,0.12)',
+    backgroundColor: 'rgba(79,182,232,0.12)',
     alignItems: 'center',
     justifyContent: 'center',
   },

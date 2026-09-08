@@ -55,8 +55,8 @@ export function GradeBadge({ tier, size = 64 }: Props) {
         <Svg width={size} height={size} viewBox="0 0 100 100">
           <Defs>
             <LinearGradient id={id} x1="0" y1="0" x2="1" y2="1">
-              <Stop offset="0" stopColor="#B18CFF" />
-              <Stop offset="1" stopColor="#6B3FBF" />
+              <Stop offset="0" stopColor="#4FB6E8" />
+              <Stop offset="1" stopColor="#15568F" />
             </LinearGradient>
           </Defs>
           <Circle cx="50" cy="50" r="44" fill="#1B1B1F" />
@@ -74,8 +74,8 @@ export function GradeBadge({ tier, size = 64 }: Props) {
         <Svg width={size} height={size} viewBox="0 0 100 100">
           <Defs>
             <LinearGradient id={id} x1="0" y1="0" x2="1" y2="1">
-              <Stop offset="0" stopColor="#B18CFF" />
-              <Stop offset="0.55" stopColor="#8C5CE0" />
+              <Stop offset="0" stopColor="#4FB6E8" />
+              <Stop offset="0.55" stopColor="#1B5FA8" />
               <Stop offset="1" stopColor="#E8C468" />
             </LinearGradient>
             <LinearGradient id={`${id}-prism`} x1="0" y1="0" x2="1" y2="1">
@@ -89,7 +89,7 @@ export function GradeBadge({ tier, size = 64 }: Props) {
           <Polygon points="50,16 80,64 20,64" fill={`url(#${id}-prism)`} opacity={0.85} />
           <Polygon points="50,16 80,64 20,64" stroke="#FFFFFF" strokeWidth="1.3" fill="none" opacity={0.8} />
           {/* sparkle accents */}
-          <Path d="M74 28 L77 34 L83 37 L77 40 L74 46 L71 40 L65 37 L71 34 Z" fill="#F5F0FF" opacity={0.9} />
+          <Path d="M74 28 L77 34 L83 37 L77 40 L74 46 L71 40 L65 37 L71 34 Z" fill="#EAF6FD" opacity={0.9} />
           <Path d="M27 68 L29 72 L33 74 L29 76 L27 80 L25 76 L21 74 L25 72 Z" fill="#E8C468" opacity={0.85} />
         </Svg>
       );

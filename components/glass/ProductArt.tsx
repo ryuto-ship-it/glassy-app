@@ -9,12 +9,12 @@ import { hashSeed } from '@/lib/artSeed';
 // distinct from the app accent so the shop floor still reads as varied
 // merchandising, while staying in the same premium-dark family.
 const PRODUCT_TONES: readonly [string, string][] = [
-  ['#8C5CE0', '#B18CFF'], // violet
+  ['#1B5FA8', '#4FB6E8'], // blue
   ['#C79A3D', '#E8C468'], // gold
   ['#2FA98C', '#6FD7C4'], // teal
   ['#B23A63', '#E07A9E'], // rose
   ['#3B6FD9', '#7FA6FF'], // steel blue
-  ['#5A4A82', '#8C7BC2'], // deep violet-gray
+  ['#2C4A68', '#8C7BC2'], // deep blue-gray
 ];
 
 const METAL = '#2A2A30';

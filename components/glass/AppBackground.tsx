@@ -17,7 +17,7 @@ export function AppBackground({ style, children, ...rest }: ViewProps) {
         end={{ x: 0.9, y: 1 }}
         style={StyleSheet.absoluteFill}
       />
-      <View style={[styles.blobViolet, dark && styles.blobVioletDark]} />
+      <View style={[styles.blobBlue, dark && styles.blobBlueDark]} />
       <View style={[styles.blobGold, dark && styles.blobGoldDark]} />
       {children}
     </View>
@@ -25,16 +25,16 @@ export function AppBackground({ style, children, ...rest }: ViewProps) {
 }
 
 const styles = StyleSheet.create({
-  blobViolet: {
+  blobBlue: {
     position: 'absolute',
     top: -60,
     right: -90,
     width: 280,
     height: 280,
     borderRadius: 200,
-    backgroundColor: 'rgba(177,140,255,0.07)',
+    backgroundColor: 'rgba(79,182,232,0.07)',
   },
-  blobVioletDark: { backgroundColor: 'rgba(177,140,255,0.10)' },
+  blobBlueDark: { backgroundColor: 'rgba(79,182,232,0.10)' },
   blobGold: {
     position: 'absolute',
     bottom: 60,

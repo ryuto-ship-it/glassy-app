@@ -17,11 +17,11 @@ import { useAppStore } from '@/store/useAppStore';
 
 function ToastItem({
   message,
-  glasAmount,
+  charmAmount,
   onDone,
 }: {
   message: string;
-  glasAmount?: number;
+  charmAmount?: number;
   onDone: () => void;
 }) {
   const sweep = useSharedValue(-1);
@@ -45,7 +45,7 @@ function ToastItem({
           <Text style={styles.msg} numberOfLines={1}>
             {message}
           </Text>
-          {glasAmount ? <Text style={styles.amt}>+{glasAmount} GLAS</Text> : null}
+          {charmAmount ? <Text style={styles.amt}>+{charmAmount} CHARM</Text> : null}
         </View>
         <Animated.View style={[styles.sweep, sweepStyle]} pointerEvents="none">
           <LinearGradient
@@ -70,7 +70,7 @@ export function ToastHost() {
   return (
     <View style={[styles.host, { top: insets.top + 8 }]} pointerEvents="box-none">
       {toasts.map((t) => (
-        <ToastItem key={t.id} message={t.message} glasAmount={t.glasAmount} onDone={() => dismissToast(t.id)} />
+        <ToastItem key={t.id} message={t.message} charmAmount={t.charmAmount} onDone={() => dismissToast(t.id)} />
       ))}
     </View>
   );

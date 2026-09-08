@@ -173,7 +173,7 @@ function IntroStep({ onStart }: { onStart: () => void }) {
         </View>
       </View>
       <View style={{ flex: 1 }} />
-      <PillButton label="분석 시작하기" onPress={onStart} colors_={['#B18CFF', '#8C5CE0']} style={{ marginHorizontal: spacing.xl }} />
+      <PillButton label="분석 시작하기" onPress={onStart} colors_={['#4FB6E8', '#1B5FA8']} style={{ marginHorizontal: spacing.xl }} />
       <Text style={styles.disclaimerSmall}>본 진단은 건강기능식품 추천을 위한 참고 자료이며 의학적 진단이 아닙니다.</Text>
     </Animated.View>
   );
@@ -333,7 +333,7 @@ function ProfileStep({
         </View>
       </ScrollView>
       <View style={styles.stepFooter}>
-        <PillButton label="분석 시작" onPress={onNext} colors_={['#B18CFF', '#8C5CE0']} />
+        <PillButton label="분석 시작" onPress={onNext} colors_={['#4FB6E8', '#1B5FA8']} />
       </View>
     </Animated.View>
   );
@@ -392,7 +392,7 @@ function PulsingRing() {
   const style = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
   return (
     <Animated.View style={[styles.pulsingRing, style]}>
-      <Ionicons name="sparkles" size={28} color={colors.accentViolet} />
+      <Ionicons name="sparkles" size={28} color={colors.accentBlue} />
     </Animated.View>
   );
 }
@@ -502,10 +502,10 @@ function ResultsStep({
             onFinish
           )
         }
-        colors_={['#B18CFF', '#8C5CE0']}
+        colors_={['#4FB6E8', '#1B5FA8']}
         style={{ marginTop: spacing.xl }}
       />
-      <Text style={styles.payHint}>스테이블코인 · 신용카드 · $GLAS 결제 지원</Text>
+      <Text style={styles.payHint}>스테이블코인 · 신용카드 · $CHARM 결제 지원</Text>
       <Text style={styles.disclaimerSmall}>
         이 리포트는 건강기능식품 추천이며 의학적 진단이 아닙니다.
       </Text>
@@ -553,7 +553,7 @@ const styles = StyleSheet.create({
   iconBtn: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
   progressWrap: { flex: 1 },
   progressTrack: { height: 4, borderRadius: 2, backgroundColor: 'rgba(255,255,255,0.08)', overflow: 'hidden' },
-  progressFill: { height: '100%', backgroundColor: colors.accentViolet, borderRadius: 2 },
+  progressFill: { height: '100%', backgroundColor: colors.accentBlue, borderRadius: 2 },
   progressLabel: { fontFamily: fonts.bodyMed, fontSize: 10, color: colors.textFaint, marginTop: 4, textAlign: 'center' },
 
   introWrap: { flex: 1, paddingHorizontal: spacing.xl, paddingTop: spacing.xl },
@@ -566,7 +566,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: spacing.lg,
   },
-  introKicker: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.accentViolet, letterSpacing: 1 },
+  introKicker: { fontFamily: fonts.bodyBold, fontSize: 12, color: colors.accentBlue, letterSpacing: 1 },
   introTitle: { fontFamily: fonts.display, fontSize: 28, color: colors.text, marginTop: spacing.sm, lineHeight: 36 },
   introBody: { fontFamily: fonts.body, fontSize: 13, color: colors.textMuted, marginTop: spacing.md, lineHeight: 20 },
   introStatsRow: { flexDirection: 'row', alignItems: 'center', marginTop: spacing.xxl },
@@ -610,7 +610,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderDim,
   },
-  checkCardActive: { backgroundColor: 'rgba(177,140,255,0.1)', borderColor: colors.accentViolet },
+  checkCardActive: { backgroundColor: 'rgba(79,182,232,0.1)', borderColor: colors.accentBlue },
   checkbox: {
     width: 18,
     height: 18,
@@ -620,7 +620,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  checkboxActive: { backgroundColor: colors.accentViolet, borderColor: colors.accentViolet },
+  checkboxActive: { backgroundColor: colors.accentBlue, borderColor: colors.accentBlue },
   checkLabel: { fontFamily: fonts.bodyMed, fontSize: 12, color: colors.textMuted, flex: 1 },
   checkLabelActive: { color: colors.text, fontFamily: fonts.bodySemi },
 
@@ -635,7 +635,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderDim,
   },
-  goalRowActive: { backgroundColor: 'rgba(177,140,255,0.1)', borderColor: colors.accentViolet },
+  goalRowActive: { backgroundColor: 'rgba(79,182,232,0.1)', borderColor: colors.accentBlue },
 
   segLabel: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.text, marginBottom: spacing.sm },
   segRow: { flexDirection: 'row', gap: 6 },
@@ -647,7 +647,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderDim,
   },
-  segOptionActive: { backgroundColor: colors.accentViolet, borderColor: colors.accentViolet },
+  segOptionActive: { backgroundColor: colors.accentBlue, borderColor: colors.accentBlue },
   segOptionText: { fontFamily: fonts.bodyMed, fontSize: 11, color: colors.textMuted },
   segOptionTextActive: { color: '#0B0B0D', fontFamily: fonts.bodyBold },
 
@@ -656,9 +656,9 @@ const styles = StyleSheet.create({
     width: 88,
     height: 88,
     borderRadius: 44,
-    backgroundColor: 'rgba(177,140,255,0.1)',
+    backgroundColor: 'rgba(79,182,232,0.1)',
     borderWidth: 1,
-    borderColor: 'rgba(177,140,255,0.3)',
+    borderColor: 'rgba(79,182,232,0.3)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -673,7 +673,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  analyzingDotActive: { borderColor: colors.accentViolet },
+  analyzingDotActive: { borderColor: colors.accentBlue },
   analyzingDotDone: { backgroundColor: colors.accentGold, borderColor: colors.accentGold },
   analyzingLabel: { fontFamily: fonts.bodyMed, fontSize: 13, color: colors.textFaint },
   analyzingLabelActive: { color: colors.text },
@@ -685,7 +685,7 @@ const styles = StyleSheet.create({
     width: 260,
     height: 260,
     borderRadius: 130,
-    backgroundColor: 'rgba(177,140,255,0.16)',
+    backgroundColor: 'rgba(79,182,232,0.16)',
   },
   historyInsightCard: {
     flexDirection: 'row',

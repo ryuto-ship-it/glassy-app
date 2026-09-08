@@ -22,7 +22,7 @@ type Props = {
   children?: React.ReactNode;
 };
 
-// Signature GLASSY progress indicator — a droplet that visibly "fills up"
+// Signature CHARM progress indicator — a droplet that visibly "fills up"
 // toward the next glow tier, instead of a generic progress bar.
 export function DropletProgress({ size = 120, percent, colors, children }: Props) {
   const clamped = Math.max(0.03, Math.min(1, percent));

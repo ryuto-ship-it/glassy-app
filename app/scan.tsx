@@ -140,7 +140,7 @@ function ViewfinderFrame({ product }: { product: { id: string; shape: ProductSha
 
   return (
     <View style={styles.viewfinderOuter}>
-      <LinearGradient colors={['rgba(177,140,255,0.22)', 'rgba(5,5,6,0)']} style={styles.viewfinderGlow} />
+      <LinearGradient colors={['rgba(79,182,232,0.22)', 'rgba(5,5,6,0)']} style={styles.viewfinderGlow} />
       <View style={styles.viewfinderShelf} />
       <Animated.View style={[styles.viewfinder, frameStyle]}>
         <Animated.View style={[styles.viewfinderArt, artStyle]}>
@@ -302,8 +302,8 @@ export default function ScanScreen() {
             {!scan.alreadyPurchased && (
               <PillButton
                 label={ui.addToCart}
-                onPress={() => openPayment({ kind: 'product', title: product.name, subtitle: 'GLASSY Myeongdong Pharmacy', priceUSD: product.priceUSD })}
-                colors_={['#B18CFF', '#8C5CE0']}
+                onPress={() => openPayment({ kind: 'product', title: product.name, subtitle: '참약사 명동점', priceUSD: product.priceUSD })}
+                colors_={['#4FB6E8', '#1B5FA8']}
                 style={{ marginTop: spacing.xl }}
               />
             )}
@@ -410,16 +410,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: 'rgba(177,140,255,0.16)',
+    backgroundColor: 'rgba(79,182,232,0.16)',
     borderWidth: 1,
-    borderColor: 'rgba(177,140,255,0.3)',
+    borderColor: 'rgba(79,182,232,0.3)',
     paddingHorizontal: 9,
     paddingVertical: 3,
     borderRadius: radius.pill,
     marginBottom: spacing.sm,
   },
-  aiChipText: { fontFamily: fonts.bodyBold, fontSize: 10, color: colors.accentViolet, letterSpacing: 0.5 },
-  aiDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.accentViolet },
+  aiChipText: { fontFamily: fonts.bodyBold, fontSize: 10, color: colors.accentBlue, letterSpacing: 0.5 },
+  aiDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.accentBlue },
   hint: { fontFamily: fonts.bodyMed, fontSize: 12.5, color: 'rgba(255,255,255,0.65)', textAlign: 'center' },
   progressTrack: {
     width: '100%',

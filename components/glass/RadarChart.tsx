@@ -29,7 +29,7 @@ function ringPoints(cx: number, cy: number, r: number, n: number) {
 // Custom SVG radar/spider chart — no chart library dependency. Renders a
 // grid of concentric rings, one spoke per axis, and a filled polygon for
 // the current scores (0-100 per axis).
-export function RadarChart({ axes, scores, size = 220, color = colors.accentViolet }: Props) {
+export function RadarChart({ axes, scores, size = 220, color = colors.accentBlue }: Props) {
   const n = axes.length;
   const cx = size / 2;
   const cy = size / 2;

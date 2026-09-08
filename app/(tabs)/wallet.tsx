@@ -27,9 +27,9 @@ import { STAKE_LOCKUP_DAYS } from '@/constants/glow';
 // styles keeps resolving to the dark palette with no further changes.
 import { darkColors as colors, fonts, radius, spacing } from '@/constants/theme';
 import { DarkScope } from '@/constants/themeScope';
-import { GLAS_PRICE_HISTORY, GLAS_PRICE_HISTORY_24H } from '@/data/mock';
+import { CHARM_PRICE_HISTORY, CHARM_PRICE_HISTORY_24H } from '@/data/mock';
 import { addDays, daysSince, daysUntil, formatDateShort } from '@/lib/date';
-import { formatGlas, formatUsd } from '@/lib/format';
+import { formatCharm, formatUsd } from '@/lib/format';
 import { useAppStore } from '@/store/useAppStore';
 import { useQuizStore } from '@/store/useQuizStore';
 import { useUiStore } from '@/store/useUiStore';
@@ -46,19 +46,19 @@ export default function WalletScreen() {
   const [period, setPeriod] = useState<Period>('7D');
   const [chartWidth, setChartWidth] = useState(300);
 
-  const purchaseEarned = useAppStore((s) => s.purchaseEarnedGlas);
-  const directPurchase = useAppStore((s) => s.directPurchaseGlas);
-  const communityReward = useAppStore((s) => s.communityRewardGlas);
-  const liquid = useAppStore((s) => s.liquidBoughtGlas);
+  const purchaseEarned = useAppStore((s) => s.purchaseEarnedCharm);
+  const directPurchase = useAppStore((s) => s.directPurchaseCharm);
+  const communityReward = useAppStore((s) => s.communityRewardCharm);
+  const liquid = useAppStore((s) => s.liquidBoughtCharm);
   const stakeEntries = useAppStore((s) => s.stakeEntries);
   const [openTooltip, setOpenTooltip] = useState<string | null>(null);
   const usdt = useAppStore((s) => s.usdtBalance);
   const usdc = useAppStore((s) => s.usdcBalance);
   const transactions = useAppStore((s) => s.transactions);
   const demoFastForward = useAppStore((s) => s.demoFastForward);
-  const totalGlas = useAppStore((s) => s.totalGlas());
-  const maturedStaked = useAppStore((s) => s.maturedStakedGlas());
-  const pendingStaked = useAppStore((s) => s.pendingStakedGlas());
+  const totalCharm = useAppStore((s) => s.totalCharm());
+  const maturedStaked = useAppStore((s) => s.maturedStakedCharm());
+  const pendingStaked = useAppStore((s) => s.pendingStakedCharm());
 
   const unstakeEntry = useAppStore((s) => s.unstakeEntry);
   const toggleDemoFastForward = useAppStore((s) => s.toggleDemoFastForward);
@@ -82,7 +82,7 @@ export default function WalletScreen() {
   const { up } = get24hChange();
   const trendColor = up ? colors.success : colors.danger;
   const chartData =
-    period === '24H' ? GLAS_PRICE_HISTORY_24H : period === '7D' ? GLAS_PRICE_HISTORY.slice(-7) : GLAS_PRICE_HISTORY;
+    period === '24H' ? CHARM_PRICE_HISTORY_24H : period === '7D' ? CHARM_PRICE_HISTORY.slice(-7) : CHARM_PRICE_HISTORY;
 
   return (
     <DarkScope>
@@ -95,7 +95,7 @@ export default function WalletScreen() {
       >
         <View style={styles.section}>
           <Text style={styles.pageTitle}>지갑</Text>
-          <Text style={styles.pageSub}>$GLAS는 결제 수단이 아니라 보유 개수로 등급을 결정해요.</Text>
+          <Text style={styles.pageSub}>$CHARM은 결제 수단이 아니라 보유 개수로 등급을 결정해요.</Text>
         </View>
 
         <View style={styles.section}>
@@ -134,17 +134,17 @@ export default function WalletScreen() {
         ) : (
           <View style={styles.section}>
             <GlassSurface elevated radius={radius.xl} padding={spacing.xl}>
-              <Text style={styles.glasKicker}>총 보유 GLAS (등급 반영분)</Text>
-              <Text style={styles.glasTotal}>{formatGlas(totalGlas)} GLAS</Text>
-              <Text style={styles.sourceIntro}>GLAS 출처별로 색과 아이콘이 달라요 — ? 를 눌러 설명을 볼 수 있어요.</Text>
+              <Text style={styles.charmKicker}>총 보유 CHARM (등급 반영분)</Text>
+              <Text style={styles.charmTotal}>{formatCharm(totalCharm)} CHARM</Text>
+              <Text style={styles.sourceIntro}>CHARM 출처별로 색과 아이콘이 달라요 — ? 를 눌러 설명을 볼 수 있어요.</Text>
 
               <View style={styles.sourceGrid}>
                 <SourceRow
                   icon="bag-check-outline"
-                  color={colors.accentViolet}
+                  color={colors.accentBlue}
                   label="구매 적립분"
                   value={purchaseEarned}
-                  tooltip="약국에서 스테이블코인·신용카드로 결제할 때마다 자동으로 적립되는 GLAS예요."
+                  tooltip="약국에서 스테이블코인·신용카드로 결제할 때마다 자동으로 적립되는 CHARM이에요."
                   isOpen={openTooltip === 'purchase'}
                   onToggle={() => setOpenTooltip(openTooltip === 'purchase' ? null : 'purchase')}
                 />
@@ -153,7 +153,7 @@ export default function WalletScreen() {
                   color={colors.accentGold}
                   label="등급 즉시구매분"
                   value={directPurchase}
-                  tooltip="등급 탭에서 '지금 바로 구매'로 결제한 즉시, 락업 없이 등급에 반영되는 GLAS예요."
+                  tooltip="등급 탭에서 '지금 바로 구매'로 결제한 즉시, 락업 없이 등급에 반영되는 CHARM이에요."
                   isOpen={openTooltip === 'direct'}
                   onToggle={() => setOpenTooltip(openTooltip === 'direct' ? null : 'direct')}
                 />
@@ -162,7 +162,7 @@ export default function WalletScreen() {
                   color={colors.accentTeal}
                   label="커뮤니티 리워드분"
                   value={communityReward}
-                  tooltip="Glow Feed에서 후기 작성, 좋아요, 팔로워 증가로 받은 GLAS예요."
+                  tooltip="Glow Feed에서 후기 작성, 좋아요, 팔로워 증가로 받은 CHARM이에요."
                   isOpen={openTooltip === 'community'}
                   onToggle={() => setOpenTooltip(openTooltip === 'community' ? null : 'community')}
                 />
@@ -171,7 +171,7 @@ export default function WalletScreen() {
                   color={colors.textFaint}
                   label="스테이킹 매수분"
                   value={maturedStaked}
-                  tooltip="거래소에서 매수한 GLAS를 30일 이상 예치하면 등급에 반영되는 GLAS예요."
+                  tooltip="거래소에서 매수한 CHARM을 30일 이상 예치하면 등급에 반영되는 CHARM이에요."
                   isOpen={openTooltip === 'staking'}
                   onToggle={() => setOpenTooltip(openTooltip === 'staking' ? null : 'staking')}
                 />
@@ -179,11 +179,11 @@ export default function WalletScreen() {
 
               {pendingStaked > 0 && (
                 <Text style={styles.pendingNote}>
-                  락업 중 {formatGlas(pendingStaked)} GLAS — 30일 후 등급에 반영돼요
+                  락업 중 {formatCharm(pendingStaked)} CHARM — 30일 후 등급에 반영돼요
                 </Text>
               )}
               {liquid > 0 && (
-                <Text style={styles.pendingNote}>미스테이킹 {formatGlas(liquid)} GLAS 보유 중</Text>
+                <Text style={styles.pendingNote}>미스테이킹 {formatCharm(liquid)} CHARM 보유 중</Text>
               )}
             </GlassSurface>
           </View>
@@ -231,7 +231,7 @@ export default function WalletScreen() {
             </Pressable>
           </View>
           {stakeEntries.length === 0 ? (
-            <EmptyState emoji="🔒" title="스테이킹 중인 GLAS가 없어요" subtitle="거래소 매수 후 스테이킹해보세요" />
+            <EmptyState emoji="🔒" title="스테이킹 중인 CHARM이 없어요" subtitle="거래소 매수 후 스테이킹해보세요" />
           ) : (
             <GlassSurface radius={radius.lg} padding={0}>
               {stakeEntries.map((entry, i) => {
@@ -241,7 +241,7 @@ export default function WalletScreen() {
                 return (
                   <View key={entry.id} style={[styles.stakeRow, i !== stakeEntries.length - 1 && styles.txDivider]}>
                     <View style={{ flex: 1 }}>
-                      <Text style={styles.txTitle}>{formatGlas(entry.amount)} GLAS</Text>
+                      <Text style={styles.txTitle}>{formatCharm(entry.amount)} CHARM</Text>
                       <Text style={styles.txSub}>
                         {matured ? '락업 해제됨' : `락업 해제까지 D-${daysLeft}`} · {formatDateShort(entry.startDate)} 예치
                       </Text>
@@ -280,7 +280,7 @@ export default function WalletScreen() {
                       <Text style={styles.txTitle} numberOfLines={1}>
                         {tx.title}
                       </Text>
-                      {(tx.type === 'purchase' || tx.type === 'purchase_glas') && (
+                      {(tx.type === 'purchase' || tx.type === 'purchase_charm') && (
                         <Pressable onPress={() => openReceipt(tx)} style={styles.chainBadge} hitSlop={6}>
                           <Ionicons name="shield-checkmark" size={11} color={colors.success} />
                           <Text style={styles.chainBadgeText}>체인 인증됨</Text>
@@ -291,7 +291,7 @@ export default function WalletScreen() {
                   </View>
                   <Text style={[styles.txAmount, tx.direction === 'out' && styles.txAmountOut]}>
                     {tx.direction === 'out' ? '−' : '+'}
-                    {formatGlas(tx.glasDelta)}
+                    {formatCharm(tx.charmDelta)}
                   </Text>
                 </View>
               ))}
@@ -319,7 +319,7 @@ function txIcon(type: string): keyof typeof Ionicons.glyphMap {
       return 'people-outline';
     case 'tier_purchase':
       return 'flash';
-    case 'purchase_glas':
+    case 'purchase_charm':
       return 'arrow-up-circle-outline';
     default:
       return 'ellipse-outline';
@@ -335,7 +335,7 @@ function DiagnosisHistoryCard() {
     return (
       <GlassSurface radius={radius.lg} padding={spacing.lg}>
         <View style={styles.diagHeaderRow}>
-          <Ionicons name="analytics-outline" size={16} color={colors.accentViolet} />
+          <Ionicons name="analytics-outline" size={16} color={colors.accentBlue} />
           <Text style={styles.diagTitle}>진단 이력</Text>
         </View>
         <Text style={styles.diagSub}>아직 AI 진단 기록이 없어요. 첫 진단을 완료하면 여기서 변화를 추적할 수 있어요.</Text>
@@ -350,7 +350,7 @@ function DiagnosisHistoryCard() {
   return (
     <GlassSurface radius={radius.lg} padding={spacing.lg}>
       <View style={styles.diagHeaderRow}>
-        <Ionicons name="analytics-outline" size={16} color={colors.accentViolet} />
+        <Ionicons name="analytics-outline" size={16} color={colors.accentBlue} />
         <Text style={styles.diagTitle}>진단 이력</Text>
       </View>
       <Text style={styles.diagSub}>
@@ -408,7 +408,7 @@ function SourceRow({
           <Text style={styles.sourceHelpText}>?</Text>
         </Pressable>
       </View>
-      <Text style={styles.sourceValue}>{formatGlas(value)} GLAS</Text>
+      <Text style={styles.sourceValue}>{formatCharm(value)} CHARM</Text>
       {isOpen && <Text style={styles.sourceTooltip}>{tooltip}</Text>}
     </View>
   );
@@ -419,8 +419,8 @@ const styles = StyleSheet.create({
   section: { paddingHorizontal: spacing.xl, marginTop: spacing.xl },
   pageTitle: { fontFamily: fonts.display, fontSize: 24, color: colors.text },
   pageSub: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted, marginTop: 4 },
-  glasKicker: { fontFamily: fonts.bodyMed, fontSize: 12, color: colors.textMuted },
-  glasTotal: { fontFamily: fonts.display, fontSize: 30, color: colors.text, marginTop: 4 },
+  charmKicker: { fontFamily: fonts.bodyMed, fontSize: 12, color: colors.textMuted },
+  charmTotal: { fontFamily: fonts.display, fontSize: 30, color: colors.text, marginTop: 4 },
   diagHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   diagTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text },
   diagSub: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, marginTop: 6, lineHeight: 16 },
@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderDim,
   },
-  periodChipActive: { backgroundColor: colors.accentViolet, borderColor: colors.accentViolet },
+  periodChipActive: { backgroundColor: colors.accentBlue, borderColor: colors.accentBlue },
   periodChipText: { fontFamily: fonts.bodyBold, fontSize: 11, color: colors.textMuted },
   periodChipTextActive: { color: '#0B0B0D' },
   stableRow: { flexDirection: 'row', gap: spacing.md },
@@ -498,7 +498,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: radius.pill,
-    backgroundColor: colors.accentViolet,
+    backgroundColor: colors.accentBlue,
   },
   unstakeBtnDisabled: { backgroundColor: 'rgba(255,255,255,0.08)' },
   unstakeBtnText: { fontFamily: fonts.bodyBold, fontSize: 11, color: '#0B0B0D' },

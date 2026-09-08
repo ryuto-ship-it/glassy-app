@@ -5,7 +5,7 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { colors, darkColors, fonts, radius, spacing } from '@/constants/theme';
 import { DarkScope } from '@/constants/themeScope';
 import { Transaction } from '@/data/mock';
-import { formatGlas, formatUsd, mockTxHash } from '@/lib/format';
+import { formatCharm, formatUsd, mockTxHash } from '@/lib/format';
 import { useAppStore } from '@/store/useAppStore';
 import { useUiStore } from '@/store/useUiStore';
 import { AppModal } from './AppModal';
@@ -70,23 +70,23 @@ export function GlobalSheets() {
 
 function WalletActionSheetContent({ mode, onClose }: { mode: 'buy' | 'stake'; onClose: () => void }) {
   const [amount, setAmount] = useState('');
-  const liquid = useAppStore((s) => s.liquidBoughtGlas);
+  const liquid = useAppStore((s) => s.liquidBoughtCharm);
   const usdt = useAppStore((s) => s.usdtBalance);
-  const buyGlas = useAppStore((s) => s.buyGlas);
-  const stakeGlas = useAppStore((s) => s.stakeGlas);
+  const buyCharm = useAppStore((s) => s.buyCharm);
+  const stakeCharm = useAppStore((s) => s.stakeCharm);
 
   const confirm = () => {
     const val = Number(amount);
     if (!val || val <= 0) return;
-    if (mode === 'buy') buyGlas(val);
-    else stakeGlas(Math.min(val, liquid));
+    if (mode === 'buy') buyCharm(val);
+    else stakeCharm(Math.min(val, liquid));
     onClose();
   };
 
   return (
     <DarkScope>
       <View style={styles.sheetContent}>
-        <Text style={[styles.title, { color: darkColors.text }]}>{mode === 'buy' ? '$GLAS 거래소 매수' : '$GLAS 스테이킹'}</Text>
+        <Text style={[styles.title, { color: darkColors.text }]}>{mode === 'buy' ? '$CHARM 거래소 매수' : '$CHARM 스테이킹'}</Text>
         {mode === 'stake' && (
           <View style={styles.lockupNotice}>
             <Ionicons name="lock-closed-outline" size={14} color={darkColors.textMuted} />
@@ -94,13 +94,13 @@ function WalletActionSheetContent({ mode, onClose }: { mode: 'buy' | 'stake'; on
           </View>
         )}
         <Text style={[styles.hint, { color: darkColors.textMuted }]}>
-          {mode === 'buy' ? `사용 가능 USDT: ${formatUsd(usdt)}` : `스테이킹 가능 GLAS: ${formatGlas(liquid)}`}
+          {mode === 'buy' ? `사용 가능 USDT: ${formatUsd(usdt)}` : `스테이킹 가능 CHARM: ${formatCharm(liquid)}`}
         </Text>
         <TextInput
           value={amount}
           onChangeText={setAmount}
           keyboardType="numeric"
-          placeholder={mode === 'buy' ? 'USDT 금액 입력' : 'GLAS 수량 입력'}
+          placeholder={mode === 'buy' ? 'USDT 금액 입력' : 'CHARM 수량 입력'}
           placeholderTextColor={darkColors.textMuted}
           style={[styles.input, { borderColor: darkColors.borderStrong, backgroundColor: darkColors.glassFill, color: darkColors.text }]}
         />
@@ -127,7 +127,7 @@ function ComposerSheetContent({ onClose }: { onClose: () => void }) {
   return (
     <View style={styles.sheetContent}>
       <Text style={styles.title}>새 후기 작성</Text>
-      <Text style={styles.hint}>후기를 등록하면 GLAS 리워드를 받아요.</Text>
+      <Text style={styles.hint}>후기를 등록하면 CHARM 리워드를 받아요.</Text>
 
       <View style={{ flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md }}>
         {COMPOSER_IMAGES.map((img) => (
@@ -145,7 +145,7 @@ function ComposerSheetContent({ onClose }: { onClose: () => void }) {
         style={styles.textArea}
         multiline
       />
-      <PillButton label="등록하고 GLAS 받기" onPress={submit} style={{ marginTop: spacing.lg }} />
+      <PillButton label="등록하고 CHARM 받기" onPress={submit} style={{ marginTop: spacing.lg }} />
       <Pressable onPress={onClose} style={{ marginTop: spacing.md, alignItems: 'center' }}>
         <Text style={styles.cancelText}>취소</Text>
       </Pressable>
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
     padding: spacing.md,
     borderRadius: radius.md,
-    backgroundColor: 'rgba(177,140,255,0.12)',
+    backgroundColor: 'rgba(79,182,232,0.12)',
   },
   lockupNoticeText: { fontFamily: fonts.bodyMed, fontSize: 11, color: colors.text, flex: 1 },
   input: {
@@ -297,7 +297,7 @@ const styles = StyleSheet.create({
   },
   cancelText: { fontFamily: fonts.bodyMed, fontSize: 12, color: colors.textMuted },
   pickThumb: { width: 64, height: 64, borderRadius: radius.md, opacity: 0.5 },
-  pickThumbActive: { opacity: 1, borderWidth: 2, borderColor: colors.accentViolet },
+  pickThumbActive: { opacity: 1, borderWidth: 2, borderColor: colors.accentBlue },
   textArea: {
     marginTop: spacing.md,
     borderWidth: 1,
