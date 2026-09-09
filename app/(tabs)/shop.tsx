@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, { useReducedMotion } from 'react-native-reanimated';
 
 import { AppBackground } from '@/components/glass/AppBackground';
 import { CharmacistLogo } from '@/components/glass/CharmacistLogo';
@@ -14,6 +15,7 @@ import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { CATEGORY_LABEL, Product, ProductCategory, PRODUCTS, REAL_PRODUCT_BADGE } from '@/data/mock';
 import { hashSeed } from '@/lib/artSeed';
 import { formatUsd } from '@/lib/format';
+import { staggerEnter } from '@/lib/motion';
 import { useTierStatus } from '@/lib/useTierStatus';
 import { useUiStore } from '@/store/useUiStore';
 
@@ -47,6 +49,7 @@ export default function ShopScreen() {
 
   const { tier } = useTierStatus();
   const openPayment = useUiStore((s) => s.openPayment);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     const t = setTimeout(() => setLoading(false), 800);
@@ -133,13 +136,17 @@ export default function ShopScreen() {
             <EmptyState title="상품이 없어요" subtitle="다른 카테고리를 선택해보세요" />
           ) : (
             <View style={styles.grid}>
-              {filtered.map((p) => {
+              {filtered.map((p, index) => {
                 const discounted = p.priceUSD * (1 - tier.discountPct / 100);
                 const groupPrice = p.groupBuy
                   ? discounted * (1 - p.groupBuy.extraDiscountPct / 100)
                   : discounted;
                 return (
-                  <View key={p.id} style={styles.gridItem}>
+                  <Animated.View
+                    key={p.id}
+                    entering={staggerEnter(index, { step: 45, max: 360 }, reducedMotion)}
+                    style={styles.gridItem}
+                  >
                     <GlassSurface radius={radius.lg} padding={spacing.sm}>
                       <View style={styles.imgWrap}>
                         <ProductImage product={p} style={styles.productImg} />
@@ -209,7 +216,7 @@ export default function ShopScreen() {
                         </Text>
                       </Pressable>
                     </GlassSurface>
-                  </View>
+                  </Animated.View>
                 );
               })}
             </View>

@@ -1,7 +1,19 @@
+import { useEffect } from 'react';
 import { Text, View } from 'react-native';
+import Animated, {
+  Easing,
+  SharedValue,
+  useAnimatedProps,
+  useReducedMotion,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import Svg, { Circle, Defs, Line, LinearGradient, Polygon, Stop } from 'react-native-svg';
 
 import { colors, fonts } from '@/constants/theme';
+
+const AnimatedPolygon = Animated.createAnimatedComponent(Polygon);
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 type Axis = { id: string; label: string };
 
@@ -35,15 +47,33 @@ export function RadarChart({ axes, scores, size = 220, color = colors.accentBlue
   const cy = size / 2;
   const maxR = size / 2 - 34;
   const gradId = `radar-${color.replace('#', '')}-${n}`;
+  const reducedMotion = useReducedMotion();
 
-  const dataPoints = axes
-    .map((axis, i) => {
-      const angle = -Math.PI / 2 + (2 * Math.PI * i) / n;
-      const value = Math.max(0, Math.min(100, scores[axis.id] ?? 0)) / 100;
-      const [x, y] = pointOn(cx, cy, maxR * value, angle);
-      return `${x.toFixed(1)},${y.toFixed(1)}`;
-    })
-    .join(' ');
+  // Values captured once per axis set — used inside the UI-thread worklet
+  // below so it doesn't need to re-read the (non-worklet-safe) `scores`
+  // object every frame.
+  const values = axes.map((axis) => Math.max(0, Math.min(100, scores[axis.id] ?? 0)) / 100);
+
+  const draw = useSharedValue(reducedMotion ? 1 : 0);
+  useEffect(() => {
+    draw.value = reducedMotion ? 1 : 0;
+    draw.value = withTiming(1, { duration: 1000, easing: Easing.out(Easing.cubic) });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(values), reducedMotion]);
+
+  const polygonProps = useAnimatedProps(() => {
+    'worklet';
+    const pts = values
+      .map((value, i) => {
+        const angle = -Math.PI / 2 + (2 * Math.PI * i) / n;
+        const r = maxR * value * draw.value;
+        const x = cx + r * Math.cos(angle);
+        const y = cy + r * Math.sin(angle);
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      })
+      .join(' ');
+    return { points: pts };
+  });
 
   return (
     <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
@@ -68,12 +98,13 @@ export function RadarChart({ axes, scores, size = 220, color = colors.accentBlue
           const [x, y] = pointOn(cx, cy, maxR, angle);
           return <Line key={axis.id} x1={cx} y1={cy} x2={x} y2={y} stroke="rgba(0,0,0,0.1)" strokeWidth={1} />;
         })}
-        <Polygon points={dataPoints} fill={`url(#${gradId})`} stroke={color} strokeWidth={2} />
+        <AnimatedPolygon animatedProps={polygonProps} fill={`url(#${gradId})`} stroke={color} strokeWidth={2} />
         {axes.map((axis, i) => {
           const angle = -Math.PI / 2 + (2 * Math.PI * i) / n;
-          const value = Math.max(0, Math.min(100, scores[axis.id] ?? 0)) / 100;
-          const [x, y] = pointOn(cx, cy, maxR * value, angle);
-          return <Circle key={axis.id} cx={x} cy={y} r={3.5} fill={color} />;
+          const value = values[i];
+          return (
+            <RadarDot key={axis.id} draw={draw} cx={cx} cy={cy} angle={angle} maxR={maxR} value={value} color={color} />
+          );
         })}
       </Svg>
       {axes.map((axis, i) => {
@@ -99,4 +130,29 @@ export function RadarChart({ axes, scores, size = 220, color = colors.accentBlue
       })}
     </View>
   );
+}
+
+function RadarDot({
+  draw,
+  cx,
+  cy,
+  angle,
+  maxR,
+  value,
+  color,
+}: {
+  draw: SharedValue<number>;
+  cx: number;
+  cy: number;
+  angle: number;
+  maxR: number;
+  value: number;
+  color: string;
+}) {
+  const dotProps = useAnimatedProps(() => {
+    'worklet';
+    const r = maxR * value * draw.value;
+    return { cx: cx + r * Math.cos(angle), cy: cy + r * Math.sin(angle), opacity: draw.value };
+  });
+  return <AnimatedCircle animatedProps={dotProps} r={3.5} fill={color} />;
 }

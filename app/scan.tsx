@@ -8,6 +8,7 @@ import Animated, {
   Easing,
   FadeIn,
   FadeInDown,
+  interpolateColor,
   ZoomIn,
   useAnimatedStyle,
   useSharedValue,
@@ -107,7 +108,9 @@ function statusForProgress(progress: number, ui: (typeof UI_LABELS)['ko']) {
 function ScanLine() {
   const y = useSharedValue(0);
   useEffect(() => {
-    y.value = withRepeat(withSequence(withTiming(1, { duration: 1300, easing: Easing.linear }), withTiming(0, { duration: 0 })), -1);
+    // reverse:true bounces smoothly back up instead of snapping — a real
+    // up/down sweep rather than a one-directional loop with a hard reset.
+    y.value = withRepeat(withTiming(1, { duration: 1300, easing: Easing.inOut(Easing.sin) }), -1, true);
   }, [y]);
   const style = useAnimatedStyle(() => ({ transform: [{ translateY: y.value * 210 }] }));
   return <Animated.View style={[styles.scanLine, style]} />;
@@ -122,12 +125,17 @@ function AiPulseDot() {
   return <Animated.View style={[styles.aiDot, style]} />;
 }
 
-function ViewfinderFrame({ product }: { product: Product }) {
+function ViewfinderFrame({ product, recognized }: { product: Product; recognized: boolean }) {
   const lock = useSharedValue(0);
+  const flash = useSharedValue(0);
   useEffect(() => {
     lock.value = 0;
     lock.value = withDelay(180, withTiming(1, { duration: 700, easing: Easing.out(Easing.cubic) }));
   }, [lock, product.id]);
+
+  useEffect(() => {
+    flash.value = withTiming(recognized ? 1 : 0, { duration: recognized ? 260 : 180, easing: Easing.out(Easing.quad) });
+  }, [recognized, flash]);
 
   const frameStyle = useAnimatedStyle(() => {
     const size = 258 - lock.value * 68;
@@ -136,6 +144,11 @@ function ViewfinderFrame({ product }: { product: Product }) {
   const artStyle = useAnimatedStyle(() => ({
     opacity: 0.3 + lock.value * 0.7,
     transform: [{ scale: 0.88 + lock.value * 0.12 }],
+  }));
+  // Corners flash from gold ("scanning") to success-green the instant
+  // recognition confirms, instead of staying a fixed color throughout.
+  const cornerStyle = useAnimatedStyle(() => ({
+    borderColor: interpolateColor(flash.value, [0, 1], [colors.accentGold, colors.success]),
   }));
 
   return (
@@ -147,10 +160,10 @@ function ViewfinderFrame({ product }: { product: Product }) {
           {product && <ProductImage product={product} style={styles.viewfinderArtImg} />}
         </Animated.View>
         <ScanLine />
-        <View style={[styles.corner, styles.cornerTL]} />
-        <View style={[styles.corner, styles.cornerTR]} />
-        <View style={[styles.corner, styles.cornerBL]} />
-        <View style={[styles.corner, styles.cornerBR]} />
+        <Animated.View style={[styles.corner, styles.cornerTL, cornerStyle]} />
+        <Animated.View style={[styles.corner, styles.cornerTR, cornerStyle]} />
+        <Animated.View style={[styles.corner, styles.cornerBL, cornerStyle]} />
+        <Animated.View style={[styles.corner, styles.cornerBR, cornerStyle]} />
       </Animated.View>
     </View>
   );
@@ -239,7 +252,7 @@ export default function ScanScreen() {
       {(step === 'viewfinder' || step === 'recognized') && (
         <View style={styles.centerRoot}>
           <View style={styles.frameZone}>
-            <ViewfinderFrame product={product} />
+            <ViewfinderFrame product={product} recognized={step === 'recognized'} />
             {step === 'recognized' && <PulseRing />}
           </View>
           {step === 'viewfinder' ? (

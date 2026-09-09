@@ -12,6 +12,7 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 
+import { ConfettiBurst } from './ConfettiBurst';
 import { GlassSurface } from './GlassSurface';
 import { GradeBadge } from './GradeBadge';
 import { TIERS } from '@/constants/glow';
@@ -38,6 +39,7 @@ export function LevelUpOverlay() {
   return (
     <Animated.View entering={FadeIn} exiting={FadeOut} style={styles.host} pointerEvents="box-none">
       <View style={styles.backdrop} />
+      <ConfettiBurst trigger={tier.id} />
       <Animated.View style={[styles.sweep, rotateStyle, isTopTier && styles.sweepBig]}>
         <LinearGradient
           colors={gradients.holo}

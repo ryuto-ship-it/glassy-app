@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, { useReducedMotion } from 'react-native-reanimated';
 
 import { AppBackground } from '@/components/glass/AppBackground';
 import { EmptyState } from '@/components/glass/EmptyState';
@@ -30,6 +31,7 @@ import { DarkScope } from '@/constants/themeScope';
 import { CHARM_PRICE_HISTORY, CHARM_PRICE_HISTORY_24H } from '@/data/mock';
 import { addDays, daysSince, daysUntil, formatDateShort } from '@/lib/date';
 import { formatCharm, formatUsd } from '@/lib/format';
+import { staggerEnter } from '@/lib/motion';
 import { useAppStore } from '@/store/useAppStore';
 import { useQuizStore } from '@/store/useQuizStore';
 import { useUiStore } from '@/store/useUiStore';
@@ -38,6 +40,7 @@ type Period = '24H' | '7D' | '30D';
 
 export default function WalletScreen() {
   const insets = useSafeAreaInsets();
+  const reducedMotion = useReducedMotion();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const openWalletAction = useUiStore((s) => s.openWalletAction);
@@ -239,7 +242,11 @@ export default function WalletScreen() {
                 const daysLeft = daysUntil(unlockDate);
                 const matured = demoFastForward || daysLeft <= 0;
                 return (
-                  <View key={entry.id} style={[styles.stakeRow, i !== stakeEntries.length - 1 && styles.txDivider]}>
+                  <Animated.View
+                    key={entry.id}
+                    entering={staggerEnter(i, { step: 70 }, reducedMotion)}
+                    style={[styles.stakeRow, i !== stakeEntries.length - 1 && styles.txDivider]}
+                  >
                     <View style={{ flex: 1 }}>
                       <Text style={styles.txTitle}>{formatCharm(entry.amount)} CHARM</Text>
                       <Text style={styles.txSub}>
@@ -252,7 +259,7 @@ export default function WalletScreen() {
                     >
                       <Text style={styles.unstakeBtnText}>언스테이킹</Text>
                     </Pressable>
-                  </View>
+                  </Animated.View>
                 );
               })}
             </GlassSurface>
@@ -271,7 +278,11 @@ export default function WalletScreen() {
           ) : (
             <GlassSurface radius={radius.lg} padding={0}>
               {transactions.slice(0, 12).map((tx, i) => (
-                <View key={tx.id} style={[styles.txRow, i !== Math.min(transactions.length, 12) - 1 && styles.txDivider]}>
+                <Animated.View
+                  key={tx.id}
+                  entering={staggerEnter(i, { step: 55, max: 380 }, reducedMotion)}
+                  style={[styles.txRow, i !== Math.min(transactions.length, 12) - 1 && styles.txDivider]}
+                >
                   <View style={styles.txIcon}>
                     <Ionicons name={txIcon(tx.type)} size={16} color={colors.textMuted} />
                   </View>
@@ -293,7 +304,7 @@ export default function WalletScreen() {
                     {tx.direction === 'out' ? '−' : '+'}
                     {formatCharm(tx.charmDelta)}
                   </Text>
-                </View>
+                </Animated.View>
               ))}
             </GlassSurface>
           )}

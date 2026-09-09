@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleProp, StyleSheet, Text, TextInput, View, ViewStyle } from 'react-native';
-import Animated, { FadeIn } from 'react-native-reanimated';
+import { Pressable, ScrollView, StyleProp, StyleSheet, Text, TextInput, View, ViewStyle } from 'react-native';
+import Animated, { FadeIn, ZoomIn } from 'react-native-reanimated';
 
 // Payment/checkout modals stay on the dark "premium glass" theme regardless
 // of which screen opened them — see constants/theme.ts / themeScope.tsx.
@@ -11,9 +11,12 @@ import { CHARM_PRICE_USD, USER } from '@/data/mock';
 import { formatCharm, formatUsd } from '@/lib/format';
 import { PaymentMethod, useAppStore } from '@/store/useAppStore';
 import { AppModal } from './AppModal';
+import { CheckmarkDraw } from './CheckmarkDraw';
+import { ConfettiBurst } from './ConfettiBurst';
 import { GlassSurface } from './GlassSurface';
 import { MockQRCode } from './MockQRCode';
 import { PillButton } from './PillButton';
+import { ProgressRing } from './ProgressRing';
 
 export type PaymentVariant =
   | { kind: 'product'; title: string; subtitle: string; priceUSD: number }
@@ -235,7 +238,7 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
         {step === 'wallet-connecting' && (
           <StepFade>
             <View style={styles.centerBlock}>
-              <ActivityIndicator color={colors.accentBlue} />
+              <ProgressRing durationMs={1300} color={colors.accentBlue} />
               <Text style={styles.centerText}>{wallet?.name}에 연결 중...</Text>
             </View>
           </StepFade>
@@ -244,9 +247,9 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
         {step === 'wallet-connected' && (
           <StepFade>
             <View style={styles.centerBlock}>
-              <View style={styles.successIcon}>
-                <Ionicons name="checkmark" size={26} color="#0B0B0D" />
-              </View>
+              <Animated.View entering={ZoomIn.duration(380).springify().damping(12)} style={styles.successIcon}>
+                <CheckmarkDraw size={26} />
+              </Animated.View>
               <Text style={styles.centerTitle}>지갑 연결 완료</Text>
               <Text style={styles.centerText}>0x7a3F...9c2D 연결됨</Text>
             </View>
@@ -309,7 +312,7 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
         {step === 'stable-processing' && (
           <StepFade>
             <View style={styles.centerBlock}>
-              <ActivityIndicator color={colors.accentBlue} />
+              <ProgressRing durationMs={1100} color={colors.accentBlue} />
               <Text style={styles.centerText}>결제 처리 중...</Text>
             </View>
           </StepFade>
@@ -333,7 +336,7 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
         {step === 'card-processing' && (
           <StepFade>
             <View style={styles.centerBlock}>
-              <ActivityIndicator color={colors.accentGold} />
+              <ProgressRing durationMs={1300} color={colors.accentGold} />
               <Text style={styles.centerText}>MoonPay 처리 중...</Text>
             </View>
           </StepFade>
@@ -365,7 +368,7 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
         {step === 'charm-processing' && (
           <StepFade>
             <View style={styles.centerBlock}>
-              <ActivityIndicator color={colors.accentBlue} />
+              <ProgressRing durationMs={900} color={colors.accentBlue} />
               <Text style={styles.centerText}>CHARM 차감 처리 중...</Text>
             </View>
           </StepFade>
@@ -385,7 +388,7 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
         {step === 'cash-scanning' && (
           <StepFade>
             <View style={styles.centerBlock}>
-              <ActivityIndicator color={colors.accentGold} />
+              <ProgressRing durationMs={1500} color={colors.accentGold} />
               <Text style={styles.centerText}>QR 스캔 중...</Text>
             </View>
           </StepFade>
@@ -394,9 +397,9 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
         {step === 'cash-matched' && (
           <StepFade>
             <View style={styles.centerBlock}>
-              <View style={styles.successIcon}>
-                <Ionicons name="checkmark" size={26} color="#0B0B0D" />
-              </View>
+              <Animated.View entering={ZoomIn.duration(380).springify().damping(12)} style={styles.successIcon}>
+                <CheckmarkDraw size={26} />
+              </Animated.View>
               <Text style={styles.centerTitle}>프로필 매칭 완료</Text>
               <Text style={styles.centerText}>가입하신 프로필 정보로 자동 매칭돼서 적립돼요.</Text>
               <View style={styles.profileChipRow}>
@@ -411,9 +414,10 @@ export function PaymentFlowModal({ visible, onClose, variant, onSuccess }: Props
         {step === 'success' && result && (
           <StepFade>
             <View style={styles.centerBlock}>
-              <View style={styles.successIcon}>
-                <Ionicons name="checkmark" size={30} color="#0B0B0D" />
-              </View>
+              <ConfettiBurst trigger={result.ref} />
+              <Animated.View entering={ZoomIn.duration(420).springify().damping(11)} style={styles.successIcon}>
+                <CheckmarkDraw size={30} />
+              </Animated.View>
               <Text style={styles.centerTitle}>결제 완료!</Text>
               {result.creditCharm !== undefined ? (
                 <Text style={styles.centerText}>

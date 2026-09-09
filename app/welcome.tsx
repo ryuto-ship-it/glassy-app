@@ -4,9 +4,22 @@ import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, { FadeIn, FadeInDown, ZoomIn } from 'react-native-reanimated';
+import Animated, {
+  Easing,
+  FadeIn,
+  FadeInDown,
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+  ZoomIn,
+} from 'react-native-reanimated';
 
 import { CharmacistLogo } from '@/components/glass/CharmacistLogo';
+import { ConfettiBurst } from '@/components/glass/ConfettiBurst';
+import { FloatingBlobs } from '@/components/glass/FloatingBlobs';
 import { PillButton } from '@/components/glass/PillButton';
 // Kept on the dark theme deliberately — a dramatic, distinct "store entry"
 // moment regardless of the app's light default elsewhere.
@@ -16,6 +29,27 @@ import { WELCOME_BONUS_CHARM, useAppStore } from '@/store/useAppStore';
 import { useUiStore } from '@/store/useUiStore';
 
 type Step = 'intro' | 'joining' | 'reward';
+
+// Subtle "look here" pulse on the primary CTA — a ~2.6s breathing scale,
+// off entirely under reduce-motion.
+function usePulseStyle() {
+  const reducedMotion = useReducedMotion();
+  const scale = useSharedValue(1);
+
+  useEffect(() => {
+    if (reducedMotion) return;
+    scale.value = withRepeat(
+      withSequence(
+        withTiming(1.035, { duration: 1300, easing: Easing.inOut(Easing.sin) }),
+        withTiming(1, { duration: 1300, easing: Easing.inOut(Easing.sin) })
+      ),
+      -1,
+      false
+    );
+  }, [reducedMotion, scale]);
+
+  return useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+}
 
 // The "매장 입구 웰컴 게이트웨이" — the mocked entry point for a customer
 // who just scanned a store QR and is signing up for the first time. Shown
@@ -27,6 +61,7 @@ export default function WelcomeScreen() {
   const [step, setStep] = useState<Step>('intro');
   const markWelcomeSeen = useUiStore((s) => s.markWelcomeSeen);
   const claimWelcomeBonus = useAppStore((s) => s.claimWelcomeBonus);
+  const pulseStyle = usePulseStyle();
 
   useEffect(() => {
     markWelcomeSeen();
@@ -50,6 +85,7 @@ export default function WelcomeScreen() {
   return (
     <DarkScope>
     <LinearGradient colors={darkBackgroundGradient} style={[styles.root, { paddingTop: insets.top + spacing.lg }]}>
+      <FloatingBlobs />
       {step === 'intro' && (
         <Pressable onPress={goHome} style={styles.closeBtn} hitSlop={10}>
           <Ionicons name="close" size={18} color={colors.textMuted} />
@@ -63,24 +99,38 @@ export default function WelcomeScreen() {
           </View>
           <Text style={styles.scannedText}>매장 QR 스캔 완료</Text>
 
-          <CharmacistLogo size={40} chip style={{ marginTop: spacing.lg }} />
-          <Text style={styles.partnerLine}>참약사와 함께하는 CHARM</Text>
-          <Text style={styles.brand}>CHARM</Text>
-          <Text style={styles.tagline}>{TAGLINE}</Text>
+          <Animated.View entering={ZoomIn.delay(150).duration(500).springify().damping(13)} style={{ marginTop: spacing.lg }}>
+            <CharmacistLogo size={40} chip />
+          </Animated.View>
+          <Animated.Text entering={FadeIn.delay(450).duration(400)} style={styles.partnerLine}>
+            참약사와 함께하는 CHARM
+          </Animated.Text>
+          <Animated.Text entering={ZoomIn.delay(600).duration(550).springify().damping(14)} style={styles.brand}>
+            CHARM
+          </Animated.Text>
+          <Animated.Text entering={FadeIn.delay(900).duration(400)} style={styles.tagline}>
+            {TAGLINE}
+          </Animated.Text>
 
-          <Text style={styles.headline}>지금 가입하면{'\n'}즉시 리워드 지급</Text>
-          <Text style={styles.sub}>간편 가입하고 웰컴 CHARM을 바로 받아보세요. 결제수단은 나중에 무엇을 쓰든 상관없어요.</Text>
+          <Animated.Text entering={FadeInDown.delay(1000).duration(450)} style={styles.headline}>
+            지금 가입하면{'\n'}즉시 리워드 지급
+          </Animated.Text>
+          <Animated.Text entering={FadeInDown.delay(1100).duration(450)} style={styles.sub}>
+            간편 가입하고 웰컴 CHARM을 바로 받아보세요. 결제수단은 나중에 무엇을 쓰든 상관없어요.
+          </Animated.Text>
 
-          <View style={styles.btnCol}>
-            <Pressable style={styles.oauthBtn} onPress={() => startSignup('google')}>
-              <Ionicons name="logo-google" size={16} color="#0B0B0D" />
-              <Text style={styles.oauthBtnText}>Google로 계속하기</Text>
-            </Pressable>
+          <Animated.View entering={FadeInDown.delay(1250).duration(450)} style={styles.btnCol}>
+            <Animated.View style={pulseStyle}>
+              <Pressable style={styles.oauthBtn} onPress={() => startSignup('google')}>
+                <Ionicons name="logo-google" size={16} color="#0B0B0D" />
+                <Text style={styles.oauthBtnText}>Google로 계속하기</Text>
+              </Pressable>
+            </Animated.View>
             <Pressable style={[styles.oauthBtn, styles.oauthBtnAlt]} onPress={() => startSignup('email')}>
               <Ionicons name="mail-outline" size={16} color={colors.text} />
               <Text style={[styles.oauthBtnText, styles.oauthBtnTextAlt]}>이메일로 계속하기</Text>
             </Pressable>
-          </View>
+          </Animated.View>
         </Animated.View>
       )}
 
@@ -93,6 +143,7 @@ export default function WelcomeScreen() {
 
       {step === 'reward' && (
         <View style={styles.centerWrap}>
+          <ConfettiBurst trigger="welcome-reward" />
           <Animated.View entering={ZoomIn.duration(420).springify()}>
             <View style={styles.rewardIconWrap}>
               <LinearGradient colors={['#4FB6E8', '#E8C468']} style={StyleSheet.absoluteFill} />

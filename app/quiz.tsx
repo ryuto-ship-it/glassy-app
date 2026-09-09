@@ -13,6 +13,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { AppBackground } from '@/components/glass/AppBackground';
+import { CountUpText } from '@/components/glass/CountUpText';
 import { GlassSurface } from '@/components/glass/GlassSurface';
 import { PillButton } from '@/components/glass/PillButton';
 import { ProductImage } from '@/components/glass/ProductImage';
@@ -426,7 +427,9 @@ function ResultsStep({
   return (
     <ScrollView contentContainerStyle={styles.stepScroll} showsVerticalScrollIndicator={false}>
       <Text style={styles.resultsKicker}>컨디션 리포트 · 실시간 분석</Text>
-      <Text style={styles.stepTitle}>AI 매칭률 {topScore}%</Text>
+      <Text style={styles.stepTitle}>
+        AI 매칭률 <CountUpText value={topScore} duration={900} style={styles.stepTitle} />%
+      </Text>
       <Text style={styles.stepSub}>선택한 컨디션과 목표를 기반으로 개인 맞춤 인텔리전스가 분석했어요.</Text>
 
       <View style={{ marginTop: spacing.lg }}>

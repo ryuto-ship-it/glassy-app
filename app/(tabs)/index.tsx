@@ -11,10 +11,12 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, { useReducedMotion } from 'react-native-reanimated';
 
 import { AiHeroBanner } from '@/components/glass/AiHeroBanner';
 import { AppBackground } from '@/components/glass/AppBackground';
 import { HomeCarousel } from '@/components/glass/HomeCarousel';
+import { CountUpText } from '@/components/glass/CountUpText';
 import { DropletProgress } from '@/components/glass/DropletProgress';
 import { EmptyState } from '@/components/glass/EmptyState';
 import { GlassSurface } from '@/components/glass/GlassSurface';
@@ -27,6 +29,7 @@ import { colors, fonts, radius, spacing, TAGLINE } from '@/constants/theme';
 import { FEATURED_GROUP_BUY, PRODUCTS, REAL_PRODUCT_BADGE, USER } from '@/data/mock';
 import { formatDateShort } from '@/lib/date';
 import { formatCharm, formatSigned, formatUsd } from '@/lib/format';
+import { staggerEnter } from '@/lib/motion';
 import { useTierStatus } from '@/lib/useTierStatus';
 import { useAppStore } from '@/store/useAppStore';
 import { useQuizStore } from '@/store/useQuizStore';
@@ -35,6 +38,7 @@ import { useUiStore } from '@/store/useUiStore';
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const reducedMotion = useReducedMotion();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -123,7 +127,9 @@ export default function HomeScreen() {
                 <View style={{ flex: 1 }}>
                   <Text style={styles.tierKicker}>내 피부 광채 등급</Text>
                   <Text style={[styles.tierName, { color: tier.accent }]}>{tier.name}</Text>
-                  <Text style={styles.tierBalance}>{formatCharm(totalCharm)} CHARM 보유</Text>
+                  <Text style={styles.tierBalance}>
+                    <CountUpText value={totalCharm} duration={1000} formatter={(n) => formatCharm(n)} style={styles.tierBalance} /> CHARM 보유
+                  </Text>
                   {next ? (
                     <>
                       <Text style={styles.tierRemaining}>
@@ -164,23 +170,25 @@ export default function HomeScreen() {
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ gap: spacing.md, paddingRight: spacing.xl }}
             >
-              {quizResult.recommendations.slice(0, 5).map((rec) => {
+              {quizResult.recommendations.slice(0, 5).map((rec, index) => {
                 const p = PRODUCTS.find((pp) => pp.id === rec.productId);
                 if (!p) return null;
                 return (
-                  <Pressable key={p.id} onPress={() => router.push('/shop')} style={{ width: 148 }}>
-                    <GlassSurface radius={radius.lg} padding={spacing.sm}>
-                      <ProductImage product={p} style={styles.productImg} />
-                      <View style={styles.matchChip}>
-                        <Text style={styles.matchChipText}>AI {rec.score}%</Text>
-                      </View>
-                      <Text style={styles.brandLabel}>{p.brand}</Text>
-                      <Text style={styles.productName} numberOfLines={2}>
-                        {p.name}
-                      </Text>
-                      <Text style={styles.productPrice}>{formatUsd(p.priceUSD)}</Text>
-                    </GlassSurface>
-                  </Pressable>
+                  <Animated.View key={p.id} entering={staggerEnter(index, { step: 70 }, reducedMotion)}>
+                    <Pressable onPress={() => router.push('/shop')} style={{ width: 148 }}>
+                      <GlassSurface radius={radius.lg} padding={spacing.sm}>
+                        <ProductImage product={p} style={styles.productImg} />
+                        <View style={styles.matchChip}>
+                          <Text style={styles.matchChipText}>AI {rec.score}%</Text>
+                        </View>
+                        <Text style={styles.brandLabel}>{p.brand}</Text>
+                        <Text style={styles.productName} numberOfLines={2}>
+                          {p.name}
+                        </Text>
+                        <Text style={styles.productPrice}>{formatUsd(p.priceUSD)}</Text>
+                      </GlassSurface>
+                    </Pressable>
+                  </Animated.View>
                 );
               })}
             </ScrollView>
@@ -238,7 +246,11 @@ export default function HomeScreen() {
           ) : (
             <GlassSurface radius={radius.lg} padding={0}>
               {recent.map((tx, i) => (
-                <View key={tx.id} style={[styles.txRow, i !== recent.length - 1 && styles.txDivider]}>
+                <Animated.View
+                  key={tx.id}
+                  entering={staggerEnter(i, { step: 80 }, reducedMotion)}
+                  style={[styles.txRow, i !== recent.length - 1 && styles.txDivider]}
+                >
                   <View style={{ flex: 1 }}>
                     <Text style={styles.txTitle} numberOfLines={1}>
                       {tx.title}
@@ -248,7 +260,7 @@ export default function HomeScreen() {
                     </Text>
                   </View>
                   <Text style={styles.txAmount}>+{formatCharm(tx.charmDelta)} CHARM</Text>
-                </View>
+                </Animated.View>
               ))}
             </GlassSurface>
           )}
@@ -267,10 +279,11 @@ export default function HomeScreen() {
             </View>
           ) : (
             <View style={styles.grid}>
-              {catalog.map((p) => {
+              {catalog.map((p, index) => {
                 const discounted = p.priceUSD * (1 - tier.discountPct / 100);
                 return (
-                  <Pressable key={p.id} onPress={() => router.push('/shop')} style={styles.gridItem}>
+                  <Animated.View key={p.id} entering={staggerEnter(index, { step: 45, max: 360 }, reducedMotion)} style={styles.gridItem}>
+                  <Pressable onPress={() => router.push('/shop')}>
                     <GlassSurface radius={radius.lg} padding={spacing.sm}>
                       <View>
                         <ProductImage product={p} style={styles.gridImg} />
@@ -302,6 +315,7 @@ export default function HomeScreen() {
                       </View>
                     </GlassSurface>
                   </Pressable>
+                  </Animated.View>
                 );
               })}
             </View>
@@ -327,7 +341,7 @@ function QuickAction({
   onPress: () => void;
 }) {
   return (
-    <Pressable onPress={onPress} style={styles.quickAction}>
+    <Pressable onPress={onPress} style={({ pressed }) => [styles.quickAction, pressed && styles.quickActionPressed]}>
       <GlassSurface radius={radius.lg} padding={spacing.md} style={{ alignItems: 'center' }}>
         <Ionicons name={icon} size={20} color={colors.text} />
         <Text style={styles.quickLabel}>{label}</Text>
@@ -376,6 +390,7 @@ const styles = StyleSheet.create({
   tierDelta: { fontFamily: fonts.bodyMed, fontSize: 10, color: colors.textFaint, marginTop: 3 },
   quickRow: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.lg },
   quickAction: { flex: 1 },
+  quickActionPressed: { opacity: 0.8, transform: [{ scale: 0.96 }] },
   quickLabel: { fontFamily: fonts.bodyMed, fontSize: 11, color: colors.text, marginTop: 6 },
   groupBuyRow: { flexDirection: 'row', gap: spacing.md, alignItems: 'center' },
   groupBuyImg: { width: 64, height: 64, borderRadius: radius.md },

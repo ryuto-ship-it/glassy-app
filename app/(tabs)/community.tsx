@@ -10,7 +10,14 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
+import Animated, {
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withSequence,
+  withTiming,
+  ZoomIn,
+} from 'react-native-reanimated';
 
 import { AppBackground } from '@/components/glass/AppBackground';
 import { GlassSurface } from '@/components/glass/GlassSurface';
@@ -20,6 +27,7 @@ import { TabFade } from '@/components/glass/TabFade';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { CommunityPost, INFLUENCER_FOLLOWER_THRESHOLD, POST_CATEGORY_LABEL, PostCategory, USER } from '@/data/mock';
 import { formatRelative } from '@/lib/date';
+import { staggerEnter } from '@/lib/motion';
 import { pickProductPhoto } from '@/lib/productPhotos';
 import { useAppStore } from '@/store/useAppStore';
 import { useUiStore } from '@/store/useUiStore';
@@ -142,8 +150,8 @@ export default function CommunityScreen() {
             </View>
           ) : (
             <View style={{ gap: spacing.lg }}>
-              {sorted.map((post) => (
-                <PostCard key={post.id} post={post} onLike={() => toggleLike(post.id)} onFollow={() => toggleFollow(post.id)} />
+              {sorted.map((post, index) => (
+                <PostCard key={post.id} post={post} index={index} onLike={() => toggleLike(post.id)} onFollow={() => toggleFollow(post.id)} />
               ))}
             </View>
           )}
@@ -165,14 +173,17 @@ function ActivityRule({ label, amount }: { label: string; amount: string }) {
 
 function PostCard({
   post,
+  index,
   onLike,
   onFollow,
 }: {
   post: CommunityPost;
+  index: number;
   onLike: () => void;
   onFollow: () => void;
 }) {
   const scale = useSharedValue(1);
+  const reducedMotion = useReducedMotion();
   const heartStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
 
   const handleLike = () => {
@@ -181,18 +192,19 @@ function PostCard({
   };
 
   return (
+    <Animated.View entering={staggerEnter(index, { step: 90, max: 450 }, reducedMotion)}>
     <GlassSurface radius={radius.lg} padding={spacing.lg}>
       {post.pinned && (
-        <View style={styles.pinnedChip}>
+        <Animated.View entering={ZoomIn.delay(200).duration(320).springify().damping(12)} style={styles.pinnedChip}>
           <Ionicons name="pin" size={10} color="#fff" />
           <Text style={styles.pinnedChipText}>인기 후기</Text>
-        </View>
+        </Animated.View>
       )}
       {post.charmEarned > 0 && (
-        <View style={styles.earnedChip}>
+        <Animated.View entering={ZoomIn.delay(250).duration(320).springify().damping(12)} style={styles.earnedChip}>
           <Ionicons name="add-circle" size={11} color={colors.success} />
           <Text style={styles.earnedChipText}>+{post.charmEarned} CHARM 획득</Text>
-        </View>
+        </Animated.View>
       )}
       <View style={styles.categoryChip}>
         <Text style={styles.categoryChipText}>{POST_CATEGORY_LABEL[post.category ?? 'review']}</Text>
@@ -213,7 +225,10 @@ function PostCard({
             {post.location} · {formatRelative(post.createdAt)}
           </Text>
         </View>
-        <Pressable onPress={onFollow} style={[styles.followBtn, post.isFollowing && styles.followBtnActive]}>
+        <Pressable
+          onPress={onFollow}
+          style={({ pressed }) => [styles.followBtn, post.isFollowing && styles.followBtnActive, pressed && styles.followBtnPressed]}
+        >
           <Text style={[styles.followBtnText, post.isFollowing && styles.followBtnTextActive]}>
             {post.isFollowing ? '팔로잉' : '팔로우'}
           </Text>
@@ -262,6 +277,7 @@ function PostCard({
         </View>
       )}
     </GlassSurface>
+    </Animated.View>
   );
 }
 
@@ -365,6 +381,7 @@ const styles = StyleSheet.create({
     borderColor: colors.accentBlue,
   },
   followBtnActive: { backgroundColor: colors.accentBlue, borderColor: colors.accentBlue },
+  followBtnPressed: { opacity: 0.75, transform: [{ scale: 0.95 }] },
   followBtnText: { fontFamily: fonts.bodyBold, fontSize: 11, color: colors.text },
   followBtnTextActive: { color: '#0B0B0D' },
   postImage: { width: 300, height: 220, borderRadius: radius.md, marginRight: spacing.sm, overflow: 'hidden' },

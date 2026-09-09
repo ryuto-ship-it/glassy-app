@@ -1,4 +1,14 @@
+import { useEffect } from 'react';
 import Svg, { Circle, Defs, LinearGradient, Path, Polygon, RadialGradient, Stop } from 'react-native-svg';
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useReducedMotion,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 
 import { TierId } from '@/constants/glow';
 
@@ -7,10 +17,35 @@ type Props = {
   size?: number;
 };
 
-// Custom per-tier SVG badge — reads like a minted medallion on dark glass
-// rather than a pastel sticker. Each tier keeps a distinct silhouette so
-// the grade is recognizable even without reading the label.
+// Wraps the medallion art in a slow, subtle idle float so brand/grade
+// elements never sit dead-still on screen — off entirely under
+// reduce-motion.
 export function GradeBadge({ tier, size = 64 }: Props) {
+  const reducedMotion = useReducedMotion();
+  const y = useSharedValue(0);
+
+  useEffect(() => {
+    if (reducedMotion) return;
+    y.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 1900, easing: Easing.inOut(Easing.sin) }),
+        withTiming(-1, { duration: 1900, easing: Easing.inOut(Easing.sin) })
+      ),
+      -1,
+      true
+    );
+  }, [reducedMotion, y]);
+
+  const floatStyle = useAnimatedStyle(() => ({ transform: [{ translateY: y.value * 2.4 }] }));
+
+  return (
+    <Animated.View style={floatStyle}>
+      <GradeBadgeArt tier={tier} size={size} />
+    </Animated.View>
+  );
+}
+
+function GradeBadgeArt({ tier, size = 64 }: Props) {
   const id = `g-${tier}-${size}`;
   switch (tier) {
     case 'bare-skin':

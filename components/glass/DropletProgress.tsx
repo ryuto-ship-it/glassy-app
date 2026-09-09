@@ -26,13 +26,15 @@ type Props = {
 // toward the next glow tier, instead of a generic progress bar.
 export function DropletProgress({ size = 120, percent, colors, children }: Props) {
   const clamped = Math.max(0.03, Math.min(1, percent));
-  const fillY = useSharedValue(98 - clamped * 90);
+  // Starts empty (98 = droplet's bottom) so the fill visibly rises to its
+  // target on first mount, not just on later value changes.
+  const fillY = useSharedValue(98);
   const bob = useSharedValue(0);
   const gradId = `droplet-fill-${size}`;
   const clipId = `droplet-clip-${size}`;
 
   useEffect(() => {
-    fillY.value = withTiming(98 - clamped * 90, { duration: 900, easing: Easing.out(Easing.cubic) });
+    fillY.value = withTiming(98 - clamped * 90, { duration: 1000, easing: Easing.out(Easing.cubic) });
   }, [clamped, fillY]);
 
   useEffect(() => {

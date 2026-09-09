@@ -13,6 +13,7 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Animated, { useReducedMotion, ZoomIn } from 'react-native-reanimated';
 
 import { AppBackground } from '@/components/glass/AppBackground';
 import { DropletProgress } from '@/components/glass/DropletProgress';
@@ -25,6 +26,7 @@ import { Tier, TIERS } from '@/constants/glow';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { formatDateShort } from '@/lib/date';
 import { formatCharm, formatSigned, formatUsd } from '@/lib/format';
+import { staggerEnter } from '@/lib/motion';
 import { useTierStatus } from '@/lib/useTierStatus';
 import { useUiStore } from '@/store/useUiStore';
 
@@ -35,6 +37,7 @@ const SNAP = CARD_WIDTH + CARD_GAP;
 export default function LevelsScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const reducedMotion = useReducedMotion();
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const openPayment = useUiStore((s) => s.openPayment);
@@ -101,10 +104,11 @@ export default function LevelsScreen() {
             getItemLayout={(_, i) => ({ length: SNAP, offset: i * SNAP, index: i })}
             initialScrollIndex={currentIndex}
             onMomentumScrollEnd={onCarouselMomentumEnd}
-            renderItem={({ item: tier }: { item: Tier }) => {
+            renderItem={({ item: tier, index }: { item: Tier; index: number }) => {
               const achieved = tier.order <= currentTier.order;
               const isCurrent = tier.id === currentTier.id;
               return (
+                <Animated.View entering={ZoomIn.delay(index * 70).duration(320)}>
                 <GlassSurface
                   radius={radius.lg}
                   padding={spacing.lg}
@@ -140,6 +144,7 @@ export default function LevelsScreen() {
                     ))}
                   </View>
                 </GlassSurface>
+                </Animated.View>
               );
             }}
           />
@@ -228,22 +233,22 @@ export default function LevelsScreen() {
         <View style={styles.section}>
           <GlassSurface radius={radius.lg} padding={spacing.lg}>
             <Text style={styles.pathTitle}>등급을 올리는 3가지 방법</Text>
-            <View style={styles.pathRow}>
+            <Animated.View entering={staggerEnter(0, { step: 80 }, reducedMotion)} style={styles.pathRow}>
               <Ionicons name="bag-handle-outline" size={16} color={colors.textMuted} />
               <Text style={styles.pathText}>① 제휴 약국에서 스테이블코인 결제 시 즉시 CHARM 적립</Text>
-            </View>
-            <View style={styles.pathRow}>
+            </Animated.View>
+            <Animated.View entering={staggerEnter(1, { step: 80 }, reducedMotion)} style={styles.pathRow}>
               <Ionicons name="lock-closed-outline" size={16} color={colors.textMuted} />
               <Text style={styles.pathText}>② 거래소에서 CHARM 매수 후 최소 30일 스테이킹 예치</Text>
-            </View>
-            <View style={styles.pathRow}>
+            </Animated.View>
+            <Animated.View entering={staggerEnter(2, { step: 80 }, reducedMotion)} style={styles.pathRow}>
               <Ionicons name="flash" size={16} color={colors.accentGold} />
               <Text style={styles.pathText}>③ '지금 바로 구매'로 락업 없이 즉시 다음 등급 달성</Text>
-            </View>
-            <View style={styles.pathRow}>
+            </Animated.View>
+            <Animated.View entering={staggerEnter(3, { step: 80 }, reducedMotion)} style={styles.pathRow}>
               <Ionicons name="shield-checkmark-outline" size={16} color={colors.textMuted} />
               <Text style={styles.pathText}>달성한 등급은 이후 시세가 내려가도 영구적으로 유지돼요</Text>
-            </View>
+            </Animated.View>
           </GlassSurface>
         </View>
       </ScrollView>

@@ -57,10 +57,10 @@ export default function AdminScreen() {
         </View>
 
         <View style={[styles.section, styles.kpiGrid]}>
-          <KpiCard label="총 가입 유저 수" value={a.totalUsers.toLocaleString()} sub="+8.2% MoM" />
-          <KpiCard label="이번달 방문객 수" value={a.monthlyVisitors.toLocaleString()} sub="+12.4% MoM" />
-          <KpiCard label="평균 객단가" value={`$${a.avgOrderValueUSD.toFixed(2)}`} />
-          <KpiCard label="QR 적립 전환율" value={`${a.qrRedemptionRatePct}%`} sub="결제수단 무관 적립" />
+          <KpiCard label="총 가입 유저 수" numericValue={a.totalUsers} formatter={(n) => Math.round(n).toLocaleString()} sub="+8.2% MoM" />
+          <KpiCard label="이번달 방문객 수" numericValue={a.monthlyVisitors} formatter={(n) => Math.round(n).toLocaleString()} sub="+12.4% MoM" />
+          <KpiCard label="평균 객단가" numericValue={a.avgOrderValueUSD} formatter={(n) => `$${n.toFixed(2)}`} />
+          <KpiCard label="QR 적립 전환율" numericValue={a.qrRedemptionRatePct} formatter={(n) => `${Math.round(n)}%`} sub="결제수단 무관 적립" />
         </View>
 
         <View style={styles.section}>
