@@ -40,10 +40,12 @@ export default function WelcomeScreen() {
     }, 1300);
   };
 
-  // router.back() strands the user on the not-found screen when welcome was
-  // reached via a direct/deep link (no prior in-app history to return to) —
-  // fall back to replacing with the home route in that case.
-  const goHome = () => (router.canGoBack() ? router.back() : router.replace('/'));
+  // Deliberately router.replace (not router.back()) — the previous history
+  // entry can be the literal "/index.html" URL (this app is a static
+  // multi-page export), which the client router fails to match back to the
+  // index route, landing on not-found. Replacing with the clean root path
+  // sidesteps that mismatch entirely.
+  const goHome = () => router.replace('/');
 
   return (
     <DarkScope>
