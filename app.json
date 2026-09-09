@@ -4,7 +4,7 @@
     "slug": "glassy-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/brand/charmacist-logo.png",
     "scheme": "glassyapp",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#0B0B0D",
@@ -13,24 +13,22 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#0B0B0D",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#FFFFFF",
+        "foregroundImage": "./assets/brand/charmacist-logo.png"
       },
       "predictiveBackGestureEnabled": false
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/brand/charmacist-logo.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/brand/charmacist-logo.png",
           "resizeMode": "contain",
           "backgroundColor": "#0B0B0D"
         }

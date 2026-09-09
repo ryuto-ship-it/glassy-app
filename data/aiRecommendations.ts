@@ -89,17 +89,17 @@ const CONDITION_PRODUCTS: Record<ConditionId, string[]> = {
   indigestion: ['p7'],
   insomnia: ['p8', 'p13'],
   stress: ['p6', 'p13'],
-  'skin-trouble': ['p4', 'p1'],
+  'skin-trouble': ['p4', 'r10'],
   'hair-thinning': ['p6', 'p8'],
-  'dry-skin': ['p10', 'p12'],
-  'joint-stiffness': ['p7', 'p14'],
+  'dry-skin': ['r6'],
+  'joint-stiffness': ['p7', 'r11'],
 };
 
 const GOAL_PRODUCTS: Record<GoalId, string[]> = {
-  brightening: ['p2', 'p9'],
-  elasticity: ['p3', 'p6'],
-  energy: ['p8', 'p14'],
-  immunity: ['p7', 'p14'],
+  brightening: ['r6'],
+  elasticity: ['p6', 'p4'],
+  energy: ['p8', 'r3'],
+  immunity: ['p7', 'r3'],
   'sleep-quality': ['p13', 'p8'],
 };
 

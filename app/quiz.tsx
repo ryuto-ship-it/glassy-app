@@ -15,7 +15,7 @@ import Animated, {
 import { AppBackground } from '@/components/glass/AppBackground';
 import { GlassSurface } from '@/components/glass/GlassSurface';
 import { PillButton } from '@/components/glass/PillButton';
-import { ProductArt } from '@/components/glass/ProductArt';
+import { ProductImage } from '@/components/glass/ProductImage';
 import { RadarChart } from '@/components/glass/RadarChart';
 import {
   AiRecommendation,
@@ -468,7 +468,7 @@ function ResultsStep({
         {products.map(({ rec, product }) => (
           <GlassSurface key={rec.productId} radius={radius.lg} padding={spacing.md}>
             <View style={styles.recRow}>
-              <ProductArt seed={product.id} shape={product.shape} style={styles.recImg} />
+              <ProductImage product={product} style={styles.recImg} />
               <View style={{ flex: 1 }}>
                 <Text style={styles.recBrand}>{product.brand}</Text>
                 <Text style={styles.recName} numberOfLines={1}>

@@ -21,7 +21,7 @@ import { GlassSurface } from '@/components/glass/GlassSurface';
 import { GradeBadge } from '@/components/glass/GradeBadge';
 import { PlaceholderArt } from '@/components/glass/PlaceholderArt';
 import { PriceTicker } from '@/components/glass/PriceChart';
-import { ProductArt } from '@/components/glass/ProductArt';
+import { ProductImage } from '@/components/glass/ProductImage';
 import { SkeletonBlock, SkeletonCard } from '@/components/glass/Skeleton';
 import { TabFade } from '@/components/glass/TabFade';
 import { colors, fonts, radius, spacing, TAGLINE } from '@/constants/theme';
@@ -172,7 +172,7 @@ export default function HomeScreen() {
                 return (
                   <Pressable key={p.id} onPress={() => router.push('/shop')} style={{ width: 148 }}>
                     <GlassSurface radius={radius.lg} padding={spacing.sm}>
-                      <ProductArt seed={p.id} shape={p.shape} style={styles.productImg} />
+                      <ProductImage product={p} style={styles.productImg} />
                       <View style={styles.matchChip}>
                         <Text style={styles.matchChipText}>AI {rec.score}%</Text>
                       </View>
@@ -277,7 +277,7 @@ export default function HomeScreen() {
                   <Pressable key={p.id} onPress={() => router.push('/shop')} style={styles.gridItem}>
                     <GlassSurface radius={radius.lg} padding={spacing.sm}>
                       <View>
-                        <ProductArt seed={p.id} shape={p.shape} style={styles.gridImg} />
+                        <ProductImage product={p} style={styles.gridImg} />
                         {p.isRepurchase && (
                           <View style={styles.repurchaseBadge}>
                             <Text style={styles.repurchaseBadgeText}>재구매</Text>

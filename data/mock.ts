@@ -1,5 +1,7 @@
 // All mock data for the CHARM demo — no backend, everything lives here.
 
+import { ImageSourcePropType } from 'react-native';
+
 import { TierId } from '@/constants/glow';
 
 // Mock $CHARM market price. Tier ENTRY is decided by (held CHARM × this price),
@@ -66,10 +68,14 @@ export type Product = {
   isRepurchase?: boolean;
   // A real, widely-known Korean pharmacy product (as opposed to the
   // fictional CHARM-brand catalog) — shown with a "약국 인기 스테디셀러"
-  // trust badge and surfaced first in Home/Shop. Illustrated the same way
-  // as every other product (no real product photography/logos bundled —
-  // see PRODUCTS below), with the real product name kept as-is.
+  // trust badge and surfaced first in Home/Shop. Real product name kept
+  // as-is; rendered with an actual package photo when `photo` is set
+  // (see ProductImage), falling back to the illustrated ProductArt
+  // silhouette otherwise.
   isRealProduct?: boolean;
+  // require()'d package photo for a real product. Optional — most real
+  // products still fall back to ProductArt until a photo is supplied.
+  photo?: ImageSourcePropType;
   groupBuy?: {
     participants: number;
     goal: number;
@@ -90,9 +96,9 @@ export const CATEGORY_LABEL: Record<ProductCategory, string> = {
 // Real, widely-known Korean pharmacy products that foreign tourists
 // actually buy — used as a trust signal ("this app is connected to what's
 // really on the shelf"), not a replacement for the fictional CHARM catalog
-// below. Illustrated with the same custom silhouette art as every other
-// product (no scraped photography or brand logos), with real product names
-// kept exactly as sold.
+// below. Real product names kept exactly as sold; a `photo` (actual package
+// photography) is set where one has been supplied, otherwise it falls back
+// to the illustrated ProductArt silhouette like the fictional catalog.
 export const REAL_PRODUCTS: Product[] = [
   {
     id: 'r1',
@@ -105,6 +111,7 @@ export const REAL_PRODUCTS: Product[] = [
     reviewCount: 5230,
     isRepurchase: true,
     isRealProduct: true,
+    photo: require('../assets/products/real/lemona.png'),
   },
   {
     id: 'r2',
@@ -116,6 +123,7 @@ export const REAL_PRODUCTS: Product[] = [
     rating: 4.7,
     reviewCount: 3890,
     isRealProduct: true,
+    photo: require('../assets/products/real/gaseuhwalmyeongsu.png'),
   },
   {
     id: 'r3',
@@ -128,6 +136,7 @@ export const REAL_PRODUCTS: Product[] = [
     reviewCount: 2110,
     isRepurchase: true,
     isRealProduct: true,
+    photo: require('../assets/products/real/cheong-kwan-jang-ginseng.png'),
   },
   {
     id: 'r4',
@@ -139,6 +148,7 @@ export const REAL_PRODUCTS: Product[] = [
     rating: 4.8,
     reviewCount: 4400,
     isRealProduct: true,
+    photo: require('../assets/products/real/lactofit-gold.png'),
   },
   {
     id: 'r5',
@@ -162,6 +172,7 @@ export const REAL_PRODUCTS: Product[] = [
     rating: 4.9,
     reviewCount: 3320,
     isRealProduct: true,
+    photo: require('../assets/products/real/madecassol.png'),
   },
   {
     id: 'r7',
@@ -185,43 +196,51 @@ export const REAL_PRODUCTS: Product[] = [
     reviewCount: 1750,
     isRealProduct: true,
   },
+  {
+    id: 'r9',
+    name: '신신파스 제로 아이스',
+    brand: '신신제약',
+    category: 'supplement',
+    shape: 'tube',
+    priceUSD: 6,
+    rating: 4.6,
+    reviewCount: 2210,
+    isRealProduct: true,
+    photo: require('../assets/products/real/sinsinpas-zero-ice.png'),
+  },
+  {
+    id: 'r10',
+    name: '인사돌 플러스',
+    brand: '동국제약',
+    category: 'supplement',
+    shape: 'pill-bottle',
+    priceUSD: 19,
+    rating: 4.7,
+    reviewCount: 3105,
+    isRepurchase: true,
+    isRealProduct: true,
+    photo: require('../assets/products/real/insadol-plus.png'),
+  },
+  {
+    id: 'r11',
+    name: '타이레놀 500mg',
+    brand: '한국얀센',
+    category: 'supplement',
+    shape: 'pill-bottle',
+    priceUSD: 7,
+    rating: 4.8,
+    reviewCount: 4890,
+    isRepurchase: true,
+    isRealProduct: true,
+    photo: require('../assets/products/real/tylenol.png'),
+  },
 ];
 
+// Fictional CHARM-brand catalog — kept intentionally small now that the
+// real pharmacy lineup above covers most of the shop floor (real products
+// are ≥60% of PRODUCTS by design; see REAL_PRODUCTS).
 export const PRODUCTS: Product[] = [
   ...REAL_PRODUCTS,
-  {
-    id: 'p1',
-    name: 'Centella Calming Ampoule',
-    brand: 'Jeju Botanica',
-    category: 'ampoule',
-    shape: 'dropper-bottle',
-    priceUSD: 28,
-    rating: 4.8,
-    reviewCount: 2140,
-    isRepurchase: true,
-  },
-  {
-    id: 'p2',
-    name: 'Vitamin C 22% Brightening Serum',
-    brand: 'Haneul Lab',
-    category: 'ampoule',
-    shape: 'dropper-bottle',
-    priceUSD: 24,
-    rating: 4.7,
-    reviewCount: 1802,
-    isRepurchase: true,
-  },
-  {
-    id: 'p3',
-    name: 'Marine Collagen Jelly Ampoule',
-    brand: 'Soonsoo',
-    category: 'ampoule',
-    shape: 'dropper-bottle',
-    priceUSD: 32,
-    rating: 4.9,
-    reviewCount: 987,
-    isRepurchase: true,
-  },
   {
     id: 'p4',
     name: 'Niacinamide 10% Pore Ampoule',
@@ -231,17 +250,6 @@ export const PRODUCTS: Product[] = [
     priceUSD: 19,
     rating: 4.6,
     reviewCount: 3021,
-  },
-  {
-    id: 'p5',
-    name: 'Vitamin C 1000 Effervescent',
-    brand: 'Byul Nutrition',
-    category: 'vitamin',
-    shape: 'pill-bottle',
-    priceUSD: 15,
-    rating: 4.5,
-    reviewCount: 1290,
-    isRepurchase: true,
   },
   {
     id: 'p6',
@@ -275,48 +283,6 @@ export const PRODUCTS: Product[] = [
     reviewCount: 1108,
   },
   {
-    id: 'p9',
-    name: 'Rice Bran Brightening Mask (5ea)',
-    brand: 'Rice & Rain',
-    category: 'skincare',
-    shape: 'pouch',
-    priceUSD: 14,
-    rating: 4.8,
-    reviewCount: 2455,
-    isRepurchase: true,
-  },
-  {
-    id: 'p10',
-    name: 'Snail Mucin 96% Essence Mask',
-    brand: 'Soonsoo',
-    category: 'skincare',
-    shape: 'pouch',
-    priceUSD: 16,
-    rating: 4.7,
-    reviewCount: 1876,
-  },
-  {
-    id: 'p11',
-    name: 'Mineral Sunscreen SPF50+ PA++++',
-    brand: 'Jeju Botanica',
-    category: 'skincare',
-    shape: 'tube',
-    priceUSD: 21,
-    rating: 4.9,
-    reviewCount: 4032,
-    isRepurchase: true,
-  },
-  {
-    id: 'p12',
-    name: 'Ceramide Barrier Cream',
-    brand: 'Haneul Lab',
-    category: 'skincare',
-    shape: 'jar',
-    priceUSD: 27,
-    rating: 4.6,
-    reviewCount: 998,
-  },
-  {
     id: 'p13',
     name: 'Honey Propolis Sleeping Mask',
     brand: 'Cheongdam Derm',
@@ -327,19 +293,8 @@ export const PRODUCTS: Product[] = [
     reviewCount: 655,
     groupBuy: { participants: 128, goal: 200, endsInDays: 3, extraDiscountPct: 20 },
   },
-  {
-    id: 'p14',
-    name: 'Red Ginseng Ampoule Duo Set',
-    brand: 'Mureung',
-    category: 'ampoule',
-    shape: 'box',
-    priceUSD: 45,
-    rating: 4.9,
-    reviewCount: 341,
-    groupBuy: { participants: 64, goal: 150, endsInDays: 6, extraDiscountPct: 15 },
-  },
-  // Added for the wearable-vitals recommendation mapping (스트레스/수면 저하
-  // -> 마그네슘+테아닌, 산소포화도 저하 -> 철분+비타민B).
+  // Referenced by data/wearable.ts getWearableInsight() — surfaced on the
+  // Profile wearable-vitals screen when stress+sleep dip / spo2 drops.
   {
     id: 'w1',
     name: '마그네슘 테아닌 슬립 컴플렉스',

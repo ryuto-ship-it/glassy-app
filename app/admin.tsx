@@ -11,6 +11,7 @@ import {
   MiniTrendLine,
   SimpleBarChart,
 } from '@/components/glass/AdminCharts';
+import { CharmacistLogo } from '@/components/glass/CharmacistLogo';
 import { GlassSurface } from '@/components/glass/GlassSurface';
 // The admin dashboard is always dark — a deliberate contrast with the
 // light consumer app. See constants/theme.ts / themeScope.tsx.
@@ -34,9 +35,12 @@ export default function AdminScreen() {
       <ScrollView contentContainerStyle={{ paddingTop: insets.top + spacing.lg, paddingBottom: 100 }}>
         <View style={styles.section}>
           <View style={styles.headerRow}>
-            <View>
-              <Text style={styles.kicker}>CHARM FOR BUSINESS</Text>
-              <Text style={styles.title}>매장 관리자 대시보드</Text>
+            <View style={styles.headerBrandRow}>
+              <CharmacistLogo size={30} chip />
+              <View>
+                <Text style={styles.kicker}>CHARM FOR BUSINESS</Text>
+                <Text style={styles.title}>매장 관리자 대시보드</Text>
+              </View>
             </View>
             <Pressable onPress={() => router.back()} style={styles.exitBtn}>
               <Ionicons name="person-outline" size={13} color={colors.text} />
@@ -133,6 +137,7 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
   section: { paddingHorizontal: spacing.xl, marginTop: spacing.xl },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end' },
+  headerBrandRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   kicker: { fontFamily: fonts.bodyBold, fontSize: 10, letterSpacing: 1.4, color: colors.accentGold },
   title: { fontFamily: fonts.display, fontSize: 21, color: colors.text, marginTop: 4 },
   exitBtn: {

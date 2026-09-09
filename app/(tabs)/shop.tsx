@@ -4,13 +4,15 @@ import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from 'r
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppBackground } from '@/components/glass/AppBackground';
+import { CharmacistLogo } from '@/components/glass/CharmacistLogo';
 import { EmptyState } from '@/components/glass/EmptyState';
 import { GlassSurface } from '@/components/glass/GlassSurface';
-import { ProductArt } from '@/components/glass/ProductArt';
+import { ProductImage } from '@/components/glass/ProductImage';
 import { SkeletonCard } from '@/components/glass/Skeleton';
 import { TabFade } from '@/components/glass/TabFade';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { CATEGORY_LABEL, Product, ProductCategory, PRODUCTS, REAL_PRODUCT_BADGE } from '@/data/mock';
+import { hashSeed } from '@/lib/artSeed';
 import { formatUsd } from '@/lib/format';
 import { useTierStatus } from '@/lib/useTierStatus';
 import { useUiStore } from '@/store/useUiStore';
@@ -26,6 +28,15 @@ const FILTERS: { key: FilterKey; label: string }[] = [
   { key: 'supplement', label: CATEGORY_LABEL.supplement },
   { key: 'ampoule', label: CATEGORY_LABEL.ampoule },
 ];
+
+// Deterministic (id-seeded) "N명 최근 구매" / "재고 임박" trust signals —
+// stable across re-renders, not tied to any real inventory data.
+function recentBuyerCount(id: string): number {
+  return 8 + (hashSeed(`${id}-buyers`) % 40);
+}
+function isLowStock(id: string): boolean {
+  return hashSeed(`${id}-stock`) % 5 === 0;
+}
 
 export default function ShopScreen() {
   const insets = useSafeAreaInsets();
@@ -83,6 +94,10 @@ export default function ShopScreen() {
           <Text style={styles.pageSub}>
             {tier.name} 등급 · 전 상품 {tier.discountPct}% 자동 할인 적용 중
           </Text>
+          <View style={styles.partnerBadge}>
+            <CharmacistLogo size={16} />
+            <Text style={styles.partnerBadgeText}>참약사 제휴 매장</Text>
+          </View>
         </View>
 
         <ScrollView
@@ -94,10 +109,12 @@ export default function ShopScreen() {
           {FILTERS.map((f) => {
             const active = filter === f.key;
             return (
-              <Pressable key={f.key} onPress={() => setFilter(f.key)}>
-                <View style={[styles.chip, active && styles.chipActive]}>
-                  <Text style={[styles.chipText, active && styles.chipTextActive]}>{f.label}</Text>
-                </View>
+              <Pressable
+                key={f.key}
+                onPress={() => setFilter(f.key)}
+                style={({ pressed }) => [styles.chip, active && styles.chipActive, pressed && styles.chipPressed]}
+              >
+                <Text style={[styles.chipText, active && styles.chipTextActive]}>{f.label}</Text>
               </Pressable>
             );
           })}
@@ -125,7 +142,7 @@ export default function ShopScreen() {
                   <View key={p.id} style={styles.gridItem}>
                     <GlassSurface radius={radius.lg} padding={spacing.sm}>
                       <View style={styles.imgWrap}>
-                        <ProductArt seed={p.id} shape={p.shape} style={styles.productImg} />
+                        <ProductImage product={p} style={styles.productImg} />
                         {p.isRepurchase && (
                           <View style={styles.repurchaseBadge}>
                             <Text style={styles.repurchaseBadgeText}>재구매</Text>
@@ -148,6 +165,13 @@ export default function ShopScreen() {
                           {p.rating} ({p.reviewCount.toLocaleString()})
                         </Text>
                       </View>
+                      {!p.groupBuy && (
+                        <Text style={isLowStock(p.id) ? styles.stockLow : styles.trustText}>
+                          {isLowStock(p.id)
+                            ? `재고 임박 · 최근 24시간 ${recentBuyerCount(p.id)}명 구매`
+                            : `최근 24시간 ${recentBuyerCount(p.id)}명 구매`}
+                        </Text>
+                      )}
 
                       {p.groupBuy && (
                         <View style={styles.groupBuyBox}>
@@ -174,7 +198,11 @@ export default function ShopScreen() {
 
                       <Pressable
                         onPress={() => handleBuy(p, p.groupBuy ? groupPrice : discounted)}
-                        style={[styles.buyBtn, justBought === p.id && styles.buyBtnDone]}
+                        style={({ pressed }) => [
+                          styles.buyBtn,
+                          justBought === p.id && styles.buyBtnDone,
+                          pressed && styles.buyBtnPressed,
+                        ]}
                       >
                         <Text style={styles.buyBtnText}>
                           {justBought === p.id ? '적립 완료 ✓' : '구매하기'}
@@ -198,6 +226,21 @@ const styles = StyleSheet.create({
   section: { paddingHorizontal: spacing.xl, marginTop: spacing.xl },
   pageTitle: { fontFamily: fonts.display, fontSize: 24, color: colors.text },
   pageSub: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted, marginTop: 4 },
+  partnerBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
+    gap: 6,
+    marginTop: spacing.sm,
+    paddingLeft: 6,
+    paddingRight: 10,
+    paddingVertical: 4,
+    borderRadius: radius.pill,
+    backgroundColor: colors.surfaceRaised,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  partnerBadgeText: { fontFamily: fonts.bodySemi, fontSize: 10.5, color: colors.text },
   chip: {
     paddingHorizontal: 14,
     paddingVertical: 8,
@@ -207,6 +250,7 @@ const styles = StyleSheet.create({
     borderColor: colors.borderDim,
   },
   chipActive: { backgroundColor: colors.accentBlue, borderColor: colors.accentBlue },
+  chipPressed: { opacity: 0.75 },
   chipText: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.textMuted },
   chipTextActive: { color: '#0B0B0D' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md },
@@ -243,6 +287,8 @@ const styles = StyleSheet.create({
   productName: { fontFamily: fonts.bodySemi, fontSize: 12, color: colors.text, marginTop: 2, minHeight: 32 },
   ratingRow: { flexDirection: 'row', alignItems: 'center', gap: 3, marginTop: 4 },
   ratingText: { fontFamily: fonts.body, fontSize: 10, color: colors.textMuted },
+  trustText: { fontFamily: fonts.body, fontSize: 9.5, color: colors.textFaint, marginTop: 3 },
+  stockLow: { fontFamily: fonts.bodyMed, fontSize: 9.5, color: colors.danger, marginTop: 3 },
   groupBuyBox: { marginTop: spacing.sm },
   groupBuyText: { fontFamily: fonts.bodyMed, fontSize: 9, color: colors.danger },
   progressTrack: { height: 4, borderRadius: 2, backgroundColor: 'rgba(255,255,255,0.08)', marginTop: 3, overflow: 'hidden' },
@@ -258,5 +304,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buyBtnDone: { backgroundColor: colors.success },
+  buyBtnPressed: { opacity: 0.85, transform: [{ scale: 0.98 }] },
   buyBtnText: { fontFamily: fonts.bodyBold, fontSize: 12, color: '#0B0B0D' },
 });

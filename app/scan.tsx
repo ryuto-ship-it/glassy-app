@@ -18,12 +18,12 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { PillButton } from '@/components/glass/PillButton';
-import { ProductArt } from '@/components/glass/ProductArt';
+import { ProductImage } from '@/components/glass/ProductImage';
 // This screen is a deliberately dark "camera" experience regardless of the
 // app's light default theme, so it aliases the preserved dark token set —
 // see constants/theme.ts's note on <DarkScope> screens.
 import { darkColors as colors, fonts, radius, spacing } from '@/constants/theme';
-import { LanguageCode, ProductShape, SCAN_PRODUCTS } from '@/data/mock';
+import { LanguageCode, Product, SCAN_PRODUCTS } from '@/data/mock';
 import { hashSeed } from '@/lib/artSeed';
 import { formatUsd } from '@/lib/format';
 import { getProductById, useAppStore } from '@/store/useAppStore';
@@ -122,7 +122,7 @@ function AiPulseDot() {
   return <Animated.View style={[styles.aiDot, style]} />;
 }
 
-function ViewfinderFrame({ product }: { product: { id: string; shape: ProductShape } }) {
+function ViewfinderFrame({ product }: { product: Product }) {
   const lock = useSharedValue(0);
   useEffect(() => {
     lock.value = 0;
@@ -144,7 +144,7 @@ function ViewfinderFrame({ product }: { product: { id: string; shape: ProductSha
       <View style={styles.viewfinderShelf} />
       <Animated.View style={[styles.viewfinder, frameStyle]}>
         <Animated.View style={[styles.viewfinderArt, artStyle]}>
-          <ProductArt seed={product.id} shape={product.shape} style={styles.viewfinderArtImg} />
+          {product && <ProductImage product={product} style={styles.viewfinderArtImg} />}
         </Animated.View>
         <ScanLine />
         <View style={[styles.corner, styles.cornerTL]} />
@@ -267,7 +267,7 @@ export default function ScanScreen() {
         <Animated.View entering={FadeIn.duration(250)} style={{ flex: 1 }}>
           <ScrollView contentContainerStyle={styles.resultScroll} showsVerticalScrollIndicator={false}>
             <Animated.View entering={ZoomIn.duration(380)} style={styles.artWrap}>
-              <ProductArt seed={product.id} shape={product.shape} style={styles.art} />
+              {product && <ProductImage product={product} style={styles.art} />}
             </Animated.View>
 
             <View style={styles.badgeRow}>

@@ -1,6 +1,8 @@
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { CharmacistLogo } from './CharmacistLogo';
+
 // The horizontal top bar for the dark browser showcase backdrop (see
 // PhoneFrame.tsx). Sits above everything, full-width, independent of the
 // centered phone bezel. Web-only, same reasoning as SidePanel.
@@ -41,6 +43,8 @@ export function TopNav() {
         <View style={styles.brandRow}>
           <Ionicons name="sparkles" size={15} color={palette.gold} />
           <Text style={styles.brand}>CHARM</Text>
+          <View style={styles.partnerDivider} />
+          <CharmacistLogo size={18} chip />
         </View>
         <View style={styles.links}>
           <NavLink label="App Demo" active onPress={() => {}} />
@@ -76,6 +80,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   brandRow: { flexDirection: 'row', alignItems: 'center', gap: 7 },
+  partnerDivider: { width: 1, height: 14, backgroundColor: colors.borderStrong, marginHorizontal: 2 },
   brand: {
     fontFamily: fonts.display,
     fontSize: 15,

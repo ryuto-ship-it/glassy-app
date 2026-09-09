@@ -23,7 +23,13 @@ export function PillButton({ label, onPress, variant = 'solid', colors_, disable
       <Pressable
         onPress={onPress}
         disabled={disabled}
-        style={[styles.ghost, { borderColor: c.borderStrong, backgroundColor: c.glassFill }, disabled && styles.disabled, style]}
+        style={({ pressed }) => [
+          styles.ghost,
+          { borderColor: c.borderStrong, backgroundColor: c.glassFill },
+          disabled && styles.disabled,
+          pressed && styles.pressed,
+          style,
+        ]}
       >
         {icon}
         <Text style={[styles.ghostText, { color: c.text }]}>{label}</Text>
@@ -31,7 +37,11 @@ export function PillButton({ label, onPress, variant = 'solid', colors_, disable
     );
   }
   return (
-    <Pressable onPress={onPress} disabled={disabled} style={[styles.solidWrap, disabled && styles.disabled, style]}>
+    <Pressable
+      onPress={onPress}
+      disabled={disabled}
+      style={({ pressed }) => [styles.solidWrap, disabled && styles.disabled, pressed && styles.pressed, style]}
+    >
       <LinearGradient
         colors={(colors_ ?? [darkColors.accentBlue, '#1B5FA8']) as any}
         start={{ x: 0, y: 0 }}
@@ -80,5 +90,9 @@ const styles = StyleSheet.create({
   },
   disabled: {
     opacity: 0.45,
+  },
+  pressed: {
+    opacity: 0.82,
+    transform: [{ scale: 0.97 }],
   },
 });

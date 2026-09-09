@@ -73,6 +73,12 @@
     color: #F5F5F7;
   }
   .topnav-brand svg { flex-shrink: 0; }
+  .topnav-partner-divider { width: 1px; height: 14px; background: rgba(255,255,255,0.16); margin: 0 3px; }
+  .topnav-partner-logo {
+    width: 22px; height: 22px; border-radius: 999px; background: #fff;
+    display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;
+  }
+  .topnav-partner-logo img { width: 16px; height: 16px; object-fit: contain; }
   .topnav-links { display: flex; align-items: center; gap: 28px; }
   .topnav-links a {
     font-family: 'Inter', sans-serif;
@@ -540,6 +546,8 @@
       <span class="topnav-brand">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z" fill="#E8C468"/></svg>
         CHARM
+        <span class="topnav-partner-divider"></span>
+        <span class="topnav-partner-logo"><img src="./assets/brand/charmacist-logo.png" alt="참약사 Charmacist" /></span>
       </span>
       <div class="topnav-links">
         <a href="./index.html">App Demo</a>

@@ -6,6 +6,7 @@ import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-nati
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeIn, FadeInDown, ZoomIn } from 'react-native-reanimated';
 
+import { CharmacistLogo } from '@/components/glass/CharmacistLogo';
 import { PillButton } from '@/components/glass/PillButton';
 // Kept on the dark theme deliberately — a dramatic, distinct "store entry"
 // moment regardless of the app's light default elsewhere.
@@ -57,6 +58,8 @@ export default function WelcomeScreen() {
           </View>
           <Text style={styles.scannedText}>매장 QR 스캔 완료</Text>
 
+          <CharmacistLogo size={40} chip style={{ marginTop: spacing.lg }} />
+          <Text style={styles.partnerLine}>참약사와 함께하는 CHARM</Text>
           <Text style={styles.brand}>CHARM</Text>
           <Text style={styles.tagline}>{TAGLINE}</Text>
 
@@ -137,7 +140,8 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   scannedText: { fontFamily: fonts.bodyMed, fontSize: 11, color: colors.accentGold, letterSpacing: 0.5 },
-  brand: { fontFamily: fonts.display, fontSize: 30, color: colors.text, marginTop: spacing.xl, letterSpacing: 1 },
+  partnerLine: { fontFamily: fonts.bodyMed, fontSize: 11, color: colors.textMuted, marginTop: spacing.sm, letterSpacing: 0.3 },
+  brand: { fontFamily: fonts.display, fontSize: 30, color: colors.text, marginTop: spacing.sm, letterSpacing: 1 },
   tagline: { fontFamily: fonts.body, fontSize: 12, color: colors.textFaint, marginTop: 2 },
   headline: {
     fontFamily: fonts.display,
