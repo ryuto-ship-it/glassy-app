@@ -1,5 +1,4 @@
 import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 import { CharmacistLogo } from './CharmacistLogo';
 
@@ -41,10 +40,8 @@ export function TopNav() {
     <View style={styles.bar}>
       <View style={styles.inner}>
         <View style={styles.brandRow}>
-          <Ionicons name="sparkles" size={15} color={palette.gold} />
+          <CharmacistLogo size={22} chip />
           <Text style={styles.brand}>CHARM</Text>
-          <View style={styles.partnerDivider} />
-          <CharmacistLogo size={18} chip />
         </View>
         <View style={styles.links}>
           <NavLink label="App Demo" active onPress={() => {}} />
@@ -79,8 +76,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 14,
   },
-  brandRow: { flexDirection: 'row', alignItems: 'center', gap: 7 },
-  partnerDivider: { width: 1, height: 14, backgroundColor: colors.borderStrong, marginHorizontal: 2 },
+  brandRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   brand: {
     fontFamily: fonts.display,
     fontSize: 15,

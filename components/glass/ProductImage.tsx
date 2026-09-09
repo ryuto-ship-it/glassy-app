@@ -3,26 +3,38 @@ import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 
 import { Product } from '@/data/mock';
 import { useIsDarkScope } from '@/constants/themeScope';
-import { ProductArt } from './ProductArt';
+import { hashSeed } from '@/lib/artSeed';
 
 type Props = {
   product: Product;
   style?: StyleProp<ViewStyle>;
 };
 
+// Every real package photo we have on hand. Products without their own
+// `photo` (see data/mock.ts) borrow one of these — deterministically, by
+// id, so a given product always shows the same photo — rather than the
+// illustrated ProductArt silhouette, which reads as an obvious placeholder
+// next to real photography elsewhere on the same screen.
+const FALLBACK_PHOTOS = [
+  require('../../assets/products/real/lemona.png'),
+  require('../../assets/products/real/gaseuhwalmyeongsu.png'),
+  require('../../assets/products/real/cheong-kwan-jang-ginseng.png'),
+  require('../../assets/products/real/lactofit-gold.png'),
+  require('../../assets/products/real/madecassol.png'),
+  require('../../assets/products/real/sinsinpas-zero-ice.png'),
+  require('../../assets/products/real/insadol-plus.png'),
+  require('../../assets/products/real/tylenol.png'),
+];
+
 // Renders a real package photo when the product has one (see Product.photo
-// in data/mock.ts), falling back to the illustrated ProductArt silhouette
-// for the rest of the catalog. Real photos sit on a flat light card — they
-// come from product-page screenshots, so a plain neutral backdrop reads
-// better than the dark jewel-tone gradient used behind illustrated art.
+// in data/mock.ts); otherwise borrows one from FALLBACK_PHOTOS so the shop
+// floor never shows an illustrated placeholder next to real photography.
 export function ProductImage({ product, style }: Props) {
   const dark = useIsDarkScope();
-  if (!product.photo) {
-    return <ProductArt seed={product.id} shape={product.shape} style={style} />;
-  }
+  const photo = product.photo ?? FALLBACK_PHOTOS[hashSeed(product.id) % FALLBACK_PHOTOS.length];
   return (
     <View style={[styles.wrap, dark ? styles.wrapDark : styles.wrapLight, style]}>
-      <Image source={product.photo} style={StyleSheet.absoluteFill} contentFit="contain" />
+      <Image source={photo} style={StyleSheet.absoluteFill} contentFit="contain" />
     </View>
   );
 }

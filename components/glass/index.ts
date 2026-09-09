@@ -11,7 +11,7 @@ export * from './AiHeroBanner';
 export * from './AppModal';
 export * from './PaymentFlowModal';
 export * from './PlaceholderArt';
-export * from './ProductArt';
+export * from './ProductImage';
 export * from './PriceChart';
 export * from './RadarChart';
 export * from './PhoneFrame';
