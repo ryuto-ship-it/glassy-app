@@ -40,7 +40,10 @@ export default function WelcomeScreen() {
     }, 1300);
   };
 
-  const goHome = () => router.back();
+  // router.back() strands the user on the not-found screen when welcome was
+  // reached via a direct/deep link (no prior in-app history to return to) —
+  // fall back to replacing with the home route in that case.
+  const goHome = () => (router.canGoBack() ? router.back() : router.replace('/'));
 
   return (
     <DarkScope>
