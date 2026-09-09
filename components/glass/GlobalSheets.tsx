@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
@@ -6,12 +7,12 @@ import { colors, darkColors, fonts, radius, spacing } from '@/constants/theme';
 import { DarkScope } from '@/constants/themeScope';
 import { Transaction } from '@/data/mock';
 import { formatCharm, formatUsd, mockTxHash } from '@/lib/format';
+import { stockPhotoUrl } from '@/lib/stockPhoto';
 import { useAppStore } from '@/store/useAppStore';
 import { useUiStore } from '@/store/useUiStore';
 import { AppModal } from './AppModal';
 import { PaymentFlowModal } from './PaymentFlowModal';
 import { PillButton } from './PillButton';
-import { PlaceholderArt } from './PlaceholderArt';
 
 const COMPOSER_IMAGES = ['new-1', 'new-2', 'new-3'];
 
@@ -132,7 +133,11 @@ function ComposerSheetContent({ onClose }: { onClose: () => void }) {
       <View style={{ flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md }}>
         {COMPOSER_IMAGES.map((img) => (
           <Pressable key={img} onPress={() => setPickedImage(img)}>
-            <PlaceholderArt seed={img} style={[styles.pickThumb, pickedImage === img && styles.pickThumbActive]} />
+            <Image
+              source={{ uri: stockPhotoUrl(img, 200, 200) }}
+              style={[styles.pickThumb, pickedImage === img && styles.pickThumbActive]}
+              contentFit="cover"
+            />
           </Pressable>
         ))}
       </View>

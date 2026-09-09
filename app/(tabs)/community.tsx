@@ -15,12 +15,12 @@ import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } 
 import { AppBackground } from '@/components/glass/AppBackground';
 import { GlassSurface } from '@/components/glass/GlassSurface';
 import { PillButton } from '@/components/glass/PillButton';
-import { PlaceholderArt } from '@/components/glass/PlaceholderArt';
 import { SkeletonCard } from '@/components/glass/Skeleton';
 import { TabFade } from '@/components/glass/TabFade';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { CommunityPost, INFLUENCER_FOLLOWER_THRESHOLD, POST_CATEGORY_LABEL, PostCategory, USER } from '@/data/mock';
 import { formatRelative } from '@/lib/date';
+import { stockPhotoUrl } from '@/lib/stockPhoto';
 import { useAppStore } from '@/store/useAppStore';
 import { useUiStore } from '@/store/useUiStore';
 
@@ -222,7 +222,7 @@ function PostCard({
 
       <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={{ marginTop: spacing.md }}>
         {post.images.map((img) => (
-          <PlaceholderArt key={img} seed={`${post.id}-${img}`} iconSize={44} style={styles.postImage} />
+          <Image key={img} source={{ uri: stockPhotoUrl(`${post.id}-${img}`, 600, 440) }} style={styles.postImage} contentFit="cover" />
         ))}
       </ScrollView>
 

@@ -19,7 +19,6 @@ import { DropletProgress } from '@/components/glass/DropletProgress';
 import { EmptyState } from '@/components/glass/EmptyState';
 import { GlassSurface } from '@/components/glass/GlassSurface';
 import { GradeBadge } from '@/components/glass/GradeBadge';
-import { PlaceholderArt } from '@/components/glass/PlaceholderArt';
 import { PriceTicker } from '@/components/glass/PriceChart';
 import { ProductImage } from '@/components/glass/ProductImage';
 import { SkeletonBlock, SkeletonCard } from '@/components/glass/Skeleton';
@@ -28,7 +27,6 @@ import { colors, fonts, radius, spacing, TAGLINE } from '@/constants/theme';
 import { FEATURED_GROUP_BUY, PRODUCTS, REAL_PRODUCT_BADGE, USER } from '@/data/mock';
 import { formatDateShort } from '@/lib/date';
 import { formatCharm, formatSigned, formatUsd } from '@/lib/format';
-import { CATEGORY_ICON } from '@/lib/productIcon';
 import { useTierStatus } from '@/lib/useTierStatus';
 import { useAppStore } from '@/store/useAppStore';
 import { useQuizStore } from '@/store/useQuizStore';
@@ -194,10 +192,8 @@ export default function HomeScreen() {
           <Pressable onPress={() => router.push('/shop')}>
             <GlassSurface strong radius={radius.lg} padding={spacing.lg}>
               <View style={styles.groupBuyRow}>
-                <PlaceholderArt
-                  seed={FEATURED_GROUP_BUY.id}
-                  icon={CATEGORY_ICON[FEATURED_GROUP_BUY.category]}
-                  iconSize={24}
+                <ProductImage
+                  product={FEATURED_GROUP_BUY}
                   style={[styles.groupBuyImg, { borderRadius: radius.md }]}
                 />
                 <View style={{ flex: 1 }}>

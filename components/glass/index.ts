@@ -10,7 +10,6 @@ export * from './PillButton';
 export * from './AiHeroBanner';
 export * from './AppModal';
 export * from './PaymentFlowModal';
-export * from './PlaceholderArt';
 export * from './ProductImage';
 export * from './PriceChart';
 export * from './RadarChart';
