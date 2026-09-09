@@ -7,7 +7,7 @@ import { colors, darkColors, fonts, radius, spacing } from '@/constants/theme';
 import { DarkScope } from '@/constants/themeScope';
 import { Transaction } from '@/data/mock';
 import { formatCharm, formatUsd, mockTxHash } from '@/lib/format';
-import { stockPhotoUrl } from '@/lib/stockPhoto';
+import { pickProductPhoto } from '@/lib/productPhotos';
 import { useAppStore } from '@/store/useAppStore';
 import { useUiStore } from '@/store/useUiStore';
 import { AppModal } from './AppModal';
@@ -133,11 +133,9 @@ function ComposerSheetContent({ onClose }: { onClose: () => void }) {
       <View style={{ flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md }}>
         {COMPOSER_IMAGES.map((img) => (
           <Pressable key={img} onPress={() => setPickedImage(img)}>
-            <Image
-              source={{ uri: stockPhotoUrl(img, 200, 200) }}
-              style={[styles.pickThumb, pickedImage === img && styles.pickThumbActive]}
-              contentFit="cover"
-            />
+            <View style={[styles.pickThumb, styles.pickThumbBg, pickedImage === img && styles.pickThumbActive]}>
+              <Image source={pickProductPhoto(img)} style={StyleSheet.absoluteFill} contentFit="contain" />
+            </View>
           </Pressable>
         ))}
       </View>
@@ -301,7 +299,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bgAlt,
   },
   cancelText: { fontFamily: fonts.bodyMed, fontSize: 12, color: colors.textMuted },
-  pickThumb: { width: 64, height: 64, borderRadius: radius.md, opacity: 0.5 },
+  pickThumb: { width: 64, height: 64, borderRadius: radius.md, opacity: 0.5, overflow: 'hidden' },
+  pickThumbBg: { backgroundColor: '#FFFFFF', padding: 6 },
   pickThumbActive: { opacity: 1, borderWidth: 2, borderColor: colors.accentBlue },
   textArea: {
     marginTop: spacing.md,

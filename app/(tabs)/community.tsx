@@ -20,7 +20,7 @@ import { TabFade } from '@/components/glass/TabFade';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { CommunityPost, INFLUENCER_FOLLOWER_THRESHOLD, POST_CATEGORY_LABEL, PostCategory, USER } from '@/data/mock';
 import { formatRelative } from '@/lib/date';
-import { stockPhotoUrl } from '@/lib/stockPhoto';
+import { pickProductPhoto } from '@/lib/productPhotos';
 import { useAppStore } from '@/store/useAppStore';
 import { useUiStore } from '@/store/useUiStore';
 
@@ -222,7 +222,9 @@ function PostCard({
 
       <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={{ marginTop: spacing.md }}>
         {post.images.map((img) => (
-          <Image key={img} source={{ uri: stockPhotoUrl(`${post.id}-${img}`, 600, 440) }} style={styles.postImage} contentFit="cover" />
+          <View key={img} style={[styles.postImage, styles.postImageBg]}>
+            <Image source={pickProductPhoto(`${post.id}-${img}`)} style={StyleSheet.absoluteFill} contentFit="contain" />
+          </View>
         ))}
       </ScrollView>
 
@@ -365,7 +367,8 @@ const styles = StyleSheet.create({
   followBtnActive: { backgroundColor: colors.accentBlue, borderColor: colors.accentBlue },
   followBtnText: { fontFamily: fonts.bodyBold, fontSize: 11, color: colors.text },
   followBtnTextActive: { color: '#0B0B0D' },
-  postImage: { width: 300, height: 220, borderRadius: radius.md, marginRight: spacing.sm },
+  postImage: { width: 300, height: 220, borderRadius: radius.md, marginRight: spacing.sm, overflow: 'hidden' },
+  postImageBg: { backgroundColor: '#FFFFFF', padding: 14 },
   caption: { fontFamily: fonts.body, fontSize: 13, color: colors.text, marginTop: spacing.md, lineHeight: 19 },
   tagRow: { flexDirection: 'row', gap: 6, marginTop: spacing.sm, flexWrap: 'wrap' },
   tag: { backgroundColor: 'rgba(255,255,255,0.05)', paddingHorizontal: 8, paddingVertical: 3, borderRadius: radius.pill },
