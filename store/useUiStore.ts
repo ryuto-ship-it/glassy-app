@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { PaymentVariant } from '@/components/glass/PaymentFlowModal';
 import { Transaction } from '@/data/mock';
 
-type SheetKind = 'wallet-action' | 'composer' | 'payment' | 'groupbuy-create' | 'receipt' | null;
+type SheetKind = 'wallet-action' | 'composer' | 'payment' | 'groupbuy-create' | 'receipt' | 'add-family' | null;
 
 type UiState = {
   activeSheet: SheetKind;
@@ -20,6 +20,7 @@ type UiState = {
   openPayment: (variant: PaymentVariant, onSuccess?: () => void) => void;
   openGroupBuyCreate: () => void;
   openReceipt: (tx: Transaction) => void;
+  openAddFamily: () => void;
   closeSheet: () => void;
   markWelcomeSeen: () => void;
 };
@@ -44,6 +45,7 @@ export const useUiStore = create<UiState>((set) => ({
     set({ activeSheet: 'payment', paymentVariant: variant, paymentOnSuccess: onSuccess ?? null }),
   openGroupBuyCreate: () => set({ activeSheet: 'groupbuy-create' }),
   openReceipt: (tx) => set({ activeSheet: 'receipt', receiptTx: tx }),
+  openAddFamily: () => set({ activeSheet: 'add-family' }),
   closeSheet: () => set({ activeSheet: null }),
   markWelcomeSeen: () => set({ hasSeenWelcome: true }),
 }));

@@ -5,10 +5,12 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { colors, darkColors, fonts, radius, spacing } from '@/constants/theme';
 import { DarkScope } from '@/constants/themeScope';
+import { FamilyRelation, RELATION_LABEL } from '@/data/family';
 import { Transaction } from '@/data/mock';
 import { formatCharm, formatUsd, mockTxHash } from '@/lib/format';
 import { pickProductPhoto } from '@/lib/productPhotos';
 import { useAppStore } from '@/store/useAppStore';
+import { useFamilyStore } from '@/store/useFamilyStore';
 import { useUiStore } from '@/store/useUiStore';
 import { AppModal } from './AppModal';
 import { PaymentFlowModal } from './PaymentFlowModal';
@@ -49,6 +51,10 @@ export function GlobalSheets() {
 
       <AppModal visible={activeSheet === 'groupbuy-create'} onClose={closeSheet}>
         {activeSheet === 'groupbuy-create' && <GroupBuyCreateSheetContent onClose={closeSheet} />}
+      </AppModal>
+
+      <AppModal visible={activeSheet === 'add-family'} onClose={closeSheet}>
+        {activeSheet === 'add-family' && <AddFamilySheetContent onClose={closeSheet} />}
       </AppModal>
 
       <DarkScope>
@@ -205,6 +211,60 @@ function GroupBuyCreateSheetContent({ onClose }: { onClose: () => void }) {
   );
 }
 
+const RELATIONS: FamilyRelation[] = ['spouse', 'child', 'parent'];
+
+// 참약사의 "우리가족 건강 플랫폼 약국" 정체성 — 계정 하나에 가족 구성원을
+// 추가해 각자의 AI 추천/진단을 독립적으로 관리하는 온보딩 진입점.
+function AddFamilySheetContent({ onClose }: { onClose: () => void }) {
+  const [name, setName] = useState('');
+  const [relation, setRelation] = useState<FamilyRelation>('child');
+  const addMember = useFamilyStore((s) => s.addMember);
+
+  const submit = () => {
+    if (!name.trim()) return;
+    addMember(name.trim(), relation);
+    onClose();
+  };
+
+  return (
+    <View style={styles.sheetContent}>
+      <View style={styles.creatorBadge}>
+        <Ionicons name="people" size={11} color="#0B0B0D" />
+        <Text style={styles.creatorBadgeText}>우리가족 건강 플랫폼 약국</Text>
+      </View>
+      <Text style={styles.title}>가족 구성원 추가</Text>
+      <Text style={styles.hint}>구성원마다 AI 진단·추천이 따로 관리돼요.</Text>
+
+      <Text style={styles.fieldLabel}>이름</Text>
+      <TextInput
+        value={name}
+        onChangeText={setName}
+        placeholder="예: 아빠, 하은이"
+        placeholderTextColor={colors.textMuted}
+        style={styles.input}
+      />
+
+      <Text style={styles.fieldLabel}>관계</Text>
+      <View style={{ flexDirection: 'row', gap: spacing.sm }}>
+        {RELATIONS.map((r) => (
+          <Pressable key={r} onPress={() => setRelation(r)} style={{ flex: 1 }}>
+            <View style={[styles.relationChip, relation === r && styles.relationChipActive]}>
+              <Text style={[styles.relationChipText, relation === r && styles.relationChipTextActive]}>
+                {RELATION_LABEL[r]}
+              </Text>
+            </View>
+          </Pressable>
+        ))}
+      </View>
+
+      <PillButton label="추가하기" onPress={submit} style={{ marginTop: spacing.lg }} />
+      <Pressable onPress={onClose} style={{ marginTop: spacing.md, alignItems: 'center' }}>
+        <Text style={styles.cancelText}>취소</Text>
+      </Pressable>
+    </View>
+  );
+}
+
 // Only ever opened from the Wallet tab's transaction list, so this stays
 // on the dark theme like the rest of Wallet.
 function ReceiptSheetContent({ tx }: { tx: Transaction }) {
@@ -352,6 +412,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   stepperValue: { fontFamily: fonts.bodyBold, fontSize: 13, color: colors.text },
+  relationChip: {
+    paddingVertical: 9,
+    borderRadius: radius.sm,
+    alignItems: 'center',
+    backgroundColor: colors.bgAlt,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  relationChipActive: { backgroundColor: colors.accentBlue, borderColor: colors.accentBlue },
+  relationChipText: { fontFamily: fonts.bodyBold, fontSize: 11.5, color: colors.textMuted },
+  relationChipTextActive: { color: '#FFFFFF' },
   receiptIconWrap: { alignSelf: 'center', marginBottom: spacing.sm },
   receiptTitle: { fontFamily: fonts.displaySemi, fontSize: 17, textAlign: 'center' },
   receiptBody: { fontFamily: fonts.body, fontSize: 12, textAlign: 'center', marginTop: 6, lineHeight: 17 },

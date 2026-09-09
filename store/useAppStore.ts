@@ -77,6 +77,7 @@ type AppState = {
   toggleLike: (postId: string) => void;
   toggleFollow: (postId: string) => void;
   dismissToast: (id: string) => void;
+  pushToast: (message: string, charmAmount?: number) => void;
   clearLevelUp: () => void;
   simulatePharmacyPurchase: (title: string, subtitle: string, usdAmount: number) => void;
   checkTierPromotion: () => void;
@@ -356,6 +357,8 @@ export const useAppStore = create<AppState>((set, get) => ({
     })),
 
   dismissToast: (id) => set((s) => ({ toasts: s.toasts.filter((t) => t.id !== id) })),
+  pushToast: (message, charmAmount) =>
+    set((s) => ({ toasts: [...s.toasts, { id: nextId('toast'), message, charmAmount }] })),
   clearLevelUp: () => set({ levelUpTier: null }),
 
   simulatePharmacyPurchase: (title, subtitle, usdAmount) => {

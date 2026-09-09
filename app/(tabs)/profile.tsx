@@ -9,10 +9,13 @@ import { GlassSurface } from '@/components/glass/GlassSurface';
 import { GradeBadge } from '@/components/glass/GradeBadge';
 import { TabFade } from '@/components/glass/TabFade';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
+import { RELATION_LABEL } from '@/data/family';
 import { LANGUAGE_LABEL, LanguageCode, USER } from '@/data/mock';
 import { formatDateShort } from '@/lib/date';
 import { useTierStatus } from '@/lib/useTierStatus';
 import { useAppStore } from '@/store/useAppStore';
+import { useFamilyStore } from '@/store/useFamilyStore';
+import { useUiStore } from '@/store/useUiStore';
 
 const LANGUAGES: LanguageCode[] = ['en', 'zh', 'vi', 'ko'];
 
@@ -22,6 +25,10 @@ export default function ProfileScreen() {
   const { tier } = useTierStatus();
   const language = useAppStore((s) => s.language);
   const setLanguage = useAppStore((s) => s.setLanguage);
+  const familyMembers = useFamilyStore((s) => s.members);
+  const activeMemberId = useFamilyStore((s) => s.activeMemberId);
+  const setActiveMember = useFamilyStore((s) => s.setActiveMember);
+  const openAddFamily = useUiStore((s) => s.openAddFamily);
 
   return (
     <View style={styles.root}>
@@ -53,6 +60,43 @@ export default function ProfileScreen() {
                 <MetaChip label={`가입일 ${formatDateShort(USER.memberSince)}`} />
               </View>
             </GlassSurface>
+          </View>
+
+          <View style={styles.section}>
+            <View style={styles.familyHeaderRow}>
+              <View>
+                <Text style={styles.sectionTitle}>우리 가족</Text>
+                <Text style={styles.familyTagline}>우리가족 건강 플랫폼 약국</Text>
+              </View>
+              <Pressable onPress={openAddFamily} style={styles.familyAddBtn}>
+                <Ionicons name="add" size={14} color={colors.accentBlue} />
+                <Text style={styles.familyAddBtnText}>구성원 추가</Text>
+              </Pressable>
+            </View>
+            <View style={{ gap: spacing.sm }}>
+              {familyMembers.map((m) => {
+                const active = m.id === activeMemberId;
+                return (
+                  <Pressable key={m.id} onPress={() => setActiveMember(m.id)}>
+                    <GlassSurface radius={radius.lg} padding={spacing.md} style={[active && styles.familyCardActive]}>
+                      <View style={styles.familyRow}>
+                        <Image source={{ uri: m.avatar }} style={styles.familyAvatar} />
+                        <View style={{ flex: 1 }}>
+                          <View style={styles.familyNameRow}>
+                            <Text style={styles.familyName}>{m.relation === 'self' ? `${m.name} (나)` : m.name}</Text>
+                            <View style={styles.familyRelationChip}>
+                              <Text style={styles.familyRelationChipText}>{RELATION_LABEL[m.relation]}</Text>
+                            </View>
+                          </View>
+                          <Text style={styles.familyFocus}>{m.focusLabel}</Text>
+                        </View>
+                        {active && <Ionicons name="checkmark-circle" size={18} color={colors.accentBlue} />}
+                      </View>
+                    </GlassSurface>
+                  </Pressable>
+                );
+              })}
+            </View>
           </View>
 
           <View style={styles.section}>
@@ -139,7 +183,29 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
   section: { paddingHorizontal: spacing.xl, marginTop: spacing.xl },
   pageTitle: { fontFamily: fonts.display, fontSize: 24, color: colors.text },
-  sectionTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text, marginBottom: spacing.md },
+  sectionTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text },
+  familyHeaderRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: spacing.md },
+  familyTagline: { fontFamily: fonts.bodyMed, fontSize: 10.5, color: colors.accentBlue, marginTop: 2 },
+  familyAddBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: radius.pill,
+    backgroundColor: 'rgba(79,182,232,0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(79,182,232,0.3)',
+  },
+  familyAddBtnText: { fontFamily: fonts.bodyBold, fontSize: 10.5, color: colors.accentBlue },
+  familyCardActive: { borderColor: colors.accentBlue },
+  familyRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  familyAvatar: { width: 40, height: 40, borderRadius: 20 },
+  familyNameRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  familyName: { fontFamily: fonts.bodySemi, fontSize: 13, color: colors.text },
+  familyRelationChip: { backgroundColor: colors.bgAlt, paddingHorizontal: 6, paddingVertical: 1, borderRadius: radius.pill },
+  familyRelationChipText: { fontFamily: fonts.bodyBold, fontSize: 8.5, color: colors.textMuted },
+  familyFocus: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, marginTop: 2 },
   headRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   avatar: { width: 56, height: 56, borderRadius: 28, borderWidth: 1, borderColor: colors.borderStrong },
   name: { fontFamily: fonts.displaySemi, fontSize: 17, color: colors.text },

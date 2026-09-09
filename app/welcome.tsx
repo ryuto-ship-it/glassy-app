@@ -18,6 +18,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import { CharmacistLogo } from '@/components/glass/CharmacistLogo';
+import { CinematicIntro } from '@/components/glass/CinematicIntro';
 import { ConfettiBurst } from '@/components/glass/ConfettiBurst';
 import { FloatingBlobs } from '@/components/glass/FloatingBlobs';
 import { PillButton } from '@/components/glass/PillButton';
@@ -26,9 +27,10 @@ import { PillButton } from '@/components/glass/PillButton';
 import { darkBackgroundGradient, darkColors as colors, fonts, radius, spacing, TAGLINE } from '@/constants/theme';
 import { DarkScope } from '@/constants/themeScope';
 import { WELCOME_BONUS_CHARM, useAppStore } from '@/store/useAppStore';
+import { useFamilyStore } from '@/store/useFamilyStore';
 import { useUiStore } from '@/store/useUiStore';
 
-type Step = 'intro' | 'joining' | 'reward';
+type Step = 'cinematic' | 'intro' | 'joining' | 'reward' | 'family-check';
 
 // Subtle "look here" pulse on the primary CTA — a ~2.6s breathing scale,
 // off entirely under reduce-motion.
@@ -58,9 +60,11 @@ function usePulseStyle() {
 export default function WelcomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [step, setStep] = useState<Step>('intro');
+  const [step, setStep] = useState<Step>('cinematic');
   const markWelcomeSeen = useUiStore((s) => s.markWelcomeSeen);
+  const openAddFamily = useUiStore((s) => s.openAddFamily);
   const claimWelcomeBonus = useAppStore((s) => s.claimWelcomeBonus);
+  const setTravelingWithFamily = useFamilyStore((s) => s.setTravelingWithFamily);
   const pulseStyle = usePulseStyle();
 
   useEffect(() => {
@@ -81,6 +85,22 @@ export default function WelcomeScreen() {
   // index route, landing on not-found. Replacing with the clean root path
   // sidesteps that mismatch entirely.
   const goHome = () => router.replace('/');
+
+  const chooseTravelMode = (withFamily: boolean) => {
+    setTravelingWithFamily(withFamily);
+    if (withFamily) openAddFamily();
+    goHome();
+  };
+
+  if (step === 'cinematic') {
+    return (
+      <DarkScope>
+        <View style={[styles.root, { paddingTop: insets.top }]}>
+          <CinematicIntro onDone={() => setStep('intro')} />
+        </View>
+      </DarkScope>
+    );
+  }
 
   return (
     <DarkScope>
@@ -160,9 +180,27 @@ export default function WelcomeScreen() {
             CHARM 멤버십이 시작됐어요. 이제 어떤 방식으로 결제하든 CHARM이 쌓여요.
           </Animated.Text>
           <Animated.View entering={FadeInDown.delay(340)} style={{ width: '100%', marginTop: spacing.xl }}>
-            <PillButton label="홈으로 이동" onPress={goHome} colors_={['#4FB6E8', '#1B5FA8']} />
+            <PillButton label="다음" onPress={() => setStep('family-check')} colors_={['#4FB6E8', '#1B5FA8']} />
           </Animated.View>
         </View>
+      )}
+
+      {step === 'family-check' && (
+        <Animated.View entering={FadeIn.duration(300)} style={styles.centerWrap}>
+          <Ionicons name="people-circle-outline" size={40} color={colors.accentBlue} />
+          <Text style={styles.familyQTitle}>혼자 여행 중이신가요,{'\n'}가족과 함께이신가요?</Text>
+          <Text style={styles.familyQSub}>참약사는 우리가족 건강 플랫폼 약국이에요 — 가족 구성원별로 AI 추천을 따로 관리할 수 있어요.</Text>
+          <View style={styles.familyBtnCol}>
+            <Pressable style={styles.familyChoiceBtn} onPress={() => chooseTravelMode(true)}>
+              <Ionicons name="people" size={16} color="#0B0B0D" />
+              <Text style={styles.familyChoiceBtnText}>가족과 함께예요</Text>
+            </Pressable>
+            <Pressable style={[styles.familyChoiceBtn, styles.familyChoiceBtnAlt]} onPress={() => chooseTravelMode(false)}>
+              <Ionicons name="person" size={16} color={colors.text} />
+              <Text style={[styles.familyChoiceBtnText, styles.familyChoiceBtnTextAlt]}>혼자 여행 중이에요</Text>
+            </Pressable>
+          </View>
+        </Animated.View>
       )}
     </LinearGradient>
     </DarkScope>
@@ -250,4 +288,34 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     maxWidth: 300,
   },
+  familyQTitle: {
+    fontFamily: fonts.display,
+    fontSize: 22,
+    color: colors.text,
+    textAlign: 'center',
+    marginTop: spacing.lg,
+    lineHeight: 30,
+  },
+  familyQSub: {
+    fontFamily: fonts.body,
+    fontSize: 12.5,
+    color: colors.textMuted,
+    textAlign: 'center',
+    marginTop: spacing.md,
+    lineHeight: 18,
+    maxWidth: 300,
+  },
+  familyBtnCol: { width: '100%', gap: spacing.sm, marginTop: spacing.xxl },
+  familyChoiceBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 14,
+    borderRadius: radius.pill,
+    backgroundColor: colors.accentGold,
+  },
+  familyChoiceBtnAlt: { backgroundColor: 'rgba(255,255,255,0.06)', borderWidth: 1, borderColor: colors.borderStrong },
+  familyChoiceBtnText: { fontFamily: fonts.bodyBold, fontSize: 13.5, color: '#0B0B0D' },
+  familyChoiceBtnTextAlt: { color: colors.text },
 });

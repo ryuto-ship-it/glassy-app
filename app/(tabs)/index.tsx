@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
+import { Href, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import {
   Pressable,
@@ -13,23 +13,30 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { useReducedMotion } from 'react-native-reanimated';
 
+import { AiChatEntryCard } from '@/components/glass/AiChatEntryCard';
 import { AiHeroBanner } from '@/components/glass/AiHeroBanner';
 import { AppBackground } from '@/components/glass/AppBackground';
+import { FamilySelector } from '@/components/glass/FamilySelector';
 import { HomeCarousel } from '@/components/glass/HomeCarousel';
 import { CountUpText } from '@/components/glass/CountUpText';
 import { DropletProgress } from '@/components/glass/DropletProgress';
 import { EmptyState } from '@/components/glass/EmptyState';
 import { GlassSurface } from '@/components/glass/GlassSurface';
 import { GradeBadge } from '@/components/glass/GradeBadge';
+import { PartnerBadge } from '@/components/glass/PartnerBadge';
 import { PriceTicker } from '@/components/glass/PriceChart';
 import { ProductImage } from '@/components/glass/ProductImage';
 import { SkeletonBlock, SkeletonCard } from '@/components/glass/Skeleton';
+import { StoreOverlay } from '@/components/glass/StoreOverlay';
 import { TabFade } from '@/components/glass/TabFade';
+import { TrustSpotlight } from '@/components/glass/TrustSpotlight';
 import { colors, fonts, radius, spacing, TAGLINE } from '@/constants/theme';
+import { RELATION_LABEL } from '@/data/family';
 import { FEATURED_GROUP_BUY, PRODUCTS, REAL_PRODUCT_BADGE, USER } from '@/data/mock';
 import { formatDateShort } from '@/lib/date';
 import { formatCharm, formatSigned, formatUsd } from '@/lib/format';
 import { staggerEnter } from '@/lib/motion';
+import { useFamilyRecommendations } from '@/lib/useFamilyRecommendations';
 import { useTierStatus } from '@/lib/useTierStatus';
 import { useAppStore } from '@/store/useAppStore';
 import { useQuizStore } from '@/store/useQuizStore';
@@ -69,7 +76,23 @@ export default function HomeScreen() {
   const isPrecision = tier.order >= 2;
   const recent = transactions.slice(0, 3);
   const catalog = PRODUCTS.slice(0, 12);
-  const topPick = quizResult ? PRODUCTS.find((p) => p.id === quizResult.recommendations[0]?.productId) : undefined;
+
+  const {
+    member: activeMember,
+    radar: familyRadar,
+    insight: familyInsight,
+    products: familyProducts,
+    hasLiveDiagnosis: familyHasLiveDiagnosis,
+  } = useFamilyRecommendations();
+  const isSelfMember = activeMember.relation === 'self';
+  const familyTopProduct = familyProducts[0];
+  const familyMatchScore = isSelfMember
+    ? quizResult?.recommendations[0]?.score
+    : familyRadar
+    ? Math.round(Object.values(familyRadar).reduce((a, b) => a + b, 0) / Object.values(familyRadar).length)
+    : undefined;
+
+  const goToChat = () => router.push('/chat' as Href);
 
   return (
     <View style={styles.root}>
@@ -82,14 +105,21 @@ export default function HomeScreen() {
         }
       >
         {/* header */}
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.brand}>CHARM</Text>
-            <Text style={styles.tagline}>{TAGLINE}</Text>
-            <Text style={styles.hello}>안녕하세요, {USER.name.split(' ')[0]}님</Text>
-            <Text style={styles.valueProp}>여행 중에도 AI가 컨디션을 분석하고, 결제할 때마다 등급이 오르는 K-beauty 멤버십</Text>
+        <View style={styles.headerWrap}>
+          <StoreOverlay />
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.brand}>CHARM</Text>
+              <Text style={styles.tagline}>{TAGLINE}</Text>
+              <Text style={styles.hello}>안녕하세요, {USER.name.split(' ')[0]}님</Text>
+              <Text style={styles.valueProp}>
+                {isSelfMember
+                  ? '여행 중에도 AI가 컨디션을 분석하고, 결제할 때마다 등급이 오르는 K-beauty 멤버십'
+                  : `지금 ${RELATION_LABEL[activeMember.relation]} 프로필을 보고 있어요 · ${activeMember.focusLabel}`}
+              </Text>
+            </View>
+            <Image source={{ uri: USER.avatar }} style={styles.avatar} />
           </View>
-          <Image source={{ uri: USER.avatar }} style={styles.avatar} />
         </View>
 
         {/* rolling promo carousel — the home screen's first banner slot */}
@@ -97,16 +127,32 @@ export default function HomeScreen() {
           <HomeCarousel />
         </View>
 
+        {/* 우리 가족 건강 플랫폼 약국 — family avatar switcher, drives the AI
+            recommendation context for the rest of the home screen */}
+        <View style={styles.section}>
+          <FamilySelector />
+        </View>
+
+        {/* 신뢰 신호 — 참약사 약사 인증 / 실제 이용자 후기 스포트라이트 */}
+        <View style={styles.section}>
+          <TrustSpotlight />
+        </View>
+
         {/* AI hero banner — the app's flagship feature, highest visual priority */}
         <View style={styles.section}>
           <AiHeroBanner
-            hasCompletedQuiz={hasCompletedQuiz}
-            topPickLabel={topPick ? `${topPick.brand} ${topPick.name}` : undefined}
-            matchScore={quizResult?.recommendations[0]?.score}
-            historyInsight={quizResult?.historyInsight}
+            hasCompletedQuiz={isSelfMember ? hasCompletedQuiz : familyHasLiveDiagnosis}
+            topPickLabel={familyTopProduct ? `${familyTopProduct.brand} ${familyTopProduct.name}` : undefined}
+            matchScore={familyMatchScore}
+            historyInsight={isSelfMember ? quizResult?.historyInsight : familyInsight}
             isPrecision={isPrecision}
             onPress={() => router.push('/quiz')}
           />
+        </View>
+
+        {/* AI 채팅 상담 — 신규 핵심 기능 진입점 */}
+        <View style={styles.section}>
+          <AiChatEntryCard onPress={goToChat} />
         </View>
 
         {/* price ticker */}
@@ -121,35 +167,40 @@ export default function HomeScreen() {
             <SkeletonCard />
           </View>
         ) : (
-          <View style={styles.section}>
-            <GlassSurface elevated padding={spacing.xl} radius={radius.xl}>
-              <View style={styles.tierRow}>
-                <View style={{ flex: 1 }}>
-                  <Text style={styles.tierKicker}>내 피부 광채 등급</Text>
-                  <Text style={[styles.tierName, { color: tier.accent }]}>{tier.name}</Text>
-                  <Text style={styles.tierBalance}>
-                    <CountUpText value={totalCharm} duration={1000} formatter={(n) => formatCharm(n)} style={styles.tierBalance} /> CHARM 보유
-                  </Text>
-                  {next ? (
-                    <>
-                      <Text style={styles.tierRemaining}>
-                        지금 시세({formatUsd(price)} 기준)로는 {next.name}까지 앞으로{' '}
-                        {formatCharm(remainingCharm)} CHARM 더 필요해요
-                      </Text>
-                      <Text style={styles.tierDelta}>어제보다 {formatSigned(remainingDelta)}개</Text>
-                    </>
-                  ) : (
-                    <Text style={styles.tierRemaining}>
-                      {tier.name} 등급 달성 · {formatDateShort(achievedAt)} 기준 시세로 승급, 이후 시세와 무관하게
-                      등급을 유지해요
+          <View style={[styles.section, styles.bentoRow]}>
+            <View style={{ flex: 1.6 }}>
+              <GlassSurface elevated padding={spacing.xl} radius={radius.xl} style={{ flex: 1 }}>
+                <View style={styles.tierRow}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.tierKicker}>내 피부 광채 등급</Text>
+                    <Text style={[styles.tierName, { color: tier.accent }]}>{tier.name}</Text>
+                    <Text style={styles.tierBalance}>
+                      <CountUpText value={totalCharm} duration={1000} formatter={(n) => formatCharm(n)} style={styles.tierBalance} /> CHARM 보유
                     </Text>
-                  )}
+                    {next ? (
+                      <>
+                        <Text style={styles.tierRemaining}>
+                          지금 시세({formatUsd(price)} 기준)로는 {next.name}까지 앞으로{' '}
+                          {formatCharm(remainingCharm)} CHARM 더 필요해요
+                        </Text>
+                        <Text style={styles.tierDelta}>어제보다 {formatSigned(remainingDelta)}개</Text>
+                      </>
+                    ) : (
+                      <Text style={styles.tierRemaining}>
+                        {tier.name} 등급 달성 · {formatDateShort(achievedAt)} 기준 시세로 승급, 이후 시세와 무관하게
+                        등급을 유지해요
+                      </Text>
+                    )}
+                  </View>
+                  <DropletProgress size={96} percent={progress} colors={tier.colors}>
+                    <GradeBadge tier={tier.id} size={40} />
+                  </DropletProgress>
                 </View>
-                <DropletProgress size={96} percent={progress} colors={tier.colors}>
-                  <GradeBadge tier={tier.id} size={40} />
-                </DropletProgress>
-              </View>
-            </GlassSurface>
+              </GlassSurface>
+            </View>
+            <View style={{ flex: 1 }}>
+              <PartnerBadge />
+            </View>
           </View>
         )}
 
@@ -161,25 +212,26 @@ export default function HomeScreen() {
           <QuickAction icon="people-outline" label="커뮤니티" onPress={() => router.push('/community')} />
         </View>
 
-        {/* AI matched products */}
-        {hasCompletedQuiz && quizResult && quizResult.recommendations.length > 0 && (
+        {/* AI matched products — personalized to the active family member */}
+        {familyProducts.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>AI 매칭 상품</Text>
+            <Text style={styles.sectionTitle}>
+              {isSelfMember ? 'AI 매칭 상품' : `${RELATION_LABEL[activeMember.relation]} 맞춤 AI 매칭`}
+            </Text>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ gap: spacing.md, paddingRight: spacing.xl }}
             >
-              {quizResult.recommendations.slice(0, 5).map((rec, index) => {
-                const p = PRODUCTS.find((pp) => pp.id === rec.productId);
-                if (!p) return null;
+              {familyProducts.slice(0, 5).map((p, index) => {
+                const rec = isSelfMember ? quizResult?.recommendations.find((r) => r.productId === p.id) : undefined;
                 return (
                   <Animated.View key={p.id} entering={staggerEnter(index, { step: 70 }, reducedMotion)}>
                     <Pressable onPress={() => router.push('/shop')} style={{ width: 148 }}>
                       <GlassSurface radius={radius.lg} padding={spacing.sm}>
                         <ProductImage product={p} style={styles.productImg} />
                         <View style={styles.matchChip}>
-                          <Text style={styles.matchChipText}>AI {rec.score}%</Text>
+                          <Text style={styles.matchChipText}>{rec ? `AI ${rec.score}%` : 'AI 추천'}</Text>
                         </View>
                         <Text style={styles.brandLabel}>{p.brand}</Text>
                         <Text style={styles.productName} numberOfLines={2}>
@@ -368,12 +420,14 @@ const styles = StyleSheet.create({
     shadowRadius: 14,
     elevation: 8,
   },
+  headerWrap: { position: 'relative' },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: spacing.xl,
   },
+  bentoRow: { flexDirection: 'row', gap: spacing.md, alignItems: 'stretch' },
   brand: { fontFamily: fonts.display, fontSize: 13, letterSpacing: 2, color: colors.textMuted },
   tagline: { fontFamily: fonts.body, fontSize: 10, color: colors.textFaint, marginTop: 1 },
   hello: { fontFamily: fonts.displaySemi, fontSize: 19, color: colors.text, marginTop: 6 },

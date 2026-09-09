@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { Href, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -413,6 +413,7 @@ function ResultsStep({
   onFinish: () => void;
   onRetake: () => void;
 }) {
+  const router = useRouter();
   const { tier } = useTierStatus();
   const openPayment = useUiStore((s) => s.openPayment);
   const axes = isPrecision ? RADAR_AXES : RADAR_AXES.filter((a) => BASIC_RADAR_AXES.includes(a.id as any));
@@ -509,6 +510,19 @@ function ResultsStep({
         style={{ marginTop: spacing.xl }}
       />
       <Text style={styles.payHint}>스테이블코인 · 신용카드 · $CHARM 결제 지원</Text>
+
+      <Pressable
+        onPress={() => router.push('/chat?startPharmacist=1&fromDiagnosis=1' as Href)}
+        style={styles.pharmacistCta}
+      >
+        <Ionicons name="medkit-outline" size={15} color={colors.accentBlue} />
+        <View style={{ flex: 1 }}>
+          <Text style={styles.pharmacistCtaTitle}>참약사 약사와 1:1 상담하기</Text>
+          <Text style={styles.pharmacistCtaSub}>이 진단 결과를 약사에게 전달하고 최종 확인받아요</Text>
+        </View>
+        <Ionicons name="chevron-forward" size={15} color={colors.textFaint} />
+      </Pressable>
+
       <Text style={styles.disclaimerSmall}>
         이 리포트는 건강기능식품 추천이며 의학적 진단이 아닙니다.
       </Text>
@@ -734,6 +748,19 @@ const styles = StyleSheet.create({
   },
   reasonText: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, flex: 1, lineHeight: 15 },
   payHint: { fontFamily: fonts.bodyMed, fontSize: 11, color: colors.textMuted, textAlign: 'center', marginTop: spacing.sm },
+  pharmacistCta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginTop: spacing.lg,
+    padding: spacing.md,
+    borderRadius: radius.lg,
+    backgroundColor: 'rgba(79,182,232,0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(79,182,232,0.25)',
+  },
+  pharmacistCtaTitle: { fontFamily: fonts.bodyBold, fontSize: 12.5, color: colors.text },
+  pharmacistCtaSub: { fontFamily: fonts.body, fontSize: 10.5, color: colors.textMuted, marginTop: 2 },
   skipText: { fontFamily: fonts.bodyMed, fontSize: 12, color: colors.textMuted },
   resultsFooterRow: {
     flexDirection: 'row',
