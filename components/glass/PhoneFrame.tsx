@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Platform, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 
@@ -28,6 +29,18 @@ export function PhoneFrame({ children }: { children: React.ReactNode }) {
 }
 
 function WebStage({ children }: { children: React.ReactNode }) {
+  // This app is statically exported (each route pre-rendered to HTML with
+  // no real browser window), so the server has no true window size to work
+  // with. If the very first client render uses useWindowDimensions()
+  // straight away, its real (client) size almost never matches whatever the
+  // static HTML was built with, React aborts hydration of this subtree
+  // (error #418) and it can get stuck rendered at the wrong tiny scale
+  // forever. Rendering nothing until after mount makes the client's first
+  // paint match the static markup exactly, so hydration always succeeds —
+  // then this immediately swaps in the correctly-scaled frame.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const { width: winW, height: winH } = useWindowDimensions();
   const outerW = FRAME_WIDTH + BEZEL * 2;
   const outerH = FRAME_HEIGHT + BEZEL * 2;
@@ -36,6 +49,13 @@ function WebStage({ children }: { children: React.ReactNode }) {
   const scale = Math.min(1, scaleW, scaleH);
   const showWatermarks = winW - outerW * scale > 220;
   const showSidePanels = winW >= SIDE_PANEL_MIN_WIDTH;
+
+  // Pre-mount (and during static-export SSR), skip the bezel chrome and
+  // render the app directly — still fully usable, just unframed — so the
+  // client's first paint matches the server markup exactly.
+  if (!mounted) {
+    return <>{children}</>;
+  }
 
   return (
     <View style={styles.stage}>
