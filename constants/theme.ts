@@ -151,7 +151,18 @@ export const fonts = {
   bodyBold: 'Inter_700Bold',
 };
 
+// Three-tier depth scale — base cards sit almost flush with the background,
+// elevated cards read as a clear layer above it, and "lift" is reserved for
+// things that float above everything else (floating action buttons, badges
+// pinned on top of a card, overlays).
 export const shadow = {
+  subtle: {
+    shadowColor: colors.shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.18,
+    shadowRadius: 6,
+    elevation: 1,
+  },
   soft: {
     shadowColor: colors.shadow,
     shadowOffset: { width: 0, height: 6 },
@@ -169,6 +180,13 @@ export const shadow = {
 };
 
 export const darkShadow = {
+  subtle: {
+    shadowColor: darkColors.shadow,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.22,
+    shadowRadius: 8,
+    elevation: 2,
+  },
   soft: {
     shadowColor: darkColors.shadow,
     shadowOffset: { width: 0, height: 8 },

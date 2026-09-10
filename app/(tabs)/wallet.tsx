@@ -116,7 +116,15 @@ export default function WalletScreen() {
               style={{ height: 140, marginTop: spacing.lg }}
               onLayout={(e) => setChartWidth(e.nativeEvent.layout.width)}
             >
-              <PriceChart data={chartData} width={chartWidth} height={140} color={trendColor} />
+              <PriceChart
+                data={chartData}
+                width={chartWidth}
+                height={140}
+                color={trendColor}
+                showGrid
+                showDot
+                periodLabel={period}
+              />
             </View>
             <View style={styles.periodRow}>
               {(['24H', '7D', '30D'] as const).map((p) => (

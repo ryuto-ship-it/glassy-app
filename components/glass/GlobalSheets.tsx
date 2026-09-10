@@ -177,7 +177,7 @@ function GroupBuyCreateSheetContent({ onClose }: { onClose: () => void }) {
   return (
     <View style={styles.sheetContent}>
       <View style={styles.creatorBadge}>
-        <Ionicons name="ribbon" size={11} color="#0B0B0D" />
+        <Ionicons name="shield-checkmark" size={11} color="#0B0B0D" />
         <Text style={styles.creatorBadgeText}>인증 크리에이터 전용</Text>
       </View>
       <Text style={styles.title}>인플루언서 공동구매 개설</Text>

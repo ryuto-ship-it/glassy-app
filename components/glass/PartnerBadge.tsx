@@ -11,7 +11,7 @@ export function PartnerBadge() {
     <View style={styles.wrap}>
       <LinearGradient colors={['#2A2110', '#1D1A2E']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
       <View style={styles.ribbonWrap}>
-        <Ionicons name="ribbon" size={22} color="#E8C468" />
+        <Ionicons name="shield-checkmark" size={22} color="#E8C468" />
       </View>
       <Text style={styles.title}>참약사{'\n'}공식 인증 파트너</Text>
       <Text style={styles.sub}>전국 200+ 매장 제휴</Text>
@@ -21,6 +21,7 @@ export function PartnerBadge() {
 
 const styles = StyleSheet.create({
   wrap: {
+    flex: 1,
     borderRadius: radius.xl,
     overflow: 'hidden',
     padding: spacing.lg,

@@ -55,15 +55,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="ai-chat"
-        options={{
-          title: 'AI 상담',
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline'} size={22} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="wallet"
         options={{
           title: '지갑',

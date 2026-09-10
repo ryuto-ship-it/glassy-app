@@ -149,7 +149,7 @@ export default function ChatScreen() {
             <View>
               <Text style={styles.headerTitle}>{PHARMACIST_PROFILE.name}</Text>
               <View style={styles.pharmacistBadge}>
-                <Ionicons name="ribbon" size={9} color="#0B0B0D" />
+                <Ionicons name="shield-checkmark" size={9} color="#0B0B0D" />
                 <Text style={styles.pharmacistBadgeText}>{PHARMACIST_PROFILE.badge}</Text>
               </View>
             </View>

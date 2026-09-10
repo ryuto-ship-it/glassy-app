@@ -172,7 +172,7 @@ export default function HomeScreen() {
             <View style={{ flex: 1.6 }}>
               <GlassSurface elevated padding={spacing.xl} radius={radius.xl} style={{ flex: 1 }}>
                 <View style={styles.tierRow}>
-                  <View style={{ flex: 1 }}>
+                  <View style={{ flex: 1, minWidth: 0 }}>
                     <Text style={styles.tierKicker}>내 피부 광채 등급</Text>
                     <Text style={[styles.tierName, { color: tier.accent }]}>{tier.name}</Text>
                     <Text style={styles.tierBalance}>
@@ -193,8 +193,8 @@ export default function HomeScreen() {
                       </Text>
                     )}
                   </View>
-                  <DropletProgress size={96} percent={progress} colors={tier.colors}>
-                    <GradeBadge tier={tier.id} size={40} />
+                  <DropletProgress size={72} percent={progress} colors={tier.colors}>
+                    <GradeBadge tier={tier.id} size={32} />
                   </DropletProgress>
                 </View>
               </GlassSurface>
@@ -347,7 +347,7 @@ export default function HomeScreen() {
                         )}
                         {p.isRealProduct && (
                           <View style={styles.realBadge}>
-                            <Ionicons name="ribbon" size={9} color="#0B0B0D" />
+                            <Ionicons name="shield-checkmark" size={9} color="#0B0B0D" />
                             <Text style={styles.realBadgeText}>{REAL_PRODUCT_BADGE}</Text>
                           </View>
                         )}
@@ -378,7 +378,8 @@ export default function HomeScreen() {
       </TabFade>
 
       <Pressable onPress={() => router.push('/scan')} style={styles.scanFab}>
-        <Ionicons name="scan" size={22} color="#0B0B0D" />
+        <Ionicons name="camera-outline" size={19} color="#0B0B0D" />
+        <Text style={styles.scanFabLabel}>스캔</Text>
       </Pressable>
     </View>
   );
@@ -409,18 +410,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: spacing.xl,
     bottom: 100,
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: colors.accentGold,
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    gap: 6,
+    height: 44,
+    paddingHorizontal: spacing.lg,
+    borderRadius: radius.pill,
+    backgroundColor: colors.accentGold,
     shadowColor: colors.accentGold,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.4,
     shadowRadius: 14,
     elevation: 8,
   },
+  scanFabLabel: { fontFamily: fonts.bodyBold, fontSize: 12.5, color: '#0B0B0D' },
   headerWrap: { position: 'relative' },
   header: {
     flexDirection: 'row',
@@ -439,7 +442,7 @@ const styles = StyleSheet.create({
 
   tierRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   tierKicker: { fontFamily: fonts.bodyMed, fontSize: 12, color: colors.textMuted },
-  tierName: { fontFamily: fonts.display, fontSize: 24, marginTop: 2 },
+  tierName: { fontFamily: fonts.display, fontSize: 19, marginTop: 2, flexShrink: 1 },
   tierBalance: { fontFamily: fonts.bodySemi, fontSize: 14, color: colors.text, marginTop: 6 },
   tierRemaining: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted, marginTop: 4 },
   tierDelta: { fontFamily: fonts.bodyMed, fontSize: 10, color: colors.textFaint, marginTop: 3 },

@@ -100,7 +100,7 @@ export default function CommunityScreen() {
               <GlassSurface radius={radius.lg} padding={spacing.lg} style={styles.creatorCtaCard}>
                 <View style={styles.creatorCtaRow}>
                   <View style={styles.creatorBadgeSmall}>
-                    <Ionicons name="ribbon" size={11} color="#0B0B0D" />
+                    <Ionicons name="shield-checkmark" size={11} color="#0B0B0D" />
                     <Text style={styles.creatorBadgeSmallText}>인증 크리에이터</Text>
                   </View>
                   <Ionicons name="chevron-forward" size={15} color={colors.textFaint} />
@@ -216,7 +216,7 @@ function PostCard({
             <Text style={styles.postAuthor}>{post.author}</Text>
             {(post.authorFollowers ?? 0) >= INFLUENCER_FOLLOWER_THRESHOLD && (
               <View style={styles.creatorBadgeTiny}>
-                <Ionicons name="ribbon" size={8} color="#0B0B0D" />
+                <Ionicons name="shield-checkmark" size={8} color="#0B0B0D" />
                 <Text style={styles.creatorBadgeTinyText}>인증 크리에이터</Text>
               </View>
             )}

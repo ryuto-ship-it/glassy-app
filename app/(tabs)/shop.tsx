@@ -157,7 +157,7 @@ export default function ShopScreen() {
                         )}
                         {p.isRealProduct && (
                           <View style={styles.realBadge}>
-                            <Ionicons name="ribbon" size={9} color="#0B0B0D" />
+                            <Ionicons name="shield-checkmark" size={9} color="#0B0B0D" />
                             <Text style={styles.realBadgeText}>{REAL_PRODUCT_BADGE}</Text>
                           </View>
                         )}

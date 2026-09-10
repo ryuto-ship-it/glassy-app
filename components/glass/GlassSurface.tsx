@@ -42,7 +42,7 @@ export function GlassSurface({
             borderWidth: noBorder ? 0 : 1,
             borderColor: colors.border,
           },
-          elevated ? shadow.soft : undefined,
+          elevated ? shadow.soft : shadow.subtle,
           style,
         ]}
         {...rest}
@@ -56,7 +56,7 @@ export function GlassSurface({
     <View
       style={[
         { borderRadius: radius, overflow: 'hidden', backgroundColor: darkColors.surface },
-        elevated ? darkShadow.soft : undefined,
+        elevated ? darkShadow.soft : darkShadow.subtle,
         style,
       ]}
       {...rest}

@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { View, Text, Animated, Easing, PanResponder, LayoutChangeEvent, StyleSheet } from 'react-native';
+import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useVideoPlayer, VideoView } from 'expo-video';
 
 import { fonts, radius, shadow, palette } from '@/constants/theme';
+import { REAL_PRODUCT_PHOTOS } from '@/lib/productPhotos';
 
 export type HomeSlide = {
   key: string;
@@ -15,6 +17,9 @@ export type HomeSlide = {
   // Optional muted/looping video background instead of the flat gradient —
   // see assets/videos/README.md, it's a placeholder clip today.
   video?: number;
+  // Optional real product-photo background (see assets/products/real/) for
+  // slides that are literally about a product, instead of a flat gradient.
+  image?: number;
 };
 
 const AUTOPLAY_MS = 4500;
@@ -37,6 +42,7 @@ export const HOME_SLIDES: HomeSlide[] = [
     title: '이번 주 새로 들어온 K-beauty 신제품',
     caption: '약국 탭에서 가장 먼저 신제품을 만나보세요.',
     icon: '✨',
+    image: REAL_PRODUCT_PHOTOS[3],
   },
   {
     key: 'upgrade',
@@ -147,6 +153,16 @@ function SlideCard({ slide, width, active }: { slide: HomeSlide; width: number; 
           <VideoSlideBackground source={slide.video} active={active} />
           <LinearGradient
             colors={['rgba(11,11,13,0.25)', 'rgba(11,11,13,0.85)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0.7, y: 1 }}
+            style={StyleSheet.absoluteFill}
+          />
+        </>
+      ) : slide.image ? (
+        <>
+          <Image source={slide.image} style={StyleSheet.absoluteFill} contentFit="cover" />
+          <LinearGradient
+            colors={['rgba(11,11,13,0.15)', 'rgba(11,11,13,0.82)']}
             start={{ x: 0, y: 0 }}
             end={{ x: 0.7, y: 1 }}
             style={StyleSheet.absoluteFill}
