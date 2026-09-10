@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import { Href, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import {
@@ -23,6 +22,7 @@ import { DropletProgress } from '@/components/glass/DropletProgress';
 import { EmptyState } from '@/components/glass/EmptyState';
 import { GlassSurface } from '@/components/glass/GlassSurface';
 import { GradeBadge } from '@/components/glass/GradeBadge';
+import { InitialAvatar } from '@/components/glass/InitialAvatar';
 import { PartnerBadge } from '@/components/glass/PartnerBadge';
 import { PriceTicker } from '@/components/glass/PriceChart';
 import { ProductImage } from '@/components/glass/ProductImage';
@@ -118,7 +118,7 @@ export default function HomeScreen() {
                   : `지금 ${RELATION_LABEL[activeMember.relation]} 프로필을 보고 있어요 · ${activeMember.focusLabel}`}
               </Text>
             </View>
-            <Image source={{ uri: USER.avatar }} style={styles.avatar} />
+            <InitialAvatar name={USER.name} size={44} style={styles.avatar} />
           </View>
         </View>
 

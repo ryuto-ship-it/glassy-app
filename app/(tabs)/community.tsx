@@ -21,6 +21,7 @@ import Animated, {
 
 import { AppBackground } from '@/components/glass/AppBackground';
 import { GlassSurface } from '@/components/glass/GlassSurface';
+import { InitialAvatar } from '@/components/glass/InitialAvatar';
 import { PillButton } from '@/components/glass/PillButton';
 import { SkeletonCard } from '@/components/glass/Skeleton';
 import { TabFade } from '@/components/glass/TabFade';
@@ -210,7 +211,7 @@ function PostCard({
         <Text style={styles.categoryChipText}>{POST_CATEGORY_LABEL[post.category ?? 'review']}</Text>
       </View>
       <View style={styles.postHeader}>
-        <Image source={{ uri: post.avatar }} style={styles.postAvatar} />
+        <InitialAvatar name={post.author} size={38} style={styles.postAvatar} />
         <View style={{ flex: 1 }}>
           <View style={styles.postAuthorRow}>
             <Text style={styles.postAuthor}>{post.author}</Text>

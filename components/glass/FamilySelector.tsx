@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, { ZoomIn } from 'react-native-reanimated';
 
+import { InitialAvatar } from '@/components/glass/InitialAvatar';
 import { RELATION_LABEL } from '@/data/family';
 import { colors, fonts, spacing } from '@/constants/theme';
 import { useFamilyStore } from '@/store/useFamilyStore';
@@ -24,7 +24,7 @@ export function FamilySelector() {
           <Animated.View key={m.id} entering={ZoomIn.delay(i * 60).duration(300)}>
             <Pressable onPress={() => setActiveMember(m.id)} style={styles.item}>
               <View style={[styles.avatarRing, active && styles.avatarRingActive]}>
-                <Image source={{ uri: m.avatar }} style={styles.avatar} />
+                <InitialAvatar name={m.name} size={44} style={styles.avatar} />
               </View>
               <Text style={[styles.name, active && styles.nameActive]} numberOfLines={1}>
                 {m.relation === 'self' ? m.name : RELATION_LABEL[m.relation]}

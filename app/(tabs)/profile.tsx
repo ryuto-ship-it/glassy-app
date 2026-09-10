@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -7,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppBackground } from '@/components/glass/AppBackground';
 import { GlassSurface } from '@/components/glass/GlassSurface';
 import { GradeBadge } from '@/components/glass/GradeBadge';
+import { InitialAvatar } from '@/components/glass/InitialAvatar';
 import { TabFade } from '@/components/glass/TabFade';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { RELATION_LABEL } from '@/data/family';
@@ -42,7 +42,7 @@ export default function ProfileScreen() {
           <View style={styles.section}>
             <GlassSurface elevated radius={radius.xl} padding={spacing.xl}>
               <View style={styles.headRow}>
-                <Image source={{ uri: USER.avatar }} style={styles.avatar} />
+                <InitialAvatar name={USER.name} size={56} style={styles.avatar} />
                 <View style={{ flex: 1 }}>
                   <Text style={styles.name}>{USER.name}</Text>
                   <Text style={styles.location}>
@@ -80,7 +80,7 @@ export default function ProfileScreen() {
                   <Pressable key={m.id} onPress={() => setActiveMember(m.id)}>
                     <GlassSurface radius={radius.lg} padding={spacing.md} style={[active && styles.familyCardActive]}>
                       <View style={styles.familyRow}>
-                        <Image source={{ uri: m.avatar }} style={styles.familyAvatar} />
+                        <InitialAvatar name={m.name} size={40} style={styles.familyAvatar} />
                         <View style={{ flex: 1 }}>
                           <View style={styles.familyNameRow}>
                             <Text style={styles.familyName}>{m.relation === 'self' ? `${m.name} (나)` : m.name}</Text>

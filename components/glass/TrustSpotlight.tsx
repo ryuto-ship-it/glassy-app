@@ -1,11 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, { FadeInRight } from 'react-native-reanimated';
 
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { TRUST_QUOTES } from '@/data/trustQuotes';
 import { GlassSurface } from './GlassSurface';
+import { InitialAvatar } from './InitialAvatar';
 
 // 신뢰 신호 스포트라이트 — 참약사 약사 인증/실제 이용자 후기를 가로 스크롤로
 // 보여준다 ("참약사 약사가 직접 검증한 추천입니다").
@@ -25,7 +25,7 @@ export function TrustSpotlight() {
           <Animated.View key={q.id} entering={FadeInRight.delay(i * 90).duration(360)} style={{ width: 240 }}>
             <GlassSurface radius={radius.lg} padding={spacing.md} elevated>
               <View style={styles.row}>
-                <Image source={{ uri: q.avatar }} style={styles.avatar} />
+                <InitialAvatar name={q.name} size={34} style={styles.avatar} />
                 <View style={{ flex: 1 }}>
                   <Text style={styles.name} numberOfLines={1}>{q.name}</Text>
                   <Text style={styles.role} numberOfLines={1}>{q.role}</Text>

@@ -1,5 +1,4 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
@@ -19,6 +18,7 @@ import Animated, {
   ZoomIn,
 } from 'react-native-reanimated';
 
+import { InitialAvatar } from '@/components/glass/InitialAvatar';
 import { ProductImage } from '@/components/glass/ProductImage';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
 import { CHAT_GREETING, parseSymptomAndRecommend, PHARMACIST_HANDOFF_LABEL } from '@/data/chatRules';
@@ -145,7 +145,7 @@ export default function ChatScreen() {
           </View>
         ) : (
           <View style={styles.headerCenter}>
-            <Image source={{ uri: PHARMACIST_PROFILE.avatar }} style={styles.pharmacistAvatarSmall} />
+            <InitialAvatar name={PHARMACIST_PROFILE.name} size={30} style={styles.pharmacistAvatarSmall} />
             <View>
               <Text style={styles.headerTitle}>{PHARMACIST_PROFILE.name}</Text>
               <View style={styles.pharmacistBadge}>
@@ -256,7 +256,7 @@ function MessageBubble({
       {!isUser && (
         <View style={styles.bubbleAvatarCol}>
           {isPharmacist ? (
-            <Image source={{ uri: PHARMACIST_PROFILE.avatar }} style={styles.bubbleAvatarImg} />
+            <InitialAvatar name={PHARMACIST_PROFILE.name} size={26} style={styles.bubbleAvatarImg} />
           ) : (
             <View style={styles.bubbleAvatarAi}>
               <Ionicons name="sparkles" size={12} color="#fff" />
