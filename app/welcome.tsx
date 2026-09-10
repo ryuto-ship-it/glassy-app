@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Href, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -30,7 +30,7 @@ import { WELCOME_BONUS_CHARM, useAppStore } from '@/store/useAppStore';
 import { useFamilyStore } from '@/store/useFamilyStore';
 import { useUiStore } from '@/store/useUiStore';
 
-type Step = 'cinematic' | 'intro' | 'joining' | 'reward' | 'family-check' | 'ai-nudge';
+type Step = 'cinematic' | 'intro' | 'joining' | 'reward' | 'family-check';
 
 // Subtle "look here" pulse on the primary CTA — a ~2.6s breathing scale,
 // off entirely under reduce-motion.
@@ -89,12 +89,7 @@ export default function WelcomeScreen() {
   const chooseTravelMode = (withFamily: boolean) => {
     setTravelingWithFamily(withFamily);
     if (withFamily) openAddFamily();
-    setStep('ai-nudge');
-  };
-
-  const goHomeThenChat = () => {
-    router.replace('/');
-    router.push('/chat' as Href);
+    goHome();
   };
 
   if (step === 'cinematic') {
@@ -203,29 +198,6 @@ export default function WelcomeScreen() {
             <Pressable style={[styles.familyChoiceBtn, styles.familyChoiceBtnAlt]} onPress={() => chooseTravelMode(false)}>
               <Ionicons name="person" size={16} color={colors.text} />
               <Text style={[styles.familyChoiceBtnText, styles.familyChoiceBtnTextAlt]}>혼자 여행 중이에요</Text>
-            </Pressable>
-          </View>
-        </Animated.View>
-      )}
-
-      {step === 'ai-nudge' && (
-        <Animated.View entering={FadeIn.duration(300)} style={styles.centerWrap}>
-          <View style={styles.aiNudgeIconWrap}>
-            <Ionicons name="chatbubble-ellipses" size={30} color="#FFFFFF" />
-          </View>
-          <Text style={styles.aiNudgeTitle}>AI한테 지금{'\n'}컨디션 한번 물어보세요</Text>
-          <Text style={styles.aiNudgeSub}>
-            가입 축하 기념으로, AI 채팅 상담을 먼저 체험해보세요. 참약사 약사에게 바로 이어서 물어볼 수도 있어요.
-          </Text>
-          <View style={{ width: '100%', marginTop: spacing.xxl, gap: spacing.sm }}>
-            <PillButton
-              label="AI에게 물어보기"
-              onPress={goHomeThenChat}
-              colors_={['#4FB6E8', '#1B5FA8']}
-              icon={<Ionicons name="chatbubble-ellipses" size={15} color="#0B0B0D" />}
-            />
-            <Pressable onPress={goHome} hitSlop={8}>
-              <Text style={styles.aiNudgeSkip}>나중에 할게요</Text>
             </Pressable>
           </View>
         </Animated.View>
@@ -353,38 +325,4 @@ const styles = StyleSheet.create({
   familyChoiceBtnAlt: { backgroundColor: 'rgba(255,255,255,0.06)', borderWidth: 1, borderColor: colors.borderStrong },
   familyChoiceBtnText: { fontFamily: fonts.bodyBold, fontSize: 13.5, color: '#0B0B0D' },
   familyChoiceBtnTextAlt: { color: colors.text },
-  aiNudgeIconWrap: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: 'rgba(79,182,232,0.16)',
-    borderWidth: 1,
-    borderColor: 'rgba(79,182,232,0.35)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  aiNudgeTitle: {
-    fontFamily: fonts.display,
-    fontSize: 22,
-    color: colors.text,
-    textAlign: 'center',
-    marginTop: spacing.lg,
-    lineHeight: 30,
-  },
-  aiNudgeSub: {
-    fontFamily: fonts.body,
-    fontSize: 12.5,
-    color: colors.textMuted,
-    textAlign: 'center',
-    marginTop: spacing.md,
-    lineHeight: 18,
-    maxWidth: 300,
-  },
-  aiNudgeSkip: {
-    fontFamily: fonts.bodyMed,
-    fontSize: 12.5,
-    color: colors.textFaint,
-    textAlign: 'center',
-    marginTop: spacing.sm,
-  },
 });

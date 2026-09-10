@@ -629,9 +629,9 @@ export const LANGUAGE_LABEL: Record<LanguageCode, string> = {
 };
 
 export const USER = {
-  name: 'Declan Murphy',
-  location: 'Dublin, Ireland',
-  avatar: 'https://i.pravatar.cc/300?img=15',
+  name: 'Bella Yujin',
+  location: 'Los Angeles, USA',
+  avatar: 'https://i.pravatar.cc/300?img=5',
   purchaseEarnedCharm: 1200,
   usdtBalance: 2300,
   usdcBalance: 480,
@@ -646,9 +646,9 @@ export const USER = {
   // Profile fields used by the QR-based cash-purchase matching mock
   // (country/gender/age band) and by the product-scan translation demo
   // (preferred language).
-  country: 'Ireland',
-  countryFlag: '🇮🇪',
-  gender: '남성' as '남성' | '여성',
+  country: 'United States',
+  countryFlag: '🇺🇸',
+  gender: '여성' as '남성' | '여성',
   ageBand: '30대' as const,
   language: 'en' as LanguageCode,
 };
@@ -740,7 +740,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     likes: 342,
     comments: [
       { id: 'c1-1', author: 'minji_seoul', text: '저도 이거 쓰는데 완전 공감이요!' },
-      { id: 'c1-2', author: 'Declan Murphy', text: '다음엔 저도 스타트!' },
+      { id: 'c1-2', author: 'Bella Yujin', text: '다음엔 저도 스타트!' },
     ],
     pinned: true,
     isFollowing: true,
@@ -782,9 +782,9 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
   },
   {
     id: 'c4',
-    author: 'Declan Murphy',
-    avatar: 'https://i.pravatar.cc/300?img=15',
-    location: 'Dublin, Ireland',
+    author: 'Bella Yujin',
+    avatar: 'https://i.pravatar.cc/300?img=5',
+    location: 'Los Angeles, USA',
     images: ['feed4'],
     caption:
       'Vitamin C 세럼 한 병 다 쓰고 재구매했어요. 톤이 밝아진 게 느껴지고 CHARM 적립도 꾸준히 쌓이는 중입니다. 이 후기로 15 CHARM 받았어요.',
@@ -832,7 +832,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     images: ['feed7'],
     caption: '콜라겐 파우더 한달 후기 — 손톱이랑 피부 결이 확실히 달라짐. Dewy Glow 등급도 코앞!',
     likes: 132,
-    comments: [{ id: 'c7-1', author: 'Declan Murphy', text: '같은 아일랜드시네요, 응원할게요.' }],
+    comments: [{ id: 'c7-1', author: 'Bella Yujin', text: '콜라겐 효과 좋아 보이네요, 저도 찜했어요!' }],
     isFollowing: false,
     createdAt: '2026-08-02',
     tags: ['콜라겐', '건기식'],
@@ -846,7 +846,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     images: ['feed8'],
     caption: 'Red Ginseng Ampoule Duo Set 선물용으로 구매했는데 포장이 고급스러워서 만족스러워요.',
     likes: 189,
-    comments: [{ id: 'c8-1', author: 'Declan Murphy', text: '선물용으로 좋아 보이네요.' }],
+    comments: [{ id: 'c8-1', author: 'Bella Yujin', text: '선물용으로 좋아 보이네요.' }],
     isFollowing: false,
     createdAt: '2026-07-30',
     tags: ['홍삼', '선물세트'],
@@ -891,7 +891,7 @@ export const COMMUNITY_POSTS: CommunityPost[] = [
     caption:
       '[성분 정보] 나이아신아마이드는 피지 조절과 모공 케어에 도움을 주지만, 고농도 비타민C(L-아스코르빈산)와 같은 시간에 바르면 효과가 떨어질 수 있어요. 아침/저녁으로 나눠 사용하는 걸 추천해요.',
     likes: 512,
-    comments: [{ id: 'c11-1', author: 'Declan Murphy', text: '몰랐던 정보네요, 감사합니다!' }],
+    comments: [{ id: 'c11-1', author: 'Bella Yujin', text: '몰랐던 정보네요, 감사합니다!' }],
     isFollowing: false,
     createdAt: '2026-08-17',
     tags: ['나이아신아마이드', '성분정보'],

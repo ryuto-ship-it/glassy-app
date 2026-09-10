@@ -28,9 +28,9 @@ export const RELATION_LABEL: Record<FamilyRelation, string> = {
 export const FAMILY_MEMBERS: FamilyMember[] = [
   {
     id: 'self',
-    name: 'Declan',
+    name: 'Bella',
     relation: 'self',
-    avatar: 'https://i.pravatar.cc/300?img=15',
+    avatar: 'https://i.pravatar.cc/300?img=5',
     focusLabel: 'AI 맞춤 케어',
     focusProductIds: ['r6', 'p4', 'r3'],
     seedRadar: { fatigue: 78, hydration: 78, elasticity: 78, immunity: 78, sleep: 78 },

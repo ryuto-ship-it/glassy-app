@@ -21,7 +21,7 @@ import Animated, {
 
 import { ProductImage } from '@/components/glass/ProductImage';
 import { colors, fonts, radius, spacing } from '@/constants/theme';
-import { CHAT_FALLBACK_REPLY, CHAT_GREETING, matchChatRule, PHARMACIST_HANDOFF_LABEL } from '@/data/chatRules';
+import { CHAT_GREETING, parseSymptomAndRecommend, PHARMACIST_HANDOFF_LABEL } from '@/data/chatRules';
 import { PRODUCTS } from '@/data/mock';
 import { PHARMACIST_PROFILE, PHARMACIST_REPLIES, PHARMACIST_SUMMARY_PREFIX } from '@/data/pharmacist';
 import { formatUsd } from '@/lib/format';
@@ -88,15 +88,15 @@ export default function ChatScreen() {
     setMessages((m) => [...m, { id: newId('user'), sender: 'user', text }]);
     setTyping(true);
     setTimeout(() => {
-      const rule = matchChatRule(text);
+      const { reply, productIds } = parseSymptomAndRecommend(text);
       setTyping(false);
       setMessages((m) => [
         ...m,
         {
           id: newId('ai'),
           sender: 'ai',
-          text: rule?.reply ?? CHAT_FALLBACK_REPLY,
-          productIds: rule?.productIds,
+          text: reply,
+          productIds: productIds.length > 0 ? productIds : undefined,
         },
       ]);
       setExchangeCount((c) => c + 1);
