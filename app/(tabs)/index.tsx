@@ -122,6 +122,12 @@ export default function HomeScreen() {
           </View>
         </View>
 
+        {/* AI 채팅 상담 — CHARM의 메인 엣지 기능. AI 진단 배너보다도 먼저,
+            홈 화면 최상단에서 가장 먼저 눈에 띄어야 하는 핵심 진입점 */}
+        <View style={styles.section}>
+          <AiChatEntryCard onPress={goToChat} />
+        </View>
+
         {/* rolling promo carousel — the home screen's first banner slot */}
         <View style={styles.section}>
           <HomeCarousel />
@@ -138,7 +144,7 @@ export default function HomeScreen() {
           <TrustSpotlight />
         </View>
 
-        {/* AI hero banner — the app's flagship feature, highest visual priority */}
+        {/* AI hero banner — AI 정밀 진단(퀴즈) 기능. 채팅 상담 다음 우선순위 */}
         <View style={styles.section}>
           <AiHeroBanner
             hasCompletedQuiz={isSelfMember ? hasCompletedQuiz : familyHasLiveDiagnosis}
@@ -148,11 +154,6 @@ export default function HomeScreen() {
             isPrecision={isPrecision}
             onPress={() => router.push('/quiz')}
           />
-        </View>
-
-        {/* AI 채팅 상담 — 신규 핵심 기능 진입점 */}
-        <View style={styles.section}>
-          <AiChatEntryCard onPress={goToChat} />
         </View>
 
         {/* price ticker */}

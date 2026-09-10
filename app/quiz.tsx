@@ -511,6 +511,15 @@ function ResultsStep({
       />
       <Text style={styles.payHint}>스테이블코인 · 신용카드 · $CHARM 결제 지원</Text>
 
+      <Pressable onPress={() => router.push('/chat' as Href)} style={styles.aiChatCta}>
+        <Ionicons name="chatbubble-ellipses-outline" size={15} color={colors.accentBlue} />
+        <View style={{ flex: 1 }}>
+          <Text style={styles.pharmacistCtaTitle}>AI 채팅으로 더 물어보기</Text>
+          <Text style={styles.pharmacistCtaSub}>이 리포트에 대해 궁금한 점을 편하게 물어보세요</Text>
+        </View>
+        <Ionicons name="chevron-forward" size={15} color={colors.textFaint} />
+      </Pressable>
+
       <Pressable
         onPress={() => router.push('/chat?startPharmacist=1&fromDiagnosis=1' as Href)}
         style={styles.pharmacistCta}
@@ -748,11 +757,22 @@ const styles = StyleSheet.create({
   },
   reasonText: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, flex: 1, lineHeight: 15 },
   payHint: { fontFamily: fonts.bodyMed, fontSize: 11, color: colors.textMuted, textAlign: 'center', marginTop: spacing.sm },
-  pharmacistCta: {
+  aiChatCta: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
     marginTop: spacing.lg,
+    padding: spacing.md,
+    borderRadius: radius.lg,
+    backgroundColor: 'rgba(79,182,232,0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(79,182,232,0.25)',
+  },
+  pharmacistCta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginTop: spacing.sm,
     padding: spacing.md,
     borderRadius: radius.lg,
     backgroundColor: 'rgba(79,182,232,0.08)',

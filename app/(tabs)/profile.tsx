@@ -120,6 +120,12 @@ export default function ProfileScreen() {
           <View style={styles.section}>
             <GlassSurface radius={radius.lg} padding={0}>
               <ProfileRow
+                icon="chatbubble-ellipses-outline"
+                label="AI 채팅 상담"
+                sub="컨디션을 편하게 물어보고 참약사 약사와도 연결돼요"
+                onPress={() => router.push('/chat')}
+              />
+              <ProfileRow
                 icon="sparkles-outline"
                 label="웰컴 플로우 다시보기"
                 sub="매장 입구 가입 화면 데모"

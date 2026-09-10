@@ -51,7 +51,6 @@ export default function RootLayout() {
       <PhoneFrame>
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.bg } }}>
           <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="chat" options={{ animation: 'slide_from_bottom' }} />
           <Stack.Screen name="quiz" options={{ animation: 'slide_from_bottom' }} />
           <Stack.Screen name="welcome" options={{ animation: 'fade' }} />
           <Stack.Screen name="scan" options={{ animation: 'fade' }} />

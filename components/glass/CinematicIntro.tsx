@@ -94,6 +94,6 @@ const styles = StyleSheet.create({
   },
   statsRow: { flexDirection: 'row', gap: spacing.xl, marginTop: spacing.xxxl },
   statCol: { alignItems: 'center', gap: 4, maxWidth: 92 },
-  statValue: { fontFamily: fonts.display, fontSize: 17, color: '#FFFFFF' },
+  statValue: { fontFamily: fonts.display, fontSize: 17, color: '#FFFFFF', textAlign: 'center' },
   statLabel: { fontFamily: fonts.bodyMed, fontSize: 9.5, color: 'rgba(255,255,255,0.6)', textAlign: 'center', lineHeight: 12 },
 });

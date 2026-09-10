@@ -231,6 +231,19 @@ export default function LevelsScreen() {
         </View>
 
         <View style={styles.section}>
+          <Pressable onPress={() => router.push('/chat')}>
+            <GlassSurface radius={radius.lg} padding={spacing.lg} style={styles.aiChatLinkCard}>
+              <View style={styles.aiLinkRow}>
+                <Ionicons name="chatbubble-ellipses" size={16} color={colors.accentBlue} />
+                <Text style={styles.aiLinkTitle}>등급 혜택이 헷갈리세요?</Text>
+              </View>
+              <Text style={styles.aiLinkBody}>AI 채팅 상담으로 지금 바로 편하게 물어보세요.</Text>
+              <Text style={[styles.aiLinkCta, { color: colors.accentBlue }]}>AI 채팅으로 물어보기 →</Text>
+            </GlassSurface>
+          </Pressable>
+        </View>
+
+        <View style={styles.section}>
           <GlassSurface radius={radius.lg} padding={spacing.lg}>
             <Text style={styles.pathTitle}>등급을 올리는 3가지 방법</Text>
             <Animated.View entering={staggerEnter(0, { step: 80 }, reducedMotion)} style={styles.pathRow}>
@@ -317,6 +330,7 @@ const styles = StyleSheet.create({
   currentRemaining: { fontFamily: fonts.body, fontSize: 12, color: colors.textMuted, marginTop: 6, textAlign: 'center' },
   currentDelta: { fontFamily: fonts.bodyMed, fontSize: 10, color: colors.textFaint, marginTop: 3 },
   aiLinkCard: { borderColor: 'rgba(232,196,104,0.25)' },
+  aiChatLinkCard: { borderColor: 'rgba(79,182,232,0.25)' },
   aiLinkRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   aiLinkTitle: { fontFamily: fonts.displaySemi, fontSize: 14, color: colors.text },
   aiLinkBody: { fontFamily: fonts.body, fontSize: 11, color: colors.textMuted, marginTop: 6, lineHeight: 16 },

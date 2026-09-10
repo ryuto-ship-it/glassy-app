@@ -27,6 +27,11 @@ import { PHARMACIST_PROFILE, PHARMACIST_REPLIES, PHARMACIST_SUMMARY_PREFIX } fro
 import { formatUsd } from '@/lib/format';
 import { useAppStore } from '@/store/useAppStore';
 
+// Matches the floating tab bar's height in app/(tabs)/_layout.tsx. That bar
+// is position:absolute and paints over this screen's content, so the fixed
+// input row needs this much extra bottom clearance or the tab bar hides it.
+const TAB_BAR_HEIGHT = 78;
+
 type Sender = 'ai' | 'user' | 'pharmacist';
 type ChatMessage = {
   id: string;
@@ -119,7 +124,11 @@ export default function ChatScreen() {
   return (
     <View style={[styles.root, { paddingTop: insets.top }]}>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.iconBtn} hitSlop={10}>
+        <Pressable
+          onPress={() => (router.canGoBack() ? router.back() : router.replace('/'))}
+          style={styles.iconBtn}
+          hitSlop={10}
+        >
           <Ionicons name="chevron-back" size={20} color={colors.text} />
         </Pressable>
         {mode === 'ai' ? (
@@ -185,7 +194,7 @@ export default function ChatScreen() {
         </ScrollView>
 
         {mode === 'ai' && (
-          <View style={[styles.inputRow, { paddingBottom: Math.max(insets.bottom, spacing.md) }]}>
+          <View style={[styles.inputRow, { paddingBottom: Math.max(insets.bottom, spacing.md) + TAB_BAR_HEIGHT }]}>
             <TextInput
               value={input}
               onChangeText={setInput}
