@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <title>CHARM 핵심 기능 소개 — 파트너 워크스루</title>
-<meta name="description" content="CHARM 앱의 데이터 수집 구조와 6가지 핵심 기능을 스크롤로 훑어보는 파트너용 워크스루" />
+<meta name="description" content="CHARM 앱의 AI 채팅 상담부터 가족 프로필, 웨어러블 연동까지 9가지 핵심 기능을 스크롤로 훑어보는 파트너용 워크스루" />
 <link rel="icon" href="./favicon.ico" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -82,7 +82,7 @@
   /* ---------- Side progress indicator ---------- */
   .side-progress {
     position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
-    z-index: 35; display: flex; flex-direction: column; gap: 15px;
+    z-index: 35; display: flex; flex-direction: column; gap: 13px;
     padding: 14px 7px; border-radius: 999px;
     background: rgba(255,255,255,0.7); backdrop-filter: blur(8px);
     border: 1px solid var(--rule); box-shadow: 0 10px 30px rgba(80,50,130,0.08);
@@ -188,7 +188,7 @@
     section.wt-section { padding: 56px 0; }
   }
 
-  /* ---------- Emphasis sections (0 and 2) ---------- */
+  /* ---------- Emphasis sections ---------- */
   .wt-section.is-emphasis {
     background: linear-gradient(160deg, rgba(22,112,180,0.07), rgba(232,196,104,0.09));
     border-radius: 32px; border-top: none; margin: 40px 0;
@@ -202,7 +202,68 @@
     padding: 5px 12px; border-radius: 999px; margin-bottom: 14px;
   }
 
-  /* ---------- Section 0: data collection ---------- */
+  /* ---------- Section 01: AI chat hero (biggest section) ---------- */
+  .hero-feature-text { max-width: 720px; }
+  .hero-feature-title {
+    font-family: 'Poppins', sans-serif; font-weight: 700; font-size: clamp(28px, 3.6vw, 36px);
+    margin: 0 0 16px; color: var(--ink); line-height: 1.3;
+  }
+  .hero-feature-desc { font-size: 16px; color: var(--ink); margin: 0 0 20px; max-width: 680px; }
+
+  .chat-sequence {
+    display: flex; align-items: flex-start; justify-content: center; gap: 28px;
+    flex-wrap: wrap; margin-top: 36px;
+  }
+  .chat-sequence-item { width: 230px; text-align: center; }
+  .chat-sequence-step {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 12px; color: var(--blue);
+    background: rgba(22,112,180,0.08); padding: 4px 12px; border-radius: 999px; margin-bottom: 12px;
+  }
+  .chat-sequence-caption { font-size: 12.5px; color: var(--muted); margin-top: 12px; line-height: 1.55; max-width: 220px; margin-left: auto; margin-right: auto; }
+  .chat-sequence-arrow {
+    align-self: center; color: var(--gold); flex-shrink: 0; margin-top: 90px;
+  }
+  @media (max-width: 620px) { .chat-sequence-arrow { display: none; } }
+
+  /* ---------- Section 02/others: real-screenshot phone frame + markers ---------- */
+  .phone-mock {
+    width: 100%; max-width: 300px; border-radius: 34px;
+    background: #17131F; padding: 11px;
+    box-shadow: 0 30px 60px rgba(30,20,50,0.22), 0 2px 0 rgba(255,255,255,0.04) inset;
+  }
+  .phone-mock.phone-mock-sm { max-width: 210px; padding: 8px; border-radius: 26px; }
+  .phone-mock-notch { width: 60px; height: 16px; border-radius: 10px; background: #000; margin: 0 auto 9px; }
+  .phone-mock-sm .phone-mock-notch { width: 44px; height: 12px; margin-bottom: 7px; }
+  .shot-frame { position: relative; line-height: 0; }
+  .shot-frame img { display: block; width: 100%; height: auto; border-radius: 22px; background: #0C0C0E; }
+  .phone-mock-sm .shot-frame img { border-radius: 17px; }
+
+  .shot-marker {
+    position: absolute; width: 26px; height: 26px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--blue-deep), var(--gold)); color: #fff;
+    font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 12px; border: 2px solid #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transform: translate(-50%, -50%); padding: 0;
+    animation: markerPulse 2.6s ease-in-out infinite;
+  }
+  @keyframes markerPulse {
+    0%, 100% { box-shadow: 0 4px 10px rgba(0,0,0,0.3), 0 0 0 0 rgba(22,112,180,0.45); }
+    50% { box-shadow: 0 4px 10px rgba(0,0,0,0.3), 0 0 0 7px rgba(22,112,180,0); }
+  }
+  .marker-tip {
+    position: absolute; left: 50%; bottom: 135%; transform: translateX(-50%) translateY(6px);
+    width: 172px; background: #17131F; color: #fff; font-size: 11.5px; line-height: 1.5; font-weight: 500;
+    padding: 9px 11px; border-radius: 10px; opacity: 0; pointer-events: none; text-align: left;
+    transition: opacity .15s ease, transform .15s ease; box-shadow: 0 12px 26px rgba(0,0,0,0.35); z-index: 5;
+  }
+  .marker-tip.below { bottom: auto; top: 135%; transform: translateX(-50%) translateY(-6px); }
+  .shot-marker:hover .marker-tip, .shot-marker.open .marker-tip {
+    opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto;
+  }
+  .shot-caption { text-align: center; font-size: 11.5px; color: var(--faint); margin: 10px 0 0; }
+
+  /* ---------- Section 03: data collection ---------- */
   .data-headline {
     font-family: 'Poppins', sans-serif; font-weight: 700; color: var(--ink);
     font-size: clamp(24px, 3.6vw, 36px); line-height: 1.42; max-width: 900px;
@@ -294,7 +355,12 @@
 
   @media (max-width: 640px) { .demo-charts-row { grid-template-columns: 1fr; } }
 
-  /* ---------- Section 2: token utility bullets + simulator ---------- */
+  .subblock-label {
+    font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 14.5px; color: var(--ink);
+    margin: 44px 0 18px; padding-top: 32px; border-top: 1px dashed var(--rule);
+  }
+
+  /* ---------- Section 05: token utility bullets + simulator ---------- */
   .util-list { list-style: none; margin: 0 0 18px; padding: 0; display: flex; flex-direction: column; gap: 10px; }
   .util-list li {
     display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--ink);
@@ -349,40 +415,6 @@
   .tier-mini.done { background: rgba(22,112,180,0.08); color: var(--blue); font-weight: 600; }
   .tier-mini.current { background: linear-gradient(135deg, var(--blue-deep), var(--gold)); color: #fff; font-weight: 700; border-color: transparent; }
 
-  /* ---------- Real-screenshot phone frame + markers ---------- */
-  .phone-mock {
-    width: 100%; max-width: 300px; border-radius: 34px;
-    background: #17131F; padding: 11px;
-    box-shadow: 0 30px 60px rgba(30,20,50,0.22), 0 2px 0 rgba(255,255,255,0.04) inset;
-  }
-  .phone-mock-notch { width: 60px; height: 16px; border-radius: 10px; background: #000; margin: 0 auto 9px; }
-  .shot-frame { position: relative; line-height: 0; }
-  .shot-frame img { display: block; width: 100%; height: auto; border-radius: 22px; background: #0C0C0E; }
-
-  .shot-marker {
-    position: absolute; width: 26px; height: 26px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--blue-deep), var(--gold)); color: #fff;
-    font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 12px; border: 2px solid #fff;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
-    cursor: pointer; transform: translate(-50%, -50%); padding: 0;
-    animation: markerPulse 2.6s ease-in-out infinite;
-  }
-  @keyframes markerPulse {
-    0%, 100% { box-shadow: 0 4px 10px rgba(0,0,0,0.3), 0 0 0 0 rgba(22,112,180,0.45); }
-    50% { box-shadow: 0 4px 10px rgba(0,0,0,0.3), 0 0 0 7px rgba(22,112,180,0); }
-  }
-  .marker-tip {
-    position: absolute; left: 50%; bottom: 135%; transform: translateX(-50%) translateY(6px);
-    width: 172px; background: #17131F; color: #fff; font-size: 11.5px; line-height: 1.5; font-weight: 500;
-    padding: 9px 11px; border-radius: 10px; opacity: 0; pointer-events: none; text-align: left;
-    transition: opacity .15s ease, transform .15s ease; box-shadow: 0 12px 26px rgba(0,0,0,0.35); z-index: 5;
-  }
-  .marker-tip.below { bottom: auto; top: 135%; transform: translateX(-50%) translateY(-6px); }
-  .shot-marker:hover .marker-tip, .shot-marker.open .marker-tip {
-    opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto;
-  }
-  .shot-caption { text-align: center; font-size: 11.5px; color: var(--faint); margin: 10px 0 0; }
-
   /* ---------- CTA ---------- */
   .wt-cta { text-align: center; padding: 70px 24px 30px; border-top: 1px solid var(--rule); }
   .wt-cta-title { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 22px; margin: 0 0 24px; color: var(--ink); }
@@ -422,29 +454,116 @@
   </nav>
 
   <nav class="side-progress" aria-label="섹션 이동">
-    <a class="sp-dot" href="#data-collection" data-label="00 데이터 수집"><span class="sp-tip">00 데이터 수집 구조</span></a>
-    <a class="sp-dot" href="#qr-reward" data-label="01 QR 적립"><span class="sp-tip">01 QR 적립</span></a>
-    <a class="sp-dot" href="#membership" data-label="02 토큰·등급"><span class="sp-tip">02 토큰 유틸리티 & 등급</span></a>
-    <a class="sp-dot" href="#ai-intel" data-label="03 AI 헬스"><span class="sp-tip">03 AI 헬스 인텔리전스</span></a>
-    <a class="sp-dot" href="#product-scan" data-label="04 제품 스캔"><span class="sp-tip">04 제품 스캔</span></a>
-    <a class="sp-dot" href="#community" data-label="05 커뮤니티"><span class="sp-tip">05 커뮤니티</span></a>
-    <a class="sp-dot" href="#dashboard" data-label="06 매장 대시보드"><span class="sp-tip">06 매장 대시보드</span></a>
+    <a class="sp-dot" href="#ai-chat" data-label="01 AI 채팅"><span class="sp-tip">01 AI 채팅 상담</span></a>
+    <a class="sp-dot" href="#pharmacist" data-label="02 약사 연결"><span class="sp-tip">02 참약사 약사 상담 연결</span></a>
+    <a class="sp-dot" href="#data-collection" data-label="03 데이터 수집"><span class="sp-tip">03 데이터 수집 구조 (QR 적립)</span></a>
+    <a class="sp-dot" href="#family" data-label="04 가족 프로필"><span class="sp-tip">04 가족 프로필</span></a>
+    <a class="sp-dot" href="#membership" data-label="05 토큰·등급"><span class="sp-tip">05 토큰 유틸리티 & 등급</span></a>
+    <a class="sp-dot" href="#wearable" data-label="06 웨어러블"><span class="sp-tip">06 웨어러블 연동</span></a>
+    <a class="sp-dot" href="#product-scan" data-label="07 제품 스캔"><span class="sp-tip">07 제품 스캔</span></a>
+    <a class="sp-dot" href="#community" data-label="08 커뮤니티"><span class="sp-tip">08 커뮤니티 & 공동구매</span></a>
+    <a class="sp-dot" href="#dashboard" data-label="09 매장 대시보드"><span class="sp-tip">09 매장 운영 대시보드</span></a>
   </nav>
 
   <section class="mega-hero">
     <div class="mega-hero-inner">
       <p class="mega-kicker">CHARM Walkthrough</p>
       <h1 class="mega-line">CHARM 핵심 기능 소개</h1>
-      <p class="mega-sub">약국 파트너를 위한 기능 워크스루</p>
+      <p class="mega-sub">AI 채팅 상담이 메인 엣지가 된 CHARM — 약국 파트너를 위한 9가지 기능 워크스루</p>
     </div>
   </section>
 
   <main>
 
-    <!-- 00 데이터 수집 구조 -->
+    <!-- 01 AI 채팅 상담 (신규 최우선 · 메인 엣지) -->
+    <section class="wt-section is-emphasis" id="ai-chat">
+      <div class="data-inner">
+        <span class="emphasis-tag">CHARM의 메인 엣지 · 새로운 최우선 기능</span>
+        <div class="feature-head"><span class="feature-num">01</span><span class="feature-total">/ 09</span></div>
+        <div class="hero-feature-text">
+          <h2 class="hero-feature-title">AI 채팅 상담</h2>
+          <p class="hero-feature-desc">
+            홈 화면 최상단, 하단 탭에서는 두 번째 자리에 항상 떠 있는 채팅창입니다. "허리가 아파요", "요즘
+            피곤해요", "잠이 잘 안 와요"처럼 편하게 컨디션이나 증상을 적으면 AI가 바로 알아듣고 참약사 실제
+            판매 제품을 추천해줘요. 미리 정해둔 몇 개 키워드만 아는 게 아니라 '허리·무릎·머리·어깨·속' 같은
+            신체 부위 표현과 조사(이/가/은/는/도)까지 스스로 인식하기 때문에, 어떤 방식으로 말하든 추천이
+            끊기지 않습니다.
+          </p>
+          <div class="feature-why">
+            <p class="why-label">왜 메인 엣지인가</p>
+            <p>
+              앱을 켰을 때 가장 먼저 만나는 기능이 "무엇을 사야 하지?"에 즉답을 주는 채팅이라는 것 — 이것이
+              CHARM을 단순 리워드 앱이 아니라 AI 헬스 상담 서비스로 차별화하는 핵심입니다.
+            </p>
+          </div>
+        </div>
+
+        <div class="chat-sequence">
+          <div class="chat-sequence-item">
+            <span class="chat-sequence-step">Step 1</span>
+            <div class="phone-mock phone-mock-sm" style="margin: 0 auto;">
+              <div class="phone-mock-notch"></div>
+              <div class="shot-frame">
+                <img src="./assets/walkthrough/ai-chat-typing.png" alt="CHARM AI 채팅 — 컨디션을 입력하는 화면" width="412" height="896" />
+              </div>
+            </div>
+            <p class="chat-sequence-caption">"허리가 아파요" — 편하게 컨디션을 입력해요. 정해진 문구가 아니어도 괜찮아요.</p>
+          </div>
+
+          <div class="chat-sequence-arrow">
+            <svg width="28" height="16" viewBox="0 0 28 16" fill="none"><path d="M0 8h24M18 2l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+
+          <div class="chat-sequence-item">
+            <span class="chat-sequence-step">Step 2</span>
+            <div class="phone-mock phone-mock-sm" style="margin: 0 auto;">
+              <div class="phone-mock-notch"></div>
+              <div class="shot-frame">
+                <img src="./assets/walkthrough/ai-chat-result.png" alt="CHARM AI 채팅 — AI가 제품을 추천하는 화면" width="412" height="896" />
+              </div>
+            </div>
+            <p class="chat-sequence-caption">AI가 즉시 분석해 참약사 제품을 추천하고, "참약사 약사에게 마저 물어보기" 버튼까지 함께 떠요.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 참약사 약사 상담 연결 (신규) -->
+    <section class="wt-section" id="pharmacist">
+      <div class="feature-head"><span class="feature-num">02</span><span class="feature-total">/ 09</span></div>
+      <div class="feature-grid reverse">
+        <div class="feature-text">
+          <h2 class="feature-title">참약사 약사 1:1 상담 연결</h2>
+          <p class="feature-desc">
+            AI 채팅에서 한 번이라도 대화를 주고받으면 "참약사 약사에게 마저 물어보기" 버튼이 떠요. 누르면
+            AI가 나눈 대화를 요약해 약사에게 전달하고, 화면 상단에 "AI 1차 분석 → 참약사 약사 확인" 2단계
+            진행 표시가 뜨면서 실제 이름과 인증 배지를 가진 참약사 약사가 등장해 마지막 확인을 이어줍니다.
+          </p>
+          <div class="feature-why">
+            <p class="why-label">왜 2단계 구조인가</p>
+            <p>AI 추천만으로 끝내지 않고 실제 약사의 최종 확인을 한 번 더 거치게 해서, 건강기능식품 추천에
+              대한 신뢰를 AI와 사람 두 겹으로 만듭니다.</p>
+          </div>
+        </div>
+        <div class="feature-visual">
+          <div class="phone-mock">
+            <div class="phone-mock-notch"></div>
+            <div class="shot-frame">
+              <img src="./assets/walkthrough/pharmacist.png" alt="CHARM 참약사 약사 상담 연결 화면" width="412" height="896" />
+              <button class="shot-marker" style="top:7%; left:50%;" type="button">①<span class="marker-tip">"김서연 약사 · 참약사 명동점" — 실제 이름과 소속 매장까지 표시되는 참약사 인증 약사예요.</span></button>
+              <button class="shot-marker" style="top:16%; left:50%;" type="button">②<span class="marker-tip">"AI 1차 분석 → 참약사 약사 확인" — 2단계 신뢰 구조가 상단에 진행 표시로 보여요.</span></button>
+              <button class="shot-marker" style="top:68%; left:50%;" type="button">③<span class="marker-tip">약사가 남긴 답변 — AI가 전달한 요약을 바탕으로 약사가 직접 코멘트를 이어줘요.</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 데이터 수집 구조 (결제수단 무관 QR 적립) -->
     <section class="wt-section is-emphasis" id="data-collection">
       <div class="data-inner">
-        <span class="emphasis-tag">가장 중요한 가치 · WHY CHARM</span>
+        <span class="emphasis-tag">가장 중요한 데이터 가치 · WHY CHARM</span>
+        <div class="feature-head"><span class="feature-num">03</span><span class="feature-total">/ 09</span></div>
         <h2 class="data-headline">
           결제 수단이 무엇이든 <span class="hl">(현금 · 신용카드 · 스테이블코인)</span>
           QR 적립 한 번으로, 방문객의 <span class="hl">국가 · 성별 · 연령대 · 구매 품목</span> 데이터가
@@ -508,44 +627,72 @@
             </div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- 01 QR 적립 -->
-    <section class="wt-section" id="qr-reward">
-      <div class="feature-head"><span class="feature-num">01</span><span class="feature-total">/ 06</span></div>
-      <div class="feature-grid">
-        <div class="feature-text">
-          <h2 class="feature-title">결제수단 무관 QR 적립</h2>
-          <p class="feature-desc">
-            현금, 신용카드, 스테이블코인 등 어떤 수단으로 결제하든 계산 후 QR 코드 하나만 스캔하면 리워드 적립과
-            고객 데이터(국가·연령·성별)가 자동으로 쌓입니다. 올리브영 등 기존 오프라인 매장의 적립 방식과 동일한
-            사용자 경험이라 별도 학습이 필요 없습니다.
-          </p>
-          <div class="feature-why">
-            <p class="why-label">왜 필요한가</p>
-            <p>결제 시스템을 바꿀 필요 없이 기존 결제 흐름을 그대로 유지하면서 데이터만 추가로 확보할 수 있습니다.</p>
+        <p class="subblock-label">실제 화면 — 매장 입구 QR 스캔부터 이렇게 시작돼요</p>
+        <div class="feature-grid">
+          <div class="feature-text">
+            <p class="feature-desc">
+              현금, 신용카드, 스테이블코인 등 어떤 수단으로 결제하든 계산 후 QR 코드 하나만 스캔하면 리워드
+              적립과 고객 데이터(국가·연령·성별)가 자동으로 쌓입니다. 올리브영 등 기존 오프라인 매장의 적립
+              방식과 동일한 사용자 경험이라 별도 학습이 필요 없습니다.
+            </p>
+            <div class="feature-why">
+              <p class="why-label">왜 필요한가</p>
+              <p>결제 시스템을 바꿀 필요 없이 기존 결제 흐름을 그대로 유지하면서 데이터만 추가로 확보할 수 있습니다.</p>
+            </div>
           </div>
-        </div>
-        <div class="feature-visual">
-          <div class="phone-mock">
-            <div class="phone-mock-notch"></div>
-            <div class="shot-frame">
-              <img src="./assets/walkthrough/qr-reward.png" alt="CHARM 매장 QR 스캔 완료 화면" width="412" height="896" />
-              <button class="shot-marker" style="top:33%; left:50%;" type="button">①<span class="marker-tip">매장 입구 QR을 스캔하면 뜨는 웰컴 화면 — 결제수단과 무관하게 여기서 가입이 시작돼요.</span></button>
-              <button class="shot-marker" style="top:53%; left:50%;" type="button">②<span class="marker-tip">가입만 해도 즉시 웰컴 CHARM이 지급돼요.</span></button>
-              <button class="shot-marker" style="top:60%; left:50%;" type="button">③<span class="marker-tip">"결제수단은 나중에 무엇을 쓰든 상관없어요" — 현금·카드·스테이블코인 모두 동일하게 적립됩니다.</span></button>
+          <div class="feature-visual">
+            <div class="phone-mock">
+              <div class="phone-mock-notch"></div>
+              <div class="shot-frame">
+                <img src="./assets/walkthrough/qr-reward.png" alt="CHARM 매장 QR 스캔 완료 화면" width="412" height="896" />
+                <button class="shot-marker" style="top:26%; left:50%;" type="button">①<span class="marker-tip">"매장 QR 스캔 완료" — 결제수단과 무관하게 여기서 가입이 시작돼요.</span></button>
+                <button class="shot-marker" style="top:37%; left:50%;" type="button">②<span class="marker-tip">"참약사와 함께하는 CHARM" — 참약사 공식 파트너십이 온보딩 첫 화면부터 드러나요.</span></button>
+                <button class="shot-marker" style="top:55%; left:50%;" type="button">③<span class="marker-tip">"지금 가입하면 즉시 리워드 지급" — 가입만 해도 웰컴 CHARM이 즉시 지급돼요.</span></button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 02 토큰 유틸리티 & 등급 멤버십 -->
+    <!-- 04 가족 프로필 (신규) -->
+    <section class="wt-section" id="family">
+      <div class="feature-head"><span class="feature-num">04</span><span class="feature-total">/ 09</span></div>
+      <div class="feature-grid reverse">
+        <div class="feature-text">
+          <h2 class="feature-title">가족 프로필</h2>
+          <p class="feature-desc">
+            계정 하나로 여러 가족 구성원을 등록해 각자 다른 AI 추천을 관리할 수 있어요. 아바타를 눌러
+            전환하면 홈 화면 전체 — 인사말, AI 추천 상품, 진단 인사이트 — 가 그 구성원 기준으로 바뀝니다.
+            배우자는 피부 보습, 자녀는 성장기 영양, 부모님은 관절·혈행 케어처럼 관계별로 다른 포커스가
+            자동으로 적용돼요.
+          </p>
+          <div class="feature-why">
+            <p class="why-label">왜 필요한가</p>
+            <p>참약사가 "우리가족 건강 플랫폼 약국"을 표방하는 만큼, 본인 한 명이 아니라 가족 전체의 건강을
+              하나의 계정에서 관리하게 해서 재방문·재구매 이유를 여러 명분으로 늘립니다.</p>
+          </div>
+        </div>
+        <div class="feature-visual">
+          <div class="phone-mock">
+            <div class="phone-mock-notch"></div>
+            <div class="shot-frame">
+              <img src="./assets/walkthrough/family.png" alt="CHARM 가족 프로필 화면" width="412" height="896" />
+              <button class="shot-marker" style="top:11%; left:50%;" type="button">①<span class="marker-tip">"지금 부모님 프로필을 보고 있어요 · 관절 · 혈행 케어" — 활성 구성원에 따라 홈 화면 문구 전체가 바뀌어요.</span></button>
+              <button class="shot-marker" style="top:69%; left:50%;" type="button">②<span class="marker-tip">가족 아바타 셀렉터 — Bella(본인)·배우자·자녀·부모님을 탭 한 번으로 전환해요.</span></button>
+              <button class="shot-marker" style="top:69%; left:88%;" type="button">③<span class="marker-tip">"+ 추가" — 새 가족 구성원은 언제든 추가할 수 있어요.</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 토큰 유틸리티 & 등급 멤버십 -->
     <section class="wt-section is-emphasis" id="membership">
       <div class="data-inner">
         <span class="emphasis-tag">리텐션 핵심 · 두 번째로 중요한 가치</span>
-        <div class="feature-head"><span class="feature-num">02</span><span class="feature-total">/ 06</span></div>
+        <div class="feature-head"><span class="feature-num">05</span><span class="feature-total">/ 09</span></div>
         <div class="feature-grid" style="margin-top: 8px;">
           <div class="feature-text">
             <h2 class="feature-title">토큰 유틸리티 & 등급 멤버십</h2>
@@ -559,6 +706,7 @@
               <li><span class="util-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span><strong>등급 즉시구매</strong> — 스테이블코인·카드로 직접 결제해 락업 없이 즉시 등급을 매수할 수 있어요.</span></li>
               <li><span class="util-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M9 12l2 2 4-4.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span><strong>앱·매장 내 CHARM 직접 결제</strong> — 결제 시점 시세로 실시간 환산돼요.</span></li>
               <li><span class="util-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span><span>한번 달성한 등급은 <strong class="util-permanent">시세 하락과 무관하게 영구 유지</strong>돼요.</span></li>
+              <li><span class="util-icon"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M4 7l3-3 3 3M4 4v9a3 3 0 0 0 3 3h9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 17l-3 3-3-3M20 20v-9a3 3 0 0 0-3-3H8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>모든 결제 내역은 온체인에 기록되고, 지갑 트랜잭션에 <strong>"체인 인증됨"</strong> 배지로 표시돼요.</span></li>
             </ul>
             <div class="feature-why">
               <p class="why-label">왜 필요한가</p>
@@ -570,9 +718,9 @@
               <div class="phone-mock-notch"></div>
               <div class="shot-frame">
                 <img src="./assets/walkthrough/membership.png" alt="CHARM 등급 멤버십 화면" width="412" height="896" />
-                <button class="shot-marker" style="top:57%; left:50%;" type="button">①<span class="marker-tip">다음 등급까지 필요 수량과 진행률 — 지금 시세 기준으로 실시간 계산돼요.</span></button>
-                <button class="shot-marker" style="top:77%; left:50%;" type="button">②<span class="marker-tip">현재 등급 표시 — Radiant Glass. 보유 CHARM의 달러 가치로 판정돼요.</span></button>
-                <button class="shot-marker" style="top:91%; left:50%;" type="button">③<span class="marker-tip">지금 시세($0.42 기준)를 반영해 다음 등급까지 남은 수량이 실시간으로 갱신돼요.</span></button>
+                <button class="shot-marker" style="top:19%; left:32%;" type="button">①<span class="marker-tip">"달성됨" 배지 — Radiant Glass 등급까지는 이미 도달, 시세가 내려가도 강등되지 않아요.</span></button>
+                <button class="shot-marker" style="top:56%; left:50%;" type="button">②<span class="marker-tip">"Glass Skin까지 1,222 CHARM 남음" — 다음 등급까지 남은 수량이 지금 시세 기준으로 실시간 계산돼요.</span></button>
+                <button class="shot-marker" style="top:80%; left:50%;" type="button">③<span class="marker-tip">"2,350 CHARM 보유 중" — '지금 바로 구매'를 누르면 락업 없이 즉시 다음 등급을 살 수 있어요.</span></button>
               </div>
             </div>
           </div>
@@ -601,41 +749,42 @@
       </div>
     </section>
 
-    <!-- 03 AI 헬스 인텔리전스 -->
-    <section class="wt-section" id="ai-intel">
-      <div class="feature-head"><span class="feature-num">03</span><span class="feature-total">/ 06</span></div>
-      <div class="feature-grid reverse">
+    <!-- 06 웨어러블 연동 (신규) -->
+    <section class="wt-section" id="wearable">
+      <div class="feature-head"><span class="feature-num">06</span><span class="feature-total">/ 09</span></div>
+      <div class="feature-grid">
         <div class="feature-text">
-          <h2 class="feature-title">AI 헬스 인텔리전스</h2>
+          <h2 class="feature-title">웨어러블 연동</h2>
           <p class="feature-desc">
-            관광객이 다크서클·피로·수면 등 컨디션 체크리스트에 응답하면 AI가 레이더 차트로 분석하고 맞춤 제품을
-            추천합니다. Whoop·Apple Watch·Fitbit 같은 웨어러블을 연동하면 실시간 바이탈 데이터를 기반으로
-            더 정밀한 분석을 제공합니다.
+            Whoop, Apple Watch, Fitbit을 연결하면 별도 설문 없이 심박수·수면·산소포화도·스트레스 데이터를
+            실시간으로 가져와 회복 점수(Recovery Score)로 종합 해석해줘요. 최근 며칠의 패턴이 나빠지면 AI가
+            먼저 알아채고, 그에 맞는 제품을 이유와 함께 추천합니다. 연동하지 않은 이용자는 셀프 체크
+            진단으로 자연스럽게 대체돼요.
           </p>
           <div class="feature-why">
             <p class="why-label">왜 필요한가</p>
-            <p>낯선 나라에서 어떤 제품을 사야 할지 모르는 관광객의 의사결정 부담을 해결하고, 단순 쇼핑앱이 아닌
-              헬스케어 서비스로 차별화합니다.</p>
+            <p>웨어러블 없이도 셀프 체크로 대체되지만, 연동하는 순간 진단이 설문이 아니라 실제 몸 상태를
+              근거로 이루어져 추천의 설득력이 크게 올라갑니다.</p>
           </div>
         </div>
         <div class="feature-visual">
           <div class="phone-mock">
             <div class="phone-mock-notch"></div>
             <div class="shot-frame">
-              <img src="./assets/walkthrough/ai-intel.png" alt="CHARM AI 컨디션 진단 결과 화면" width="412" height="896" />
-              <button class="shot-marker" style="top:17%; left:50%;" type="button">①<span class="marker-tip">AI 매칭률 — 응답한 컨디션·목표를 기반으로 산출된 종합 매칭 점수예요.</span></button>
-              <button class="shot-marker" style="top:38%; left:50%;" type="button">②<span class="marker-tip">축별 레이더 차트 — 피로도·수분·탄력·면역·수면 5축으로 컨디션을 시각화해요.</span></button>
-              <button class="shot-marker" style="top:83%; left:50%;" type="button">③<span class="marker-tip">AI 추천 제품과 매칭 스코어 — 등급이 오르면 더 정밀한 리포트가 열려요.</span></button>
+              <img src="./assets/walkthrough/wearable.png" alt="CHARM 웨어러블 연동 — 내 컨디션 화면" width="412" height="896" />
+              <button class="shot-marker" style="top:22%; left:50%;" type="button">①<span class="marker-tip">"72% · 양호" — 오늘의 회복 점수. Whoop 등 연동된 기기의 실시간 데이터를 종합해 산출돼요.</span></button>
+              <button class="shot-marker" style="top:50%; left:50%;" type="button">②<span class="marker-tip">심박수·수면·산소포화도·스트레스 4개 지표 — 최근 7일 추이를 함께 보여줘요.</span></button>
+              <button class="shot-marker" style="top:76%; left:50%;" type="button">③<span class="marker-tip">"AI 해석" — 최근 3일 패턴이 나빠지고 있다면 AI가 먼저 짚어주고 맞는 제품을 추천해요.</span></button>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 04 제품 스캔 -->
+    <!-- 07 제품 스캔 -->
     <section class="wt-section" id="product-scan">
-      <div class="feature-head"><span class="feature-num">04</span><span class="feature-total">/ 06</span></div>
-      <div class="feature-grid">
+      <div class="feature-head"><span class="feature-num">07</span><span class="feature-total">/ 09</span></div>
+      <div class="feature-grid reverse">
         <div class="feature-text">
           <h2 class="feature-title">제품 스캔 + 자국어 정보 제공</h2>
           <p class="feature-desc">
@@ -653,28 +802,30 @@
             <div class="phone-mock-notch"></div>
             <div class="shot-frame">
               <img src="./assets/walkthrough/product-scan.png" alt="CHARM 제품 스캔 결과 화면 (영어 번역)" width="412" height="896" />
-              <button class="shot-marker" style="top:59%; left:50%;" type="button">①<span class="marker-tip">Efficacy — 효능·효과가 이용자의 모국어(영어)로 즉시 번역돼요.</span></button>
-              <button class="shot-marker" style="top:69%; left:50%;" type="button">②<span class="marker-tip">Dosage — 복용법이 원문 그대로가 아닌 이해하기 쉬운 현지어로 제공돼요.</span></button>
-              <button class="shot-marker" style="top:79%; left:50%;" type="button">③<span class="marker-tip">Precautions — 주의사항까지 놓치지 않도록 번역해 안전하게 사용하게 해요.</span></button>
+              <button class="shot-marker" style="top:30%; left:50%;" type="button">①<span class="marker-tip">"AI match confidence 96%" — 스캔한 제품을 얼마나 정확히 인식했는지 보여줘요.</span></button>
+              <button class="shot-marker" style="top:59%; left:50%;" type="button">②<span class="marker-tip">Efficacy — 효능·효과가 이용자의 모국어(영어)로 즉시 번역돼요.</span></button>
+              <button class="shot-marker" style="top:79%; left:50%;" type="button">③<span class="marker-tip">Precautions / Side Effects — 주의사항과 부작용까지 놓치지 않도록 번역해 안전하게 사용하게 해요.</span></button>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 05 커뮤니티 & 공동구매 -->
+    <!-- 08 커뮤니티 & 공동구매 -->
     <section class="wt-section" id="community">
-      <div class="feature-head"><span class="feature-num">05</span><span class="feature-total">/ 06</span></div>
-      <div class="feature-grid reverse">
+      <div class="feature-head"><span class="feature-num">08</span><span class="feature-total">/ 09</span></div>
+      <div class="feature-grid">
         <div class="feature-text">
           <h2 class="feature-title">커뮤니티 & 공동구매</h2>
           <p class="feature-desc">
-            관광객들이 후기, 성분 정보, Q&amp;A를 공유하고, 인플루언서는 직접 공동구매를 개설할 수 있는 정보
-            허브입니다. 활동에 대한 토큰 리워드도 함께 제공됩니다.
+            관광객들이 후기, 성분 정보, Q&amp;A를 공유하고, 팔로워 100명 이상이면 붙는 "인증 크리에이터"
+            배지를 가진 인플루언서는 직접 공동구매를 열어 목표 인원과 할인율까지 정할 수 있는 정보 허브입니다.
+            활동에 대한 토큰 리워드도 함께 제공됩니다.
           </p>
           <div class="feature-why">
             <p class="why-label">왜 필요한가</p>
-            <p>여기저기 흩어진 제품 정보를 하나의 신뢰 채널로 모으고, 자발적 바이럴 확산을 유도합니다.</p>
+            <p>여기저기 흩어진 제품 정보를 하나의 신뢰 채널로 모으고, 인플루언서 공동구매를 통해 자발적
+              바이럴 확산을 유도합니다.</p>
           </div>
         </div>
         <div class="feature-visual">
@@ -682,32 +833,32 @@
             <div class="phone-mock-notch"></div>
             <div class="shot-frame">
               <img src="./assets/walkthrough/community.png" alt="CHARM 커뮤니티 피드 화면" width="412" height="896" />
-              <button class="shot-marker" style="top:23%; left:50%;" type="button">①<span class="marker-tip">인플루언서 공동구매 개설하기 — 팔로워를 위한 공동구매를 직접 열고 목표 인원·할인율을 정할 수 있어요.</span></button>
-              <button class="shot-marker" style="top:36%; left:78%;" type="button">②<span class="marker-tip">공동구매 전용 카테고리 — 후기·성분 정보와 별도로 공동구매만 따로 모아볼 수 있어요.</span></button>
-              <button class="shot-marker" style="top:49%; left:50%;" type="button">③<span class="marker-tip">활동하고 CHARM 받기 — 후기 작성 +15, 팔로워 10명 +20 등 활동마다 토큰 리워드가 쌓여요.</span></button>
+              <button class="shot-marker" style="top:23%; left:50%;" type="button">①<span class="marker-tip">"인플루언서 공동구매 개설하기" — 인증 크리에이터는 팔로워를 위한 공동구매를 직접 열고 목표 인원·할인율을 정할 수 있어요.</span></button>
+              <button class="shot-marker" style="top:46%; left:50%;" type="button">②<span class="marker-tip">"활동하고 CHARM 받기" — 후기 작성 +15, 팔로워 10명 +20 등 활동마다 토큰 리워드가 쌓여요.</span></button>
+              <button class="shot-marker" style="top:64%; left:78%;" type="button">③<span class="marker-tip">"+18 CHARM 획득" — 인기 후기에는 실제로 적립된 CHARM 배지가 함께 붙어요.</span></button>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 06 매장 운영 대시보드 -->
+    <!-- 09 매장 운영 대시보드 -->
     <section class="wt-section" id="dashboard">
-      <div class="feature-head"><span class="feature-num">06</span><span class="feature-total">/ 06</span></div>
+      <div class="feature-head"><span class="feature-num">09</span><span class="feature-total">/ 09</span></div>
       <div class="feature-grid">
         <div class="feature-text">
           <h2 class="feature-title">매장 운영 대시보드</h2>
           <p class="feature-desc">
-            파트너 매장은 방문객의 국가별 비중, 연령대×성별 구매 패턴, 결제수단 비중, 인기 카테고리, 재방문율
-            등을 실시간 대시보드로 확인할 수 있습니다. <strong>참약사</strong> 같은 트렌디 약국 체인이 명동·홍대·강남
-            등 지점별로 이 데이터를 쌓으면, 지점마다 다른 관광객·로컬 고객 구성에 맞춰 발주와 프로모션을 조정할 수
-            있습니다.
+            참약사 공식 인증 파트너 매장은 방문객의 국가별 비중, 연령대×성별 구매 패턴, 결제수단 비중, 인기
+            카테고리, 재방문율 등을 실시간 대시보드로 확인할 수 있습니다. <strong>참약사</strong> 같은 트렌디
+            약국 체인이 명동·홍대·강남 등 지점별로 이 데이터를 쌓으면, 지점마다 다른 관광객·로컬 고객 구성에
+            맞춰 발주와 프로모션을 조정할 수 있습니다.
           </p>
           <div class="feature-why">
             <p class="why-label">왜 필요한가</p>
             <p>참약사 같은 체인 약국이 카드사도 갖지 못한 오프라인 고객 데이터를 확보할 수 있습니다 — 카드사나
               기존 플랫폼이 절대 제공할 수 없는 데이터를 직접 확보해 타겟 마케팅에
-              활용할 수 있습니다 — <strong>0번에서 보신 QR 적립 데이터가 바로 이 화면을 채웁니다.</strong></p>
+              활용할 수 있습니다 — <strong>3번에서 보신 QR 적립 데이터가 바로 이 화면을 채웁니다.</strong></p>
           </div>
         </div>
         <div class="feature-visual">
@@ -715,9 +866,9 @@
             <div class="phone-mock-notch"></div>
             <div class="shot-frame">
               <img src="./assets/walkthrough/dashboard.png" alt="CHARM 매장 관리자 대시보드 화면" width="412" height="896" />
-              <button class="shot-marker" style="top:19%; left:50%;" type="button">①<span class="marker-tip">"카드사도 가질 수 없는 오프라인 고객 데이터입니다" — 이 앱 도입의 핵심 가치 메시지예요.</span></button>
-              <button class="shot-marker" style="top:44%; left:74%;" type="button">②<span class="marker-tip">QR 적립 전환율 87% — 결제수단과 무관하게 얼마나 많은 결제가 데이터로 전환됐는지 보여줘요.</span></button>
-              <button class="shot-marker" style="top:63%; left:50%;" type="button">③<span class="marker-tip">국가별 방문객 비중 — 00번에서 본 QR 적립이 실제로 이렇게 쌓인 결과예요.</span></button>
+              <button class="shot-marker" style="top:15%; left:50%;" type="button">①<span class="marker-tip">"참약사가 카드사도 갖지 못한 오프라인 고객 데이터를 확보하는 화면입니다" — 이 앱 도입의 핵심 가치 메시지예요.</span></button>
+              <button class="shot-marker" style="top:40%; left:78%;" type="button">②<span class="marker-tip">QR 적립 전환율 87% — 결제수단과 무관하게 얼마나 많은 결제가 데이터로 전환됐는지 보여줘요.</span></button>
+              <button class="shot-marker" style="top:60%; left:50%;" type="button">③<span class="marker-tip">국가별 방문객 비중 — 3번에서 본 QR 적립이 실제로 이렇게 쌓인 결과예요.</span></button>
             </div>
           </div>
         </div>
@@ -727,7 +878,7 @@
   </main>
 
   <section class="wt-cta">
-    <p class="wt-cta-title">데이터 수집부터 리텐션까지, 6가지 핵심 기능을 모두 확인하셨습니다.</p>
+    <p class="wt-cta-title">AI 채팅 상담부터 매장 대시보드까지, 9가지 핵심 기능을 모두 확인하셨습니다.</p>
     <div class="wt-cta-buttons">
       <a class="btn btn-primary" href="./index.html">실제 앱 데모 보기</a>
       <a class="btn btn-secondary" href="./whitepaper.html">백서 보기</a>
@@ -789,7 +940,7 @@
     document.querySelectorAll('.shot-marker.open').forEach(function (b) { b.classList.remove('open'); });
   });
 
-  // ---------- Section 0: interactive data-collection demo ----------
+  // ---------- Section 03: interactive data-collection demo ----------
   var demoQr = document.getElementById('demoQr');
   var demoStatus = document.getElementById('demoStatus');
   var demoStatusDot = document.getElementById('demoStatusDot');
@@ -853,7 +1004,7 @@
     btn.addEventListener('click', function () { playDemo(btn.getAttribute('data-method'), btn); });
   });
 
-  // ---------- Section 2: CHARM holdings tier simulator ----------
+  // ---------- Section 05: CHARM holdings tier simulator ----------
   var CHARM_PRICE = 0.45;
   var TIER_DEFS = [
     { key: 'bare', name: 'Bare Skin', usdMin: 0, benefit: '기본 구매 리워드 적립 시작', gradient: 'linear-gradient(135deg,#C9BEE0,#A996CF)' },
